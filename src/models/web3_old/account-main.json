@@ -1,0 +1,12 @@
+{
+  "Constant": "0xa2e6D319D4374383c993268609a42338E1B4f3D3",
+  "Accounts": "0xACa37c6C1142494d9236525b3280eaBFd843E47e",
+  "Bank": "0xa2682F10f6072476eaaA24E69b2d723F458aB810",
+  "TokenRegistry": "0xf9fe70A8AB94BF5a97Dd353De8fdFDD391071B81",
+  "ChainLinkAggregator": "0x8abaE64f9C8dFd8947F45815c5a34dBB8064c8b9",
+  "SavingAccount": "0xaf4D657Bd3380c7F9Ab1878E84745cA8100F019d",
+  "otc_account": {
+    "rinkeby": "0x5861889855605382f4f04aA93C9a1B2217D3a6a6",
+    "mainnet": "0x52dd2474db34605af36d4e069e5807e2317f8fbc"
+  }
+}

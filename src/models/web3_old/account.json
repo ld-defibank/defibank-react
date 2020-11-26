@@ -1,0 +1,38 @@
+{
+  "test": {
+    "Accounts": "0x7c28159B550C3C5AaBB486C801BF0fBE8D7a5970",
+    "Bank": "0x7891c51074ac7c7B2bD4CDE74684BA4a31751B7D",
+    "ChainLinkAggregator": "0x88FfdcC92d51307c669F73877a9F3A525e428D64",
+    "GlobalConfig": "0x51862663C169C0fCd6bFb2978fAB9cfB5AF63f97",
+    "SavingAccount": "0xd5c4B500E5535B313E5e18CADBaD85c11245E4f3",
+    "TokenRegistry": "0x803877eddC43dEC4a747FECdbaf2211DC25109aF",
+    "otc_account": {
+      "rinkeby": "0x5861889855605382f4f04aA93C9a1B2217D3a6a6",
+      "mainnet": "0x52dd2474db34605af36d4e069e5807e2317f8fbc"
+    }
+  },
+  "cn": {
+    "Accounts": "0xeC88BA505bC341cd590DCED6001C29F3B267970A",
+    "Bank": "0xad4649a917a0e928d00c3028dB63ACb07960d25B",
+    "ChainLinkAggregator": "0x649C5CdF618Bd330F611CbAf2638CFf80d231592",
+    "GlobalConfig": "0xa13B12D2c2EC945bCAB381fb596481735E24D585",
+    "SavingAccount": "0x7a9E457991352F8feFB90AB1ce7488DF7cDa6ed5",
+    "TokenRegistry": "0x7ac06F24F06A9700F8970C49454Cfb3B940871e0",
+    "otc_account": {
+      "rinkeby": "0x5861889855605382f4f04aA93C9a1B2217D3a6a6",
+      "mainnet": "0x52dd2474db34605af36d4e069e5807e2317f8fbc"
+    }
+  },
+  "org": {
+    "Accounts": "0xeC88BA505bC341cd590DCED6001C29F3B267970A",
+    "Bank": "0xad4649a917a0e928d00c3028dB63ACb07960d25B",
+    "ChainLinkAggregator": "0x649C5CdF618Bd330F611CbAf2638CFf80d231592",
+    "GlobalConfig": "0xa13B12D2c2EC945bCAB381fb596481735E24D585",
+    "SavingAccount": "0x7a9E457991352F8feFB90AB1ce7488DF7cDa6ed5",
+    "TokenRegistry": "0x7ac06F24F06A9700F8970C49454Cfb3B940871e0",
+    "otc_account": {
+      "rinkeby": "0x5861889855605382f4f04aA93C9a1B2217D3a6a6",
+      "mainnet": "0x52dd2474db34605af36d4e069e5807e2317f8fbc"
+    }
+  }
+}

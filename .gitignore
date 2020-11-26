@@ -1,0 +1,10 @@
+plugins
+platforms
+node_modules/
+public/
+dist
+dist/assets
+dist/antd
+tmp
+stats.json
+.idea

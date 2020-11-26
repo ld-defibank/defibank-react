@@ -1,0 +1,26 @@
+{
+  "copy": "Copy",
+  "click_copy": "Click to copy",
+  "click_upload": "Click to upload",
+  "ok": "Ok",
+  "cancel": "Cancel",
+  "empty": "No Data",
+  "no_more": "No More",
+  "loading": "Loading",
+  "ok2": "Ok",
+  "login": "Sign in",
+  "success": "Success",
+  "fail": "Fail",
+  "be_careful": "Be careful",
+  "detail": "Detail",
+  "need_signin": "Please Sign in",
+
+  "sidebar_menu_user": "Profile",
+  "sidebar_menu_missions": "Missions",
+  "sidebar_menu_history": "History",
+  "sidebar_menu_contact": "Contact Us",
+
+  "top_wallet_connect": "Connect Wallet",
+  "top_language_zh-cn": "CN",
+  "top_language_en": "EN"
+}

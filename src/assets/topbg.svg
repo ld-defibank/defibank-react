@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1440px" height="233px" viewBox="0 0 1440 233" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>编组 9</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="107.492188%" y1="-7.92299107%" x2="-7.8359375%" y2="107.922991%" id="linearGradient-1">
+            <stop stop-color="#3A3897" offset="0%"></stop>
+            <stop stop-color="#A3A1FF" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="106.546691%" y1="-7.27776566%" x2="-19.5629869%" y2="119.505323%" id="linearGradient-2">
+            <stop stop-color="#662D8C" offset="0%"></stop>
+            <stop stop-color="#ED1E79" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-3" x="0" y="337" width="1440" height="233"></rect>
+        <linearGradient x1="50%" y1="-2.48949813e-15%" x2="50%" y2="100%" id="linearGradient-4">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Exchanger-Dashboard-UI备份-8">
+            <g id="编组-9" transform="translate(0.000000, -337.000000)">
+                <g id="Bg-image">
+                    <use fill="url(#linearGradient-1)" xlink:href="#path-3"></use>
+                    <use fill-opacity="0.3" fill="url(#linearGradient-2)" xlink:href="#path-3"></use>
+                </g>
+                <g id="编组" transform="translate(6.000000, 0.000000)" fill="url(#linearGradient-4)" fill-opacity="0.0399999991">
+                    <path d="M188.047861,399.394239 C188.047861,399.394239 2103.97585,649.653473 1613.8167,265.813602 C1123.65755,-118.026269 188.047861,399.394239 188.047861,399.394239 Z" id="Path-2" transform="translate(941.047861, 301.820885) scale(1, -1) rotate(-7.000000) translate(-941.047861, -301.820885) "></path>
+                    <path d="M-2.27373675e-13,331.04274 C-2.27373675e-13,331.04274 2045.69204,631.963887 1522.33486,170.420341 C998.977672,-291.123205 -2.27373675e-13,331.04274 -2.27373675e-13,331.04274 Z" id="Path-2" transform="translate(804.000000, 213.716857) scale(-1, -1) translate(-804.000000, -213.716857) "></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
