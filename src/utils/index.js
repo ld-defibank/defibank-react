@@ -117,6 +117,12 @@ function mobileNumber(number, chinese) {
   return millify(parseFloat(number), ...opt);
 }
 
+function humanReadableNumber(num) {
+  const aNum = num.toString().split('.');
+  aNum[0] = aNum[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+  return aNum.join('.');
+}
+
 export {
   isMobile,
   storage,
@@ -134,4 +140,5 @@ export {
   fromFixedAmountToAmount,
   isEth,
   mobileNumber,
+  humanReadableNumber,
 };

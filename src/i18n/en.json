@@ -22,5 +22,10 @@
 
   "top_wallet_connect": "Connect Wallet",
   "top_language_zh-cn": "CN",
-  "top_language_en": "EN"
+  "top_language_en": "EN",
+
+  "index_market_title": "Current Market Size",
+  "index_market_size": "Market Size",
+  "index_market_borrow": "Borrowed",
+  "index_market_deposit": "Deposited"
 }

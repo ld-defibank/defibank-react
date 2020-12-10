@@ -11,10 +11,6 @@ const {
   ADDRESS_LENDING_POOL,
 } = CONFIG.INTERFACE;
 
-const {
-  MAX_VAL,
-} = CONFIG;
-
 const defaultStates = {
 };
 
@@ -42,21 +38,10 @@ function useLendingPool(customInitialStates = {}) {
       }));
   }, [getContract]);
 
-  // const getAllowance = useCallback((tokenAddress) => {
-  //   if (!web3 || !currentAccount || !tokenAddress) return Promise.resolve('0');
-  //   if (isEth(tokenAddress)) return Promise.resolve(MAX_VAL);
-  //   const ercContract = getErcContract(tokenAddress);
-  //   return ercContract.methods.allowance(currentAccount, toChecksumAddress(ADDRESS_LENDING_POOL)).call();
-  // }, [web3, currentAccount]);
-
-  // const approve = useCallback((tokenAddress) => {
-  //   if (!web3 || !currentAccount || !tokenAddress) return Promise.reject({ code: 9999 });
-  //   if (isEth(tokenAddress)) return Promise.resolve(true);
-  //   const ercContract = getErcContract(tokenAddress);
-  //   return ercContract.methods.approve(toChecksumAddress(ADDRESS_LENDING_POOL), MAX_VAL).send({
-  //     from: currentAccount,
-  //   });
-  // }, [web3, currentAccount]);
+  const callContract = useCallback((method, args = []) => {
+    const contract = getContract();
+    return contract.methods[method](...args).call();
+  }, [getContract]);
 
   const deposit = useCallback((tokenAddress, amount, referralCode = '0') => {
     const options = {
@@ -73,10 +58,11 @@ function useLendingPool(customInitialStates = {}) {
     ], options);
   }, [web3, currentAccount, sendContract]);
 
+  const getReserveData = useCallback(tokenAddress => callContract('getReserveData', [tokenAddress]), [web3, currentAccount, sendContract]);
+
   return {
-    // getAllowance,
-    // approve,
     deposit,
+    getReserveData,
   };
 }
 

@@ -6,6 +6,7 @@ import Web3Modal from './web3modal';
 import LendingPoolCore from './lendingPoolCore';
 import LendingPool from './lendingPool';
 import LendingPoolDataProvider from './lendingPoolDataProvider';
+import Market from './market';
 import Utils from './utils';
 
 const models = {
@@ -17,6 +18,7 @@ const models = {
   LendingPoolCore,
   LendingPool,
   LendingPoolDataProvider,
+  Market,
 };
 
 

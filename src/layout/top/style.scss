@@ -1,6 +1,7 @@
 #top {
-  background-image: linear-gradient(to top right, #ae75d3 0%, #513c9a 100%);
-  padding-bottom: 50px;
+  position: absolute;
+  top: 0;
+  right: 0;
 
   .top-container {
     padding: 30px;
@@ -19,6 +20,7 @@
     font-size: 16px;
     color: #fff;
     font-weight: 500;
+    line-height: 1;
     
     &:focus {
       outline: none;
@@ -29,7 +31,6 @@
     }
 
     &.connected {
-      padding: 9px 15px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

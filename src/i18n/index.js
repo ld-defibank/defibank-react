@@ -1,13 +1,13 @@
 import zhCn from './zh-cn.json';
 import en from './en.json';
 
-const defaultLang = zhCn;
+const defaultLang = en;
 
 const I18N = {
-  'zh-cn': zhCn,
-  en: {
+  en,
+  'zh-cn': {
     ...defaultLang,
-    ...en,
+    ...zhCn,
   },
 };
 
