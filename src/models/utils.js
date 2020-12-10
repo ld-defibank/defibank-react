@@ -5,18 +5,23 @@ import QUERYS from '../querys';
 
 
 const getStateCodeCallback = () => fetch.get(QUERYS.STATE_CODE);
-const defaultStates = {};
+const defaultStates = {
+  globalLoading: false,
+};
 
 function useUtils(customInitialStates = {}) {
   const initialStates = {
     ...defaultStates,
     ...customInitialStates,
   };
+  const [globalLoading, setGlobalLoading] = useState(initialStates.globalLoading);
 
   const getStateCode = useCallback(() => getStateCodeCallback(), []);
 
   return {
     getStateCode,
+    globalLoading,
+    setGlobalLoading,
   };
 }
 

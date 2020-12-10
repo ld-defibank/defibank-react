@@ -2,6 +2,7 @@ import React from 'react';
 import I18n from './i18n';
 import Router from './router';
 import Web3 from './web3v2';
+import Web3Modal from './web3modal';
 import LendingPoolCore from './lendingPoolCore';
 import LendingPool from './lendingPool';
 import LendingPoolDataProvider from './lendingPoolDataProvider';
@@ -9,12 +10,13 @@ import Utils from './utils';
 
 const models = {
   I18n,
+  Utils,
   Router,
+  Web3Modal,
   Web3,
   LendingPoolCore,
   LendingPool,
   LendingPoolDataProvider,
-  Utils,
 };
 
 
