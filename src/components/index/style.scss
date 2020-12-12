@@ -1,4 +1,6 @@
 #index .market-info {
+  margin-bottom: 40px;
+
   .title {
     font-size: 24px;
     margin-bottom: 18px;
@@ -37,6 +39,87 @@
         flex-grow: 0;
         flex-shrink: 0;
         margin-left: 8px;
+      }
+    }
+  }
+}
+
+#index .market-list {
+  .ez-table {
+    .thead .tr {
+      margin-bottom: 40px;
+    }
+    .tbody .tr {
+      margin-bottom: 45px;
+      cursor: pointer;
+    }
+
+    .symbol {
+      width: 15%;
+    }
+    .totalusd {
+      width: 15%;
+    }
+    .deposit {
+      width: 20%;
+    }
+    .borrow {
+      width: 20%;
+    }
+    .depositapr {
+      width: 15%;
+    }
+    .borrowapr {
+      width: 15%;
+    }
+    .deposit,
+    .borrow {
+      &>div:last-child {
+        color: var(--main-text-gray);
+      }
+    }
+
+    .symbol,
+    .totalusd,
+    .deposit,
+    .borrow,
+    .deposit>div:last-child,
+    .borrow>div:last-child {
+      transition: all ease 0.15s;
+    }
+    
+    .symbol {
+      .icon {
+        display: inline-block;
+        height: 36px;
+        width: 36px;
+        padding: 5px;
+        border-radius: 18px;
+        background-color: #fff;
+        margin-right: 20px;
+      }
+      svg {
+        height: 26px;
+        width: 26px;
+      }
+      
+      &>* {
+        vertical-align: middle;
+      }
+    }
+    
+    .tbody .tr:hover {
+      .symbol,
+      .totalusd,
+      .deposit,
+      .borrow {
+        color: var(--main-text-strong);
+      }
+      .deposit,
+      .borrow {
+        &>div:last-child {
+          color: var(--main-text-strong-2);
+        }
       }
     }
   }

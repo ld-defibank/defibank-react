@@ -27,5 +27,11 @@
   "index_market_title": "Current Market Size",
   "index_market_size": "Market Size",
   "index_market_borrow": "Borrowed",
-  "index_market_deposit": "Deposited"
+  "index_market_deposit": "Deposited",
+  "index_table_token": "Asset",
+  "index_table_market_size": "Market Size",
+  "index_table_deposit": "Total Deposit",
+  "index_table_borrow": "Total Borrow",
+  "index_table_deposit_apr": "Deposit APR",
+  "index_table_borrow_apr": "Borrow APR"
 }

@@ -44,13 +44,10 @@ body {
   color: #28a745;
 }
 .tx-orange {
-  color: #FD7602;
+  color: var(--main-text-orange);
 }
-.tx-blue {
-  color: #00A3F1;
-}
-.tx-blue2 {
-  color: #329AFF;
+.tx-green {
+  color: var(--main-text-green);
 }
 
 .tx-logo-blue {

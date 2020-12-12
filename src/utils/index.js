@@ -60,6 +60,14 @@ function getUid() {
   return uid;
 }
 
+function times10(deciaml, pow10, fixed) {
+  const dec = new Decimal(deciaml).times(new Decimal(10).pow(pow10));
+  if (fixed) {
+    return dec.toFixed(fixed, Decimal.ROUND_DOWN);
+  }
+  return dec.toString();
+}
+
 function fromAmountToFixedAmount(amount, TOKEN, fixed, side = Decimal.ROUND_DOWN) {
   const {
     decimals,
@@ -136,6 +144,7 @@ export {
   formatTimespan,
   formatHash,
   getUid,
+  times10,
   fromAmountToFixedAmount,
   fromFixedAmountToAmount,
   isEth,
