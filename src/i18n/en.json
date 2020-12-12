@@ -15,10 +15,11 @@
   "detail": "Detail",
   "need_signin": "Please Sign in",
 
-  "sidebar_menu_user": "Profile",
-  "sidebar_menu_missions": "Missions",
+  "sidebar_menu_home": "Homepage",
+  "sidebar_menu_dashboard": "Dashboard",
+  "sidebar_menu_deposit": "Deposit",
+  "sidebar_menu_borrow": "Borrow",
   "sidebar_menu_history": "History",
-  "sidebar_menu_contact": "Contact Us",
 
   "top_wallet_connect": "Connect Wallet",
   "top_language_zh-cn": "CN",

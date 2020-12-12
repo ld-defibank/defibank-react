@@ -16,7 +16,7 @@ const pathConfigs = {
     key: 'index',
     refresh: [],
     sidebar: {
-      active: 'user',
+      active: 'home',
     },
   },
 };

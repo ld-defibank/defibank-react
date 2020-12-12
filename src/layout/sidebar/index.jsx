@@ -30,20 +30,24 @@ function Sidebar() {
           </a>
         </div>
         <div className="menu">
-          <div className={classnames('menu-item', { active: sidebar.active === 'user' })}>
-            <a onClick={() => goto('/')}><UserOutlined /><FormattedMessage id="sidebar_menu_user" /></a>
-          </div>
-          <div className={classnames('menu-item', { active: sidebar.active === 'missions' })}>
-            <a onClick={() => goto('/missions')}><CrownOutlined /><FormattedMessage id="sidebar_menu_missions" /></a>
-          </div>
-          <div className={classnames('menu-item', { active: sidebar.active === 'history' })}>
-            <a onClick={() => goto('/history')}><HistoryOutlined /><FormattedMessage id="sidebar_menu_history" /></a>
-          </div>
-          <div className={classnames('menu-item', { active: sidebar.active === 'contact' })}>
-            <a onClick={() => goto('/contact')}><CustomerServiceOutlined /><FormattedMessage id="sidebar_menu_contact" /></a>
+          <div className="menu-content">
+            <div className={classnames('menu-item', { active: sidebar.active === 'home' })}>
+              <a onClick={() => goto('/')}><FormattedMessage id="sidebar_menu_home" /></a>
+            </div>
+            <div className={classnames('menu-item', { active: sidebar.active === 'dashboard' })}>
+              <a onClick={() => goto('/dashboard')}><FormattedMessage id="sidebar_menu_dashboard" /></a>
+            </div>
+            <div className={classnames('menu-item', { active: sidebar.active === 'deposit' })}>
+              <a onClick={() => goto('/deposit')}><FormattedMessage id="sidebar_menu_deposit" /></a>
+            </div>
+            <div className={classnames('menu-item', { active: sidebar.active === 'borrow' })}>
+              <a onClick={() => goto('/borrow')}><FormattedMessage id="sidebar_menu_borrow" /></a>
+            </div>
+            <div className={classnames('menu-item', { active: sidebar.active === 'history' })}>
+              <a onClick={() => goto('/history')}><FormattedMessage id="sidebar_menu_history" /></a>
+            </div>
           </div>
         </div>
-        <div className="copyright">All rights ANT-CLUB</div>
       </div>
     </div>
   );

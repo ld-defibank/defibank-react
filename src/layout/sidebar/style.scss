@@ -1,4 +1,4 @@
-$barWidth: 240px;
+$barWidth: 290px;
 
 #sidebar {
   flex-grow: 0;
@@ -13,12 +13,12 @@ $barWidth: 240px;
     left: 0;
     width: $barWidth;
     height: 100vh;
-    background: #393857;
   }
 
   .logo {
-    background: #30304D;
-    padding: 27px 0 27px 30px;
+    height: 98px;
+    padding: 34px 0;
+    text-align: center;
 
     img {
       height: 30px;
@@ -26,33 +26,35 @@ $barWidth: 240px;
   }
 
   .menu {
-    padding-top: 18px;
-    padding-left: 30px;
+    height: calc(100vh - 98px);
+    display: flex;
+    align-items: center;
+
+    &-content {
+      width: 100%;
+    }
 
     .menu-item {
-      padding: 12px 0 12px 10px;
+      padding: 15px 0 15px 30px;
 
       &.active {
-        background: rgba($color: #fff, $alpha: 0.05);
-
-        a, a:hover {
-          opacity: 1;
+        a {
+          color: var(--main-text-strong);
         }
       }
 
       a {
         display: inline-block;
         width: 100%;
-        color: #fff;
-        font-weight: 500;
-        opacity: 0.5;
+        font-size: 16px;
+        color: var(--main-text);
 
         &>* {
           vertical-align: middle;
         }
 
         &:hover {
-          opacity: 0.7;
+          color: var(--main-text-strong-2);
         }
       }
 
@@ -63,17 +65,6 @@ $barWidth: 240px;
     }
   }
 
-  .copyright {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    padding: 27px 0;
-    opacity: 0.5;
-    font-size: 12px;
-    color: #fff;
-    width: 100%;
-    text-align: center;
-  }
 }
 
 @media screen and (max-width: 600px) {
