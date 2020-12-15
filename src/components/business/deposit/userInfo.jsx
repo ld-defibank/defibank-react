@@ -44,11 +44,11 @@ export default function DashboardDepositUserInfo({ data, prices, assetList = [] 
   return (
     <div className="user-info">
       <div className="info">
-        <div className="label"><FormattedMessage id="dashboard_deposit_info_aggregated" /></div>
+        <div className="label"><FormattedMessage id="deposit_info_aggregated" /></div>
         <div className="value">{humanReadableNumber(aggregated)} <span className="unit">USD</span></div>
       </div>
       <div className="composition">
-        <div className="label"><FormattedMessage id="dashboard_deposit_info_composition" /></div>
+        <div className="label"><FormattedMessage id="deposit_info_composition" /></div>
         <div className="value"><UserInfoBar data={barData} /></div>
       </div>
     </div>

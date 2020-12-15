@@ -13,17 +13,17 @@ function getColumns(data, prices, userData, t, handleModeChange) {
   const radioGroupOptions = [{
     key: 'stable',
     value: BORROW_RATE_MODE.stable,
-    label: t('dashboard_borrow_table_mode_stable'),
+    label: t('borrow_table_mode_stable'),
   }, {
     key: 'variable',
     value: BORROW_RATE_MODE.variable,
-    label: t('dashboard_borrow_table_mode_no_variable'),
+    label: t('borrow_table_mode_no_variable'),
   }];
 
   const availableBorrowsETH = userData ? userData.availableBorrowsETH : '0';
 
   return [{
-    title: t('dashboard_borrow_table_asset'),
+    title: t('borrow_table_asset'),
     dataIndex: 'symbol',
     key: 'symbol',
     className: 'symbol',
@@ -38,7 +38,7 @@ function getColumns(data, prices, userData, t, handleModeChange) {
       </>
     ),
   }, {
-    title: t('dashboard_borrow_table_available'),
+    title: t('borrow_table_available'),
     dataIndex: 'available',
     key: 'available',
     className: 'available',
@@ -56,13 +56,13 @@ function getColumns(data, prices, userData, t, handleModeChange) {
       return `${humanReadableNumber(available.toFixed(2))} ${row.symbol}`;
     },
     props: {
-      'data-label': t('dashboard_borrow_table_available'),
+      'data-label': t('borrow_table_available'),
     },
   }, {
     title: (
       <>
-        <div><FormattedMessage id="dashboard_borrow_table_stable_apr" /></div>
-        <div><FormattedMessage id="dashboard_borrow_table_variable_apr" /></div>
+        <div><FormattedMessage id="borrow_table_stable_apr" /></div>
+        <div><FormattedMessage id="borrow_table_variable_apr" /></div>
       </>
     ),
     dataIndex: 'apr',
@@ -94,30 +94,30 @@ function getColumns(data, prices, userData, t, handleModeChange) {
       );
     },
     props: {
-      'data-label': t('dashboard_deposit_apr'),
+      'data-label': t('deposit_apr'),
     },
   }, {
-    title: t('dashboard_borrow_table_mode'),
+    title: t('borrow_table_mode'),
     dataIndex: 'borrowRateMode',
     key: 'borrowRateMode',
     className: 'borrowratemode',
     render: (text, row) => {
       if (text === BORROW_RATE_MODE.noborrow) {
-        return <span className="tx-gray"><FormattedMessage id="dashboard_borrow_table_mode_noborrow" /></span>;
+        return <span className="tx-gray"><FormattedMessage id="borrow_table_mode_noborrow" /></span>;
       }
       return <RadioGroup options={radioGroupOptions} value={text} onChange={c => handleModeChange(row, c)} />;
     },
     props: {
-      'data-label': t('dashboard_deposit_collateral'),
+      'data-label': t('deposit_collateral'),
     },
   }, {
-    title: t('dashboard_deposit_table_opt'),
+    title: t('deposit_table_opt'),
     dataIndex: 'opt',
     key: 'opt',
     className: 'opt',
     // render: text => ,
     props: {
-      'data-label': t('dashboard_deposit_opt'),
+      'data-label': t('deposit_opt'),
     },
   }];
 }
@@ -127,7 +127,7 @@ export default function DashboardBorrowList({ data, prices, userData, onModeChan
 
   const columns = getColumns(data, prices, userData, t, onModeChange);
   return (
-    <div className="dashboard-list">
+    <div className="business-list">
       <Table
         rowKey="symbol"
         dataSource={data}

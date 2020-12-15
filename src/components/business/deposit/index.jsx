@@ -27,7 +27,7 @@ const initialListData = Object.values(TOKENS).map(v => ({
 }));
 
 
-function DashboardDeposit() {
+function Deposit() {
   const [loading, setLoading] = useState(true);
   const [prices, setPrices] = useState([]);
   const [userData, setUserData] = useState(null);
@@ -97,12 +97,12 @@ function DashboardDeposit() {
 
   return (
     <SitePage
-      id="dashboardDeposit"
-      className="dashboard-page"
+      id="deposit"
+      className="business-page"
       header={(
         <>
-          <a className="active"><FormattedMessage id="dashboard_header_deposit" /></a>
-          <a onClick={() => goto('/dashboard/borrow')}><FormattedMessage id="dashboard_header_borrow" /></a>
+          <a className="active"><FormattedMessage id="business_header_deposit" /></a>
+          <a onClick={() => goto('/borrow')}><FormattedMessage id="business_header_borrow" /></a>
         </>
       )}
     >
@@ -113,4 +113,4 @@ function DashboardDeposit() {
 }
 
 
-export default DashboardDeposit;
+export default Deposit;

@@ -19,18 +19,32 @@ const pathConfigs = {
       active: 'home',
     },
   },
-  '/dashboard/deposit': {
-    key: 'dashboard_deposit',
+  '/dashboard': {
+    key: 'dashboard',
     refresh: [],
     sidebar: {
       active: 'dashboard',
     },
   },
-  '/dashboard/borrow': {
-    key: 'dashboard_borrow',
+  '/deposit': {
+    key: 'deposit',
     refresh: [],
     sidebar: {
-      active: 'dashboard',
+      active: 'deposit',
+    },
+  },
+  '/deposit/deposit/:tokenAddress': {
+    key: 'create_deposit',
+    refresh: [],
+    sidebar: {
+      active: 'deposit',
+    },
+  },
+  '/borrow': {
+    key: 'borrow',
+    refresh: [],
+    sidebar: {
+      active: 'borrow',
     },
   },
 };
@@ -67,6 +81,9 @@ function useRouter(customInitialStates = {}) {
     goto: (goto) => {
       if (pageLocation.pathname === goto) return;
       history.push(goto);
+    },
+    goBack: () => {
+      history.goBack();
     },
   };
 }

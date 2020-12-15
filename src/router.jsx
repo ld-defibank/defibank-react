@@ -5,7 +5,8 @@ import Sidebar from './layout/sidebar';
 import ConnectWallet from './layout/connectWallet';
 import Top from './layout/top';
 import Index from './components/index';
-import { DashboardDeposit, DashboardBorrow } from './components/dashboard';
+import { Deposit, Borrow, CreateDeposit } from './components/business';
+import Dashboard from './components/dashboard';
 import Test from './components/test';
 import Store from './models';
 
@@ -19,8 +20,10 @@ function MyRouter(props) {
             <Top />
             <Switch>
               <Route path="/" exact component={Index} />
-              <Route path="/dashboard/deposit" exact component={DashboardDeposit} />
-              <Route path="/dashboard/borrow" exact component={DashboardBorrow} />
+              <Route path="/deposit" exact component={Deposit} />
+              <Route path="/deposit/deposit/:tokenAddress" exact component={CreateDeposit} />
+              <Route path="/borrow" exact component={Borrow} />
+              <Route path="/dashboard" exact component={Dashboard} />
               <Route path="/test" exact component={Test} />
             </Switch>
           </Main>

@@ -77,21 +77,21 @@ export default function DashboardBorrowUserInfo({ data, prices, assetList = [] }
     <>
       <div className="user-info">
         <div className="info">
-          <div className="label"><FormattedMessage id="dashboard_borrow_info_borrowed" /></div>
+          <div className="label"><FormattedMessage id="borrow_info_borrowed" /></div>
           <div className="value">{humanReadableNumber(borrowed)} <span className="unit">USD</span></div>
         </div>
         <div className="composition">
-          <div className="label"><FormattedMessage id="dashboard_borrow_info_borrow_composition" /></div>
+          <div className="label"><FormattedMessage id="borrow_info_borrow_composition" /></div>
           <div className="value"><UserInfoBar data={borrowedBarData} /></div>
         </div>
       </div>
       <div className="user-info">
         <div className="info">
-          <div className="label"><FormattedMessage id="dashboard_borrow_info_collateral" /></div>
+          <div className="label"><FormattedMessage id="borrow_info_collateral" /></div>
           <div className="value">{humanReadableNumber(collateral)} <span className="unit">USD</span></div>
         </div>
         <div className="composition">
-          <div className="label"><FormattedMessage id="dashboard_borrow_info_collateral_composition" /></div>
+          <div className="label"><FormattedMessage id="borrow_info_collateral_composition" /></div>
           <div className="value"><UserInfoBar data={collateralbarData} /></div>
         </div>
       </div>

@@ -35,7 +35,7 @@ const initialListData = Object.values(TOKENS).map(v => ({
   borrowRateMode: BORROW_RATE_MODE[0],
 }));
 
-function DashboardBorrow() {
+function Borrow() {
   const [loading, setLoading] = useState(true);
   const [prices, setPrices] = useState([]);
   const [userData, setUserData] = useState(null);
@@ -86,7 +86,6 @@ function DashboardBorrow() {
       Object.keys(TOKENS).forEach((symbol) => {
         // 获取市场数据
         getMarketReserveData(TOKENS[symbol].tokenAddress).then((reserve) => {
-          console.log(reserve);
           updateAssetListValue(symbol, 'variableApr', times10(reserve.variableBorrowRate, -27, 2));
           updateAssetListValue(symbol, 'stableApr', times10(reserve.stableBorrowRate, -27, 2));
           updateAssetListValue(symbol, 'utilizationRate', times10(reserve.utilizationRate, -27, 2));
@@ -110,12 +109,12 @@ function DashboardBorrow() {
 
   return (
     <SitePage
-      id="dashboardBorrow"
-      className="dashboard-page"
+      id="borrow"
+      className="business-page"
       header={(
         <>
-          <a onClick={() => goto('/dashboard/deposit')}><FormattedMessage id="dashboard_header_deposit" /></a>
-          <a className="active"><FormattedMessage id="dashboard_header_borrow" /></a>
+          <a onClick={() => goto('/deposit')}><FormattedMessage id="business_header_deposit" /></a>
+          <a className="active"><FormattedMessage id="business_header_borrow" /></a>
         </>
       )}
     >
@@ -125,4 +124,4 @@ function DashboardBorrow() {
   );
 }
 
-export default DashboardBorrow;
+export default Borrow;
