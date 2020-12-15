@@ -19,6 +19,20 @@ const pathConfigs = {
       active: 'home',
     },
   },
+  '/dashboard/deposit': {
+    key: 'dashboard_deposit',
+    refresh: [],
+    sidebar: {
+      active: 'dashboard',
+    },
+  },
+  '/dashboard/borrow': {
+    key: 'dashboard_borrow',
+    refresh: [],
+    sidebar: {
+      active: 'dashboard',
+    },
+  },
 };
 
 const defaultStates = {

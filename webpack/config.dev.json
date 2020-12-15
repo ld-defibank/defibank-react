@@ -3,19 +3,20 @@
   "DOMAIN": "",
 
   "INTERFACE": {
+    "CHAINLINK_PROXY_PRICE_PROVIDER": "0xF9f9534DeA1668c2404a7C95874EB66BD3F9E543",
     "ADDRESS_LENDING_POOL": "0x9B0C802E7375623c03428Bb2158f0275651C5922",
     "ADDRESS_LENDING_POOL_CORE": "0xBfe89145023238E7f8f01f5B887CD8FCBf47da84",
     "ADDRESS_LENDING_POOL_DATA_PROVIDER": "0x92eb3b62E1bb8B73aDB6011AB91972635C85083d"
   },
   "TOKENS": {
     "USDT": {
-      "address": "0xcDaA397060059E9AA2C3a6F7f544BB1Be7237a48",
+      "tokenAddress": "0xcDaA397060059E9AA2C3a6F7f544BB1Be7237a48",
       "name": "Tether USD",
       "symbol": "USDT",
       "decimals": 6
     },
     "ETH": {
-      "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "tokenAddress": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
       "name": "Ethereum",
       "symbol": "ETH",
       "decimals": 18

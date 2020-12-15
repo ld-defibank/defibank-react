@@ -1,0 +1,39 @@
+.ez-radio-group {
+  position: relative;
+  display: inline-block;
+  height: 30px;
+  border-radius: 15px;
+  padding: 2px;
+  background: var(--main-pad-bg);
+  overflow: hidden;
+
+  &-option {
+    position: relative;
+    display: inline-block;
+    height: 26px;
+    border-radius: 13px;
+    z-index: 2;
+    cursor: pointer;
+    overflow: hidden;
+
+    &>span {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
+
+  &-checked {
+    position: absolute;
+    display: inline-block;
+    height: 26px;
+    border-radius: 13px;
+    top: 2px;
+    background: var(--main-pad-bg-strong);
+    transform: translate(2px, 0);
+    transition: all ease 0.15s;
+  }
+}

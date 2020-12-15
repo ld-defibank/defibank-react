@@ -25,6 +25,6 @@ function useUtils(customInitialStates = {}) {
   };
 }
 
-const Router = createContainer(useUtils);
+const Utils = createContainer(useUtils);
 
-export default Router;
+export default Utils;

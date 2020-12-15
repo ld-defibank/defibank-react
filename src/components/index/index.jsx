@@ -52,7 +52,7 @@ function Index() {
   } = Web3.useContainer();
   const {
     getMarketAllReserveData,
-    getAllReservePrice,
+    getAllAssetsUSDPrices,
   } = Market.useContainer();
 
   useEffect(() => {
@@ -60,7 +60,7 @@ function Index() {
     if (web3) {
       Promise.all([
         getMarketAllReserveData(),
-        getAllReservePrice(),
+        getAllAssetsUSDPrices(),
       ]).then((resp) => {
         const processedData = processData({
           reserves: resp[0],

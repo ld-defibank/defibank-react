@@ -3,6 +3,7 @@ import { createContainer } from 'unstated-next';
 import fetch from '@utils/fetch';
 import QUERYS from '../querys';
 import LendingPool from './lendingPool';
+import ChainlinkProxyPriceProvider from './chainlinkProxyPriceProvider';
 import CONFIG from '../config';
 
 const {
@@ -20,31 +21,52 @@ function useMarket(customInitialStates = {}) {
   const {
     getReserveData,
   } = LendingPool.useContainer();
+  const {
+    getAssetPrice,
+    getAssetsPrices,
+  } = ChainlinkProxyPriceProvider.useContainer();
 
   const getMarketReserveData = useCallback(tokenAddress => getReserveData(tokenAddress).then(data => ({
     ...data,
     tokenAddress,
-    meta: Object.values(TOKENS).find(token => token.address === tokenAddress),
+    meta: Object.values(TOKENS).find(token => token.tokenAddress === tokenAddress),
   })), [getReserveData]);
 
   const getMarketAllReserveData = useCallback(() => {
-    const tokenAddresses = Object.keys(TOKENS).map(key => TOKENS[key].address);
+    const tokenAddresses = Object.keys(TOKENS).map(key => TOKENS[key].tokenAddress);
     return Promise.all(tokenAddresses.map(address => getMarketReserveData(address)));
   }, [getMarketReserveData]);
 
-  // TODO:
-  const getAllReservePrice = useCallback(() => Promise.resolve(Object.values(TOKENS).map(token => ({
-    tokenAddress: token.address,
-    price: '1',
-  }))), []);
+  const getAssetETHPrice = useCallback(tokenAddress => getAssetPrice(tokenAddress), [getAssetPrice]);
+
+  const getAssetsETHPrices = useCallback(tokenAddresses => getAssetsPrices(tokenAddresses).then(prices => prices.map((price, i) => ({
+    tokenAddress: tokenAddresses[i],
+    priceAsEth: price,
+  }))), [getAssetsPrices]);
+
+  const getETHUSDPrice = useCallback(() => getAssetPrice(TOKENS.USDT.tokenAddress).then(price => 1e18 / parseInt(price, 10)), [getAssetPrice]);
+
+  const getAllAssetsETHPrices = useCallback(() => getAssetsETHPrices(Object.values(TOKENS).map(token => token.tokenAddress)), [getAssetsETHPrices]);
+  const getAllAssetsUSDPrices = useCallback(() => Promise.all([
+    getAllAssetsETHPrices(),
+    getETHUSDPrice(),
+  ]).then(([prices, ethusdPrice]) => prices.map(token => ({
+    tokenAddress: token.tokenAddress,
+    price: token.tokenAddress === TOKENS.USDT.tokenAddress ? 1 : parseInt(token.priceAsEth, 10) / 1e18 * ethusdPrice,
+    priceAsEth: token.priceAsEth,
+  }))), [getAllAssetsETHPrices, getETHUSDPrice]);
 
   return {
     getMarketReserveData,
     getMarketAllReserveData,
-    getAllReservePrice,
+    getETHUSDPrice,
+    getAssetETHPrice,
+    getAssetsETHPrices,
+    getAllAssetsETHPrices,
+    getAllAssetsUSDPrices,
   };
 }
 
-const Router = createContainer(useMarket);
+const Market = createContainer(useMarket);
 
-export default Router;
+export default Market;

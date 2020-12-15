@@ -1,0 +1,54 @@
+#dashboardDeposit {
+  .ez-table {
+    .thead .tr {
+      margin-bottom: 35px;
+    }
+    .tbody .tr {
+      margin-bottom: 45px;
+    }
+
+    .symbol {
+      width: 20%;
+    }
+    .balance {
+      width: 20%;
+
+      &>div:last-child {
+        color: var(--main-text-gray);
+      }
+    }
+    .apr {
+      width: 20%;
+    }
+    .collateral {
+      width: 20%;
+    }
+    .opt {
+      width: 20%;
+    }
+
+    .symbol {
+      .icon {
+        display: inline-block;
+        height: 36px;
+        width: 36px;
+        padding: 5px;
+        border-radius: 18px;
+        background-color: #fff;
+        margin-right: 20px;
+      }
+      svg {
+        height: 26px;
+        width: 26px;
+      }
+      
+      &>* {
+        vertical-align: middle;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  @import './style.m.scss';
+}

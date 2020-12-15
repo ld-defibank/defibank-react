@@ -58,11 +58,17 @@ function useLendingPool(customInitialStates = {}) {
     ], options);
   }, [web3, currentAccount, sendContract]);
 
-  const getReserveData = useCallback(tokenAddress => callContract('getReserveData', [tokenAddress]), [web3, currentAccount, sendContract]);
+  const getReserveData = useCallback(tokenAddress => callContract('getReserveData', [tokenAddress]), [web3, currentAccount, callContract]);
+
+  const getUserAccountData = useCallback(() => callContract('getUserAccountData', [currentAccount]), [web3, currentAccount, callContract]);
+
+  const getUserReserveData = useCallback(tokenAddress => callContract('getUserReserveData', [tokenAddress, currentAccount]), [web3, currentAccount, callContract]);
 
   return {
     deposit,
     getReserveData,
+    getUserAccountData,
+    getUserReserveData,
   };
 }
 

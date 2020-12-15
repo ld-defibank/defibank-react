@@ -47,17 +47,17 @@ function Index() {
   const { t } = I18n.useContainer();
 
   const updateAllowance = useCallback(() => {
-    getAllowance(USDT.address).then(setUSDTAllowance);
+    getAllowance(USDT.tokenAddress).then(setUSDTAllowance);
   }, [currentAccount, getAllowance, setUSDTAllowance]);
   const updateBalance = useCallback(() => {
-    getCurrentAccountTokenWalletBalance(USDT.address).then(setUSDTWalletBalance);
-    getCurrentAccountTokenWalletBalance(ETH.address).then(setETHWalletBalance);
+    getCurrentAccountTokenWalletBalance(USDT.tokenAddress).then(setUSDTWalletBalance);
+    getCurrentAccountTokenWalletBalance(ETH.tokenAddress).then(setETHWalletBalance);
   }, [currentAccount, getCurrentAccountTokenWalletBalance, setUSDTAllowance]);
   const updateReserveData = useCallback(() => {
-    getUserReserveData(USDT.address).then((d) => {
+    getUserReserveData(USDT.tokenAddress).then((d) => {
       setUSDTdepositBalance(d.currentATokenBalance);
     });
-    getUserReserveData(ETH.address).then((d) => {
+    getUserReserveData(ETH.tokenAddress).then((d) => {
       setETHdepositBalance(d.currentATokenBalance);
     });
   }, [currentAccount, getUserReserveData, setUSDTdepositBalance]);
@@ -76,13 +76,13 @@ function Index() {
 
   const handleApprove = () => {
     if (parseInt(USDTallowance, 10) > 0) return;
-    approve(USDT.address).then((d) => {
+    approve(USDT.tokenAddress).then((d) => {
       updateAllowance();
     });
   };
 
   const handleDeposit = (amount, coin) => {
-    deposit(coin.address, fromFixedAmountToAmount(amount, coin)).then((d) => {
+    deposit(coin.tokenAddress, fromFixedAmountToAmount(amount, coin)).then((d) => {
       updateBalance();
       updateReserveData();
     });

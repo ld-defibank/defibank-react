@@ -8,5 +8,14 @@
   --main-text-green: #94CD34;
   --main-text-orange: #FE9900;
 
-  --index-market-bg: #212232;
+  --main-pad-bg: #212232;
+  --main-pad-bg-strong: #4E516D;
+  --main-tip-bg: #fff;
+  --main-tip-text: #100C20;
+
+  --index-market-bg: var(--main-pad-bg);
+  --dashboard-user-info-bg: var(--main-pad-bg);
+  --dashboard-user-info-bar-color-1: #E4913B;
+  --dashboard-user-info-bar-color-2: #EDC910;
+  --dashboard-user-info-bar-color-3: #E43BA3;
 }

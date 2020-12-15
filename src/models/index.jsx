@@ -1,13 +1,19 @@
 import React from 'react';
+// 工具和配置
 import I18n from './i18n';
+import Utils from './utils';
 import Router from './router';
+// 基础设施
 import Web3 from './web3v2';
 import Web3Modal from './web3modal';
+// 合约底层
 import LendingPoolCore from './lendingPoolCore';
 import LendingPool from './lendingPool';
 import LendingPoolDataProvider from './lendingPoolDataProvider';
+import ChainlinkProxyPriceProvider from './chainlinkProxyPriceProvider';
+// 业务层
 import Market from './market';
-import Utils from './utils';
+import User from './user';
 
 const models = {
   I18n,
@@ -18,7 +24,9 @@ const models = {
   LendingPoolCore,
   LendingPool,
   LendingPoolDataProvider,
+  ChainlinkProxyPriceProvider,
   Market,
+  User,
 };
 
 
