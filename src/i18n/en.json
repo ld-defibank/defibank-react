@@ -14,6 +14,7 @@
   "be_careful": "Be careful",
   "detail": "Detail",
   "need_signin": "Please Sign in",
+  "common_web3_error": "Some error occurred, please try again. Error code: {code}",
 
   "sidebar_menu_home": "Homepage",
   "sidebar_menu_dashboard": "Dashboard",
@@ -60,12 +61,26 @@
   "borrow_table_available": "Available for you",
   "borrow_table_stable_apr": "Stable APR",
   "borrow_table_variable_apr": "Variable APR",
+  "borrow_table_opt": "Operation",
+  "borrow_table_opt_borrow": "Borrow",
+  "borrow_table_opt_repay": "Repay",
   "borrow_table_mode": "Rate Mode",
   "borrow_table_mode_noborrow": "--",
   "borrow_table_mode_stable": "Stable",
   "borrow_table_mode_no_variable": "Variable",
+
   "create_deposit_title": "Balance in wallet",
   "create_deposit_opt_approve": "Approve",
   "create_deposit_opt_deposit": "Deposit",
-  "create_deposit_success": "Deposit success"
+  "create_deposit_success": "Deposit success",
+
+  "create_withdraw_title": "Balance in DefiBank",
+
+  "create_borrow_title": "Collateral",
+  "create_borrow_opt_borrow": "Borrow",
+  "create_borrow_mode": "Interest Rate Mode",
+  "create_borrow_mode_stable": "Stable",
+  "create_borrow_mode_variable": "Variable",
+  "create_borrow_success": "Borrow success",
+  "create_borrow_e_3": "You cannot borrow the selected amount with a stable rate"
 }

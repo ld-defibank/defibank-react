@@ -39,7 +39,6 @@ class Contract {
   }
 
   send(method, args = [], options = {}) {
-    console.log(method, args, options);
     return this.estimateGas(method, args, { ...options })
       .then(gas => this.contract.methods[method](...args).send({
         gas,
@@ -60,7 +59,6 @@ class Contract {
   }
 
   estimateGas(method, args = [], options = {}) {
-    console.log(method, args, options);
     return this.contract.methods[method](...args).estimateGas(options)
       // gas多一点防止出问题
       .then((gas) => {

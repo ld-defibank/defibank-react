@@ -5,6 +5,11 @@ import './radioGroup.scss';
 
 export default function RadioGroup({ options = [], value, onChange, optionWidth = 60, disabled = false }) {
   const checkedIndex = options.findIndex(option => option.value === value);
+  const handleOptionClick = (v) => {
+    if (v === value || disabled) return;
+    onChange(v);
+  };
+
   return (
     <span className={classnames('ez-radio-group', { disabled })}>
       {checkedIndex > -1 && (
@@ -15,7 +20,7 @@ export default function RadioGroup({ options = [], value, onChange, optionWidth 
           key={option.key}
           className={classnames('ez-radio-group-option', { checked: option.value === value })}
           style={{ width: optionWidth }}
-          onClick={() => option.value === value || onChange(option.value)}
+          onClick={() => handleOptionClick(option.value)}
         >
           <span>{option.label || option.value}</span>
         </span>

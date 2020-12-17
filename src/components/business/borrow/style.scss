@@ -21,6 +21,14 @@
     }
     .opt {
       width: 20%;
+
+      a {
+        margin-right: 8px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
     }
 
     .symbol {

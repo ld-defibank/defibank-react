@@ -11,69 +11,62 @@ import Market from '@models/market';
 import Utils from '@models/utils';
 import SitePage from '@common/sitePage';
 import FormattedMessage from '@common/formattedMessage';
+import RadioGroup from '@common/radioGroup';
 import { Spin } from '@common/antd';
 import message from '@utils/message';
-import { fromAmountToFixedAmount, fromFixedAmountToAmount, isEth } from '@utils/';
+import { fromAmountToFixedAmount, fromFixedAmountToAmount, times10, tryGetErrorFromWeb3Error } from '@utils/';
 import CreatePad from '../createPad';
 import CreateOverview from '../createOverview';
 import CONFIG from '../../../config';
+import CONST from '../../../const';
 
 import './style.scss';
 
 
 const { TOKENS } = CONFIG;
+const { BORROW_RATE_MODE, BORROW_RATE_MODE_CODE } = CONST;
 
 
 function getPadOpts({
-  allowance,
   amount,
-  handleApprove,
-  handleDeposit,
+  handleBorrow,
 }) {
-  const padOpts = [];
-  if (allowance === '0') {
-    padOpts.push({
-      key: 'approve',
-      text: <FormattedMessage id="create_deposit_opt_approve" />,
-      onClick: handleApprove,
-    });
-  }
-  const disableDeposit = !(
-    allowance !== '0'
-    && parseFloat(amount) > 0
+  const disableBorrow = !(
+    parseFloat(amount) > 0
   );
-  padOpts.push({
-    key: 'deposit',
-    text: <FormattedMessage id="create_deposit_opt_deposit" />,
-    onClick: handleDeposit,
+  const padOpts = [{
+    key: 'borrow',
+    text: <FormattedMessage id="create_borrow_opt_borrow" />,
+    onClick: handleBorrow,
     props: {
-      disabled: disableDeposit,
+      disabled: disableBorrow,
     },
-  });
+  }];
   return padOpts;
 }
 
-function CreateDeposit({ match }) {
+function CreateBorrow({ match }) {
   const [tokenInfo, setTokenInfo] = useState(null);
-  const [walletBalance, setWalletBalance] = useState('0');
+  const [availableBalance, setAvailableBalance] = useState('0');
   const [price, setPrice] = useState(0);
   const [amount, setAmount] = useState('');
   const [maxAmount, setMaxAmount] = useState('0');
-  const [allowance, setAllowance] = useState('0');
+  const [rateMode, setRateMode] = useState(BORROW_RATE_MODE.stable);
+  const [lockRateMode, setLockRateMode] = useState(false);
 
   const {
     web3,
     currentAccount,
   } = Web3.useContainer();
   const {
+    getCurrentUserAccountData,
+    getCurrentUserReserveData,
     getCurrentAccountTokenWalletBalance,
-    estimateDepositETHGas,
-    getAllowance,
-    approve,
-    deposit,
+    borrow,
   } = User.useContainer();
   const {
     getAssetUSDPrice,
+    getAssetETHPrice,
   } = Market.useContainer();
   const { setGlobalLoading } = Utils.useContainer();
   const { t } = I18n.useContainer();
@@ -89,22 +82,26 @@ function CreateDeposit({ match }) {
   // 初始化钱包数据
   const updateWalletBalance = useCallback(() => {
     if (web3 && currentAccount && tokenInfo) {
-      getCurrentAccountTokenWalletBalance(tokenInfo.tokenAddress).then((balance) => {
-        setWalletBalance(balance);
+      Promise.all([
+        getCurrentUserReserveData(tokenInfo.tokenAddress),
+        getCurrentUserAccountData(tokenInfo.tokenAddress),
+        getAssetETHPrice(tokenInfo.tokenAddress),
+      ]).then(([reverseData, userData, assetEthPrice]) => {
+        const { borrowRateMode } = reverseData;
+        // 锁定rate mode
+        if (borrowRateMode !== BORROW_RATE_MODE_CODE.noborrow) {
+          setRateMode(BORROW_RATE_MODE[borrowRateMode]);
+          setLockRateMode(true);
+        }
+        const { availableBorrowsETH } = userData;
+        const balance = fromFixedAmountToAmount(new Decimal(availableBorrowsETH).div(assetEthPrice).toFixed(tokenInfo.decimals, Decimal.ROUND_DOWN), tokenInfo);
+        setAvailableBalance(balance);
         // 更新amount最大值
         if (parseInt(balance, 10) === 0) return;
-        if (!isEth(tokenInfo.tokenAddress)) {
-          setMaxAmount(fromAmountToFixedAmount(balance, tokenInfo, Infinity));
-        } else {
-          // TODO:
-          // ETH先判定gas
-          estimateDepositETHGas().then((gas) => {
-            setMaxAmount(fromAmountToFixedAmount(new Decimal(balance).minus(gas).toFixed(0), tokenInfo, Infinity));
-          });
-        }
+        setMaxAmount(fromAmountToFixedAmount(balance, tokenInfo, Infinity));
       });
     }
-  }, [web3, currentAccount, getCurrentAccountTokenWalletBalance, tokenInfo, setWalletBalance]);
+  }, [web3, currentAccount, getCurrentAccountTokenWalletBalance, tokenInfo, setAvailableBalance]);
 
   const updatePrice = useCallback(() => {
     if (web3 && currentAccount && tokenInfo) {
@@ -112,22 +109,16 @@ function CreateDeposit({ match }) {
     }
   }, [web3, currentAccount, setPrice, tokenInfo, getAssetUSDPrice]);
 
-  const updateAllowance = useCallback(() => {
-    if (web3 && currentAccount && tokenInfo) {
-      getAllowance(tokenInfo.tokenAddress).then(setAllowance);
-    }
-  }, [web3, currentAccount, setAllowance, tokenInfo, getAllowance]);
 
   useEffect(() => {
     updateWalletBalance();
     updatePrice();
-    updateAllowance();
   }, [web3, currentAccount, tokenInfo]);
 
   if (!tokenInfo) {
     return (
       <SitePage
-        id="createDeposit"
+        id="createBorrow"
         className="business-page"
         header={(
           <>
@@ -145,26 +136,19 @@ function CreateDeposit({ match }) {
     );
   }
 
-  const handleApprove = () => {
-    if (tokenInfo) {
-      setGlobalLoading(true);
-      approve(tokenInfo.tokenAddress).then(() => {
-        updateAllowance();
-        setGlobalLoading(false);
-      }).catch(() => {
-        setGlobalLoading(false);
-      });
-    }
-  };
 
-  const handleDeposit = () => {
+  const handleBorrow = () => {
     if (tokenInfo) {
       setGlobalLoading(true);
-      deposit(tokenInfo.tokenAddress, fromFixedAmountToAmount(amount, tokenInfo)).then(() => {
+      borrow(tokenInfo.tokenAddress, fromFixedAmountToAmount(amount, tokenInfo), BORROW_RATE_MODE_CODE[rateMode]).then(() => {
         updateWalletBalance();
         setGlobalLoading(false);
-        message.success(t('create_deposit_success'));
-      }).catch(() => {
+        message.success(t('create_borrow_success'));
+      }).catch((e) => {
+        const error = tryGetErrorFromWeb3Error(e);
+        if (error.code !== 4001) {
+          message.error(t.try(`create_borrow_e_${error.code}`, 'common_web3_error', { code: error.code }));
+        }
         setGlobalLoading(false);
       });
     }
@@ -172,14 +156,21 @@ function CreateDeposit({ match }) {
 
   const padOpts = getPadOpts({
     t,
-    allowance,
     amount,
-    handleApprove,
-    handleDeposit,
+    handleBorrow,
   });
+  const radioGroupOptions = [{
+    key: 'stable',
+    value: BORROW_RATE_MODE.stable,
+    label: t('create_borrow_mode_stable'),
+  }, {
+    key: 'variable',
+    value: BORROW_RATE_MODE.variable,
+    label: t('create_borrow_mode_variable'),
+  }];
   return (
     <SitePage
-      id="createDeposit"
+      id="createBorrow"
       className="business-page"
       header={(
         <>
@@ -194,15 +185,21 @@ function CreateDeposit({ match }) {
     >
       <div className="opt">
         <CreatePad
-          title={<FormattedMessage id="create_deposit_title" />}
+          title={<FormattedMessage id="create_borrow_title" />}
           tokenInfo={tokenInfo}
-          balance={walletBalance}
+          balance={availableBalance}
           price={price}
           amount={amount}
           onAmountChange={setAmount}
           hasMax
           maxAmount={maxAmount}
           opts={padOpts}
+          extra={(
+            <div className="radio-group-container">
+              <FormattedMessage id="create_borrow_mode" className="label" />
+              <RadioGroup options={radioGroupOptions} value={rateMode} onChange={setRateMode} optionWidth={100} disabled={lockRateMode} />
+            </div>
+          )}
         />
         <CreateOverview />
       </div>
@@ -210,4 +207,4 @@ function CreateDeposit({ match }) {
   );
 }
 
-export default CreateDeposit;
+export default CreateBorrow;

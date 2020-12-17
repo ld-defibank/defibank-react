@@ -7,6 +7,11 @@ const CONST = {
     stable: 'stable',
     variable: 'variable',
   },
+  BORROW_RATE_MODE_CODE: {
+    noborrow: '0',
+    stable: '1',
+    variable: '2',
+  },
 };
 
 export default CONST;

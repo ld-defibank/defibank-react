@@ -40,6 +40,20 @@ const pathConfigs = {
       active: 'deposit',
     },
   },
+  '/deposit/withdraw/:tokenAddress': {
+    key: 'create_withdraw',
+    refresh: [],
+    sidebar: {
+      active: 'deposit',
+    },
+  },
+  '/borrow/borrow/:tokenAddress': {
+    key: 'create_borrow',
+    refresh: [],
+    sidebar: {
+      active: 'borrow',
+    },
+  },
   '/borrow': {
     key: 'borrow',
     refresh: [],

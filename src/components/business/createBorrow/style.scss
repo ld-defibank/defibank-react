@@ -1,0 +1,26 @@
+#createBorrow {
+  .opt {
+    display: flex;
+  }
+  .business-create-pad {
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
+  .business-create-overview {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 330px;
+    margin-left: 45px;
+  }
+
+  .radio-group-container {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .ez-radio-group {
+      background: var(--page-background);
+    }
+  }
+}

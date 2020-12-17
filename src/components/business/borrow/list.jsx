@@ -1,7 +1,9 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react';
 import Table from '@common/table';
 import RadioGroup from '@common/radioGroup';
 import I18n from '@models/i18n';
+import Router from '@models/router';
 import FormattedMessage from '@common/formattedMessage';
 import { fromAmountToFixedAmount, humanReadableNumber } from '@utils/';
 import { Spin } from '@common/antd';
@@ -9,7 +11,7 @@ import CONST from '../../../const';
 
 const { BORROW_RATE_MODE } = CONST;
 
-function getColumns(data, prices, userData, t, handleModeChange) {
+function getColumns(data, prices, userData, t, goto, handleModeChange) {
   const radioGroupOptions = [{
     key: 'stable',
     value: BORROW_RATE_MODE.stable,
@@ -105,17 +107,22 @@ function getColumns(data, prices, userData, t, handleModeChange) {
       if (text === BORROW_RATE_MODE.noborrow) {
         return <span className="tx-gray"><FormattedMessage id="borrow_table_mode_noborrow" /></span>;
       }
-      return <RadioGroup options={radioGroupOptions} value={text} onChange={c => handleModeChange(row, c)} />;
+      return <RadioGroup options={radioGroupOptions} value={text} onChange={c => handleModeChange(row, c)} witdh={100} />;
     },
     props: {
       'data-label': t('deposit_collateral'),
     },
   }, {
-    title: t('deposit_table_opt'),
+    title: t('borrow_table_opt'),
     dataIndex: 'opt',
     key: 'opt',
     className: 'opt',
-    // render: text => ,
+    render: (text, row) => (
+      <>
+        <a onClick={() => goto('/borrow/borrow/' + row.tokenAddress)}><FormattedMessage id="borrow_table_opt_borrow" /></a>
+        <a onClick={() => goto('/borrow/withdraw/' + row.tokenAddress)}><FormattedMessage id="borrow_table_opt_repay" /></a>
+      </>
+    ),
     props: {
       'data-label': t('deposit_opt'),
     },
@@ -124,8 +131,9 @@ function getColumns(data, prices, userData, t, handleModeChange) {
 
 export default function DashboardBorrowList({ data, prices, userData, onModeChange }) {
   const { t, locale } = I18n.useContainer();
+  const { goto } = Router.useContainer();
 
-  const columns = getColumns(data, prices, userData, t, onModeChange);
+  const columns = getColumns(data, prices, userData, t, goto, onModeChange);
   return (
     <div className="business-list">
       <Table

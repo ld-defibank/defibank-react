@@ -36,4 +36,13 @@
     transform: translate(2px, 0);
     transition: all ease 0.15s;
   }
+
+  &.disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+
+    .ez-radio-group-option {
+      cursor: not-allowed;
+    }
+  }
 }

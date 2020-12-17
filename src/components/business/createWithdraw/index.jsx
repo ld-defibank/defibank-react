@@ -13,15 +13,17 @@ import SitePage from '@common/sitePage';
 import FormattedMessage from '@common/formattedMessage';
 import { Spin } from '@common/antd';
 import message from '@utils/message';
-import { fromAmountToFixedAmount, fromFixedAmountToAmount, isEth } from '@utils/';
+import { fromAmountToFixedAmount, fromFixedAmountToAmount, times10, isEth } from '@utils/';
 import CreatePad from '../createPad';
 import CreateOverview from '../createOverview';
 import CONFIG from '../../../config';
+import CONST from '../../../const';
 
 import './style.scss';
 
 
 const { TOKENS } = CONFIG;
+const { BORROW_RATE_MODE } = CONST;
 
 
 function getPadOpts({
@@ -53,7 +55,7 @@ function getPadOpts({
   return padOpts;
 }
 
-function CreateDeposit({ match }) {
+function CreateWithdraw({ match }) {
   const [tokenInfo, setTokenInfo] = useState(null);
   const [walletBalance, setWalletBalance] = useState('0');
   const [price, setPrice] = useState(0);
@@ -73,6 +75,7 @@ function CreateDeposit({ match }) {
     deposit,
   } = User.useContainer();
   const {
+    getMarketReserveData,
     getAssetUSDPrice,
   } = Market.useContainer();
   const { setGlobalLoading } = Utils.useContainer();
@@ -151,8 +154,6 @@ function CreateDeposit({ match }) {
       approve(tokenInfo.tokenAddress).then(() => {
         updateAllowance();
         setGlobalLoading(false);
-      }).catch(() => {
-        setGlobalLoading(false);
       });
     }
   };
@@ -164,8 +165,6 @@ function CreateDeposit({ match }) {
         updateWalletBalance();
         setGlobalLoading(false);
         message.success(t('create_deposit_success'));
-      }).catch(() => {
-        setGlobalLoading(false);
       });
     }
   };
@@ -179,7 +178,7 @@ function CreateDeposit({ match }) {
   });
   return (
     <SitePage
-      id="createDeposit"
+      id="createWithdraw"
       className="business-page"
       header={(
         <>
@@ -194,7 +193,7 @@ function CreateDeposit({ match }) {
     >
       <div className="opt">
         <CreatePad
-          title={<FormattedMessage id="create_deposit_title" />}
+          title={<FormattedMessage id="create_withdraw_title" />}
           tokenInfo={tokenInfo}
           balance={walletBalance}
           price={price}
@@ -210,4 +209,4 @@ function CreateDeposit({ match }) {
   );
 }
 
-export default CreateDeposit;
+export default CreateWithdraw;

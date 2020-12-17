@@ -81,6 +81,19 @@ function useUser(customInitialStates = {}) {
     ], options);
   }, [web3, currentAccount, getLendingPoolContract]);
 
+  const borrow = useCallback((tokenAddress, amount, interestRateMode, referralCode = '0') => {
+    const options = {
+      from: currentAccount,
+      value: 0,
+    };
+    return getLendingPoolContract().send('borrow', [
+      toChecksumAddress(tokenAddress),
+      amount,
+      interestRateMode,
+      referralCode,
+    ], options);
+  }, [web3, currentAccount, getLendingPoolContract]);
+
   return {
     estimateDepositETHGas,
     getCurrentUserAccountData,
@@ -89,6 +102,7 @@ function useUser(customInitialStates = {}) {
     getAllowance,
     approve,
     deposit,
+    borrow,
   };
 }
 

@@ -140,14 +140,32 @@ function humanReadableNumber(num) {
   return aNum.join('.');
 }
 
+const intReg = /^(0*)([0-9]+)/;
 function standardNumber(num) {
   const [intPart, decimalPart] = num.toString().split('.');
-  const iIntPart = parseInt(intPart, 10);
-  if (!decimalPart) return iIntPart.toString();
+  const iIntPart = intPart.replace(intReg, '$2');
+  if (!decimalPart) return iIntPart;
   const reverseDecimalPart = decimalPart.split('').reverse().join('');
-  const iReverseDecimalPart = parseInt(reverseDecimalPart, 10);
-  if (!iReverseDecimalPart) return iIntPart.toString();
+  const iReverseDecimalPart = reverseDecimalPart.replace(intReg, '$2');
+  if (!iReverseDecimalPart) return iIntPart;
   return `${iIntPart}.${iReverseDecimalPart.toString().split('').reverse().join('')}`;
+}
+
+function tryGetErrorFromWeb3Error(error) {
+  if (error.code) {
+    return error;
+  }
+  try {
+    const ret = JSON.parse('{' + error.message.split('{').slice(1).join('{'));
+    if (ret.originalError) {
+      return ret.originalError;
+    }
+    return ret;
+  } catch (e) {
+    return {
+      code: -9999,
+    };
+  }
 }
 
 export {
@@ -171,4 +189,5 @@ export {
   mobileNumber,
   humanReadableNumber,
   standardNumber,
+  tryGetErrorFromWeb3Error,
 };

@@ -21,10 +21,12 @@ function getSliderPercent(amount, maxAmount) {
 }
 
 function parseAmountString(amount, tokenInfo) {
-  return standardNumber(fromAmountToFixedAmount(fromFixedAmountToAmount(amount, tokenInfo), tokenInfo, Infinity));
+  const num = fromAmountToFixedAmount(fromFixedAmountToAmount(amount, tokenInfo), tokenInfo, Infinity);
+  const output = standardNumber(num);
+  return output;
 }
 
-export default function CreatePad({ title, tokenInfo, balance, price, amount, onAmountChange, hasMax, maxAmount, opts = [] }) {
+export default function CreatePad({ title, tokenInfo, balance, price, amount, onAmountChange, hasMax, maxAmount, opts = [], extra }) {
   const handleAmountChange = useCallback((e) => {
     const { value } = e.target;
     if (value === '') {
@@ -58,13 +60,14 @@ export default function CreatePad({ title, tokenInfo, balance, price, amount, on
     if (percent === 0) {
       onAmountChange(maxAmount);
     }
-    onAmountChange(parseAmountString(parseFloat(maxAmount) * percent / 100, tokenInfo));
+    onAmountChange(fromAmountToFixedAmount(fromFixedAmountToAmount(parseFloat(maxAmount) * percent / 100, tokenInfo), tokenInfo, Infinity));
   }, [onAmountChange, maxAmount, amount, tokenInfo]);
 
-  const handleParseAmountString = (value) => {
-    if (!value) return;
-    onAmountChange(parseAmountString(value, tokenInfo));
-  };
+  const handleAfterAmountChange = useCallback(() => {
+    if (!amount) return;
+    const parsed = parseAmountString(amount, tokenInfo);
+    onAmountChange(parsed);
+  }, [onAmountChange, amount, tokenInfo]);
 
   const sliderPercent = getSliderPercent(amount, maxAmount);
   return (
@@ -82,7 +85,7 @@ export default function CreatePad({ title, tokenInfo, balance, price, amount, on
           type="text"
           value={amount}
           onChange={handleAmountChange}
-          onBlur={e => handleParseAmountString(e.target.value)}
+          onBlur={handleAfterAmountChange}
           placeholder="0.00"
         />
         {hasMax && (<button className="max-btn" onClick={handleMaxClick}>MAX</button>)}
@@ -94,8 +97,9 @@ export default function CreatePad({ title, tokenInfo, balance, price, amount, on
         <span className="symbol">{tokenInfo.symbol}</span>
       </div>
       <div className="slider-container">
-        <Slider tipFormatter={v => `${v}%`} marks={marks} value={sliderPercent} onChange={handleSliderChange} />
+        <Slider tipFormatter={v => `${v}%`} marks={marks} value={sliderPercent} onChange={handleSliderChange} onAfterChange={handleAfterAmountChange} />
       </div>
+      {extra}
       <div className="opts">
         {opts.map(opt => (
           <button key={opt.key} onClick={opt.onClick} {...opt.props}>{opt.text}</button>
