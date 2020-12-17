@@ -91,7 +91,6 @@ class Erc20Contract extends Contract {
   }
 
   approve(account, tokenAddress) {
-    console.log(account, tokenAddress);
     return this.send('approve', [toChecksumAddress(tokenAddress), MAX_VAL], {
       from: account,
     });
