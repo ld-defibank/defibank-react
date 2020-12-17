@@ -14,7 +14,7 @@ import FormattedMessage from '@common/formattedMessage';
 import RadioGroup from '@common/radioGroup';
 import { Spin } from '@common/antd';
 import message from '@utils/message';
-import { fromAmountToFixedAmount, fromFixedAmountToAmount, times10, tryGetErrorFromWeb3Error } from '@utils/';
+import { fromAmountToFixedAmount, fromFixedAmountToAmount, tryGetErrorFromWeb3Error } from '@utils/';
 import CreatePad from '../createPad';
 import CreateOverview from '../createOverview';
 import CONFIG from '../../../config';
