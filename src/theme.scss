@@ -1,17 +1,22 @@
 :root {
+  --primary-color: #C7976A;
   --page-background: #100C20;
   --main-text: #fff;
-  --main-text-strong: #C7976A;
+  --main-text-strong: var(--primary-color);
   --main-text-strong-2: #DDC1A6;
   --main-text-weak: #7B7F9D;
   --main-text-gray: #464A65;
   --main-text-green: #94CD34;
   --main-text-orange: #FE9900;
+  --main-input-placeholder: #666;
 
   --main-pad-bg: #212232;
   --main-pad-bg-strong: #4E516D;
   --main-tip-bg: #fff;
   --main-tip-text: #100C20;
+  --main-symbol-icon-bg: #d8d8d8;
+  --button-disabled-bg: #424959;
+  --button-disabled-text: #6C7284;
 
   --index-market-bg: var(--main-pad-bg);
   --business-user-info-bg: var(--main-pad-bg);

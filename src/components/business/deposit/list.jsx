@@ -65,7 +65,7 @@ function getColumns(data, prices, t, goto, handleCollateralChange) {
     title: t('deposit_table_collateral'),
     dataIndex: 'isCollateral',
     key: 'isCollateral',
-    className: 'isCollateral',
+    className: 'collateral',
     render: (text, row) => <RadioGroup options={radioGroupOptions} value={text} onChange={c => handleCollateralChange(row, c)} />,
     props: {
       'data-label': t('deposit_collateral'),

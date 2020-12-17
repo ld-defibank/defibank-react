@@ -63,5 +63,9 @@
   "borrow_table_mode": "Rate Mode",
   "borrow_table_mode_noborrow": "--",
   "borrow_table_mode_stable": "Stable",
-  "borrow_table_mode_no_variable": "Variable"
+  "borrow_table_mode_no_variable": "Variable",
+  "create_deposit_title": "Balance in wallet",
+  "create_deposit_opt_approve": "Approve",
+  "create_deposit_opt_deposit": "Deposit",
+  "create_deposit_success": "Deposit success"
 }

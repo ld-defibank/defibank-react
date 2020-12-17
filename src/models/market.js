@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { createContainer } from 'unstated-next';
 import fetch from '@utils/fetch';
+import { isEth, isUsdt } from '@utils/';
 import QUERYS from '../querys';
 import LendingPool from './lendingPool';
 import ChainlinkProxyPriceProvider from './chainlinkProxyPriceProvider';
@@ -47,6 +48,19 @@ function useMarket(customInitialStates = {}) {
   const getETHUSDPrice = useCallback(() => getAssetPrice(TOKENS.USDT.tokenAddress).then(price => 1e18 / parseInt(price, 10)), [getAssetPrice]);
 
   const getAllAssetsETHPrices = useCallback(() => getAssetsETHPrices(Object.values(TOKENS).map(token => token.tokenAddress)), [getAssetsETHPrices]);
+
+  const getAssetUSDPrice = useCallback((tokenAddress) => {
+    if (isEth(tokenAddress)) {
+      return getETHUSDPrice();
+    }
+    if (isUsdt(tokenAddress)) {
+      return Promise.resolve(1);
+    }
+    return Promise.all([
+      getAssetETHPrice(tokenAddress),
+      getETHUSDPrice(),
+    ]).then(([priceAsEth, ethusdPrice]) => parseInt(priceAsEth, 10) / 1e18 * ethusdPrice);
+  }, [getETHUSDPrice, getAssetETHPrice]);
   const getAllAssetsUSDPrices = useCallback(() => Promise.all([
     getAllAssetsETHPrices(),
     getETHUSDPrice(),
@@ -63,6 +77,7 @@ function useMarket(customInitialStates = {}) {
     getAssetETHPrice,
     getAssetsETHPrices,
     getAllAssetsETHPrices,
+    getAssetUSDPrice,
     getAllAssetsUSDPrices,
   };
 }

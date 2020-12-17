@@ -27,22 +27,6 @@ function useLendingPool(customInitialStates = {}) {
 
   const getContract = useCallback(() => getWeb3Contract(ABI, ADDRESS_LENDING_POOL), [web3, getWeb3Contract]);
 
-  const sendContract = useCallback((method, args = [], options = {}) => {
-    const contract = getContract();
-    return contract.methods[method](...args).estimateGas(options)
-      // gas多一点防止出问题
-      .then(gas => parseInt(gas * 1.05, 10))
-      .then(gas => contract.methods[method](...args).send({
-        gas,
-        ...options,
-      }));
-  }, [getContract]);
-
-  const callContract = useCallback((method, args = []) => {
-    const contract = getContract();
-    return contract.methods[method](...args).call();
-  }, [getContract]);
-
   const deposit = useCallback((tokenAddress, amount, referralCode = '0') => {
     const options = {
       from: currentAccount,
@@ -51,21 +35,22 @@ function useLendingPool(customInitialStates = {}) {
     if (isEth(tokenAddress)) {
       options.value = amount;
     }
-    return sendContract('deposit', [
+    return getContract().send('deposit', [
       toChecksumAddress(tokenAddress),
       amount,
       referralCode,
     ], options);
-  }, [web3, currentAccount, sendContract]);
+  }, [web3, currentAccount, getContract]);
 
-  const getReserveData = useCallback(tokenAddress => callContract('getReserveData', [tokenAddress]), [web3, currentAccount, callContract]);
+  const getReserveData = useCallback(tokenAddress => getContract().call('getReserveData', [tokenAddress]), [web3, currentAccount, getContract]);
 
-  const getUserAccountData = useCallback(() => callContract('getUserAccountData', [currentAccount]), [web3, currentAccount, callContract]);
+  const getUserAccountData = useCallback(() => getContract().call('getUserAccountData', [currentAccount]), [web3, currentAccount, getContract]);
 
-  const getUserReserveData = useCallback(tokenAddress => callContract('getUserReserveData', [tokenAddress, currentAccount]), [web3, currentAccount, callContract]);
+  const getUserReserveData = useCallback(tokenAddress => getContract().call('getUserReserveData', [tokenAddress, currentAccount]), [web3, currentAccount, getContract]);
 
   return {
     deposit,
+    getContract,
     getReserveData,
     getUserAccountData,
     getUserReserveData,

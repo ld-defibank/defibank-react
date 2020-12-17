@@ -12,3 +12,31 @@
 @import '~antd/lib/notification/style/index.less';
 @import '~antd/lib/select/style/index.less';
 @import '~antd/lib/modal/style/index.less';
+
+@primary-color: #C7976A;
+
+// slider定制
+.ant-slider {
+  .ant-slider-rail {
+    background: var(--page-background);
+  }
+  .ant-slider-dot {
+    border-color: var(--main-text-gray);
+    background: var(--main-text-gray);
+  }
+  .ant-slider-dot-active {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+  }
+  .ant-slider-track {
+    background: var(--primary-color);;
+  }
+  &:hover {
+    .ant-slider-rail {
+      background: var(--page-background);
+    }
+    .ant-slider-track {
+      background: var(--primary-color);;
+    }
+  }
+}

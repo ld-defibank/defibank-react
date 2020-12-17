@@ -4,6 +4,7 @@ import Main from './layout/main';
 import Sidebar from './layout/sidebar';
 import ConnectWallet from './layout/connectWallet';
 import Top from './layout/top';
+import GlobalLoading from './layout/globalLoading';
 import Index from './components/index';
 import { Deposit, Borrow, CreateDeposit } from './components/business';
 import Dashboard from './components/dashboard';
@@ -29,6 +30,7 @@ function MyRouter(props) {
           </Main>
         </div>
         <ConnectWallet />
+        <GlobalLoading />
       </Store>
     </Router>
   );

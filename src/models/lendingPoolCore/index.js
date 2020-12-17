@@ -36,20 +36,18 @@ function useLendingPoolCore(customInitialStates = {}) {
     if (!web3 || !currentAccount || !tokenAddress) return Promise.resolve('0');
     if (isEth(tokenAddress)) return Promise.resolve(MAX_VAL);
     const ercContract = getErcContract(tokenAddress);
-    return ercContract.methods.allowance(currentAccount, toChecksumAddress(ADDRESS_LENDING_POOL_CORE)).call();
+    return ercContract.allowance(currentAccount, ADDRESS_LENDING_POOL_CORE);
   }, [web3, currentAccount]);
 
   const approve = useCallback((tokenAddress) => {
     if (!web3 || !currentAccount || !tokenAddress) return Promise.reject({ code: 9999 });
     if (isEth(tokenAddress)) return Promise.resolve(true);
     const ercContract = getErcContract(tokenAddress);
-    return ercContract.methods.approve(toChecksumAddress(ADDRESS_LENDING_POOL_CORE), MAX_VAL).send({
-      from: currentAccount,
-    });
+    return ercContract.approve(currentAccount, ADDRESS_LENDING_POOL_CORE);
   }, [web3, currentAccount]);
 
-
   return {
+    getContract,
     getAllowance,
     approve,
   };

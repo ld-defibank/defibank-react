@@ -5,6 +5,10 @@ import Decimal from 'decimal.js-light';
 import isMobile from './isMobile';
 import CONFIG from '../config';
 
+const {
+  TOKENS,
+} = CONFIG;
+
 const STORAGE_PREFIX = 'SEKAI_';
 
 function storage(key, value) {
@@ -90,7 +94,12 @@ function fromFixedAmountToAmount(fixedAmount, TOKEN) {
 
 function isEth(tokenAddress) {
   if (!tokenAddress) return false;
-  return tokenAddress.toLowerCase() === '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
+  return tokenAddress.toLowerCase() === TOKENS.ETH.tokenAddress.toLowerCase();
+}
+
+function isUsdt(tokenAddress) {
+  if (!tokenAddress) return false;
+  return tokenAddress.toLowerCase() === TOKENS.USDT.tokenAddress.toLowerCase();
 }
 
 function formatHash(hash) {
@@ -131,6 +140,16 @@ function humanReadableNumber(num) {
   return aNum.join('.');
 }
 
+function standardNumber(num) {
+  const [intPart, decimalPart] = num.toString().split('.');
+  const iIntPart = parseInt(intPart, 10);
+  if (!decimalPart) return iIntPart.toString();
+  const reverseDecimalPart = decimalPart.split('').reverse().join('');
+  const iReverseDecimalPart = parseInt(reverseDecimalPart, 10);
+  if (!iReverseDecimalPart) return iIntPart.toString();
+  return `${iIntPart}.${iReverseDecimalPart.toString().split('').reverse().join('')}`;
+}
+
 export {
   isMobile,
   storage,
@@ -148,6 +167,8 @@ export {
   fromAmountToFixedAmount,
   fromFixedAmountToAmount,
   isEth,
+  isUsdt,
   mobileNumber,
   humanReadableNumber,
+  standardNumber,
 };

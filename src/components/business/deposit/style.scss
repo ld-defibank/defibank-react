@@ -25,6 +25,14 @@
     }
     .opt {
       width: 20%;
+
+      a {
+        margin-right: 8px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
     }
 
     .symbol {
@@ -34,7 +42,7 @@
         width: 36px;
         padding: 5px;
         border-radius: 18px;
-        background-color: #fff;
+        background-color: var(--main-symbol-icon-bg);
         margin-right: 20px;
       }
       svg {

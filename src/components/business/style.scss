@@ -136,6 +136,9 @@
         transform: translate(0, 12px);
       }
     }
+    &:first-child:last-child {
+      border-radius: 4px;
+    }
     &:nth-child(3n + 1) {
       background-color: var(--business-user-info-bar-color-1);
 
@@ -169,6 +172,132 @@
     line-height: 22px;
     text-align: center;
     color: var(--main-text-gray);
+  }
+}
+
+.business-page .business-create-pad {
+  background: var(--main-pad-bg);
+  border-radius: 8px;
+  padding: 40px 30px;
+
+  .title {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .balance {
+    font-size: 54px;
+    height: 75px;
+    line-height: 75px;
+
+    .symbol {
+      font-size: 24px;
+      margin-left: 18px;
+    }
+  }
+
+  .balance-value {
+    color: var(--main-text-gray);
+    margin-bottom: 18px;
+  }
+
+  .input-container {
+    display: flex;
+    align-items: center;
+    background: var(--page-background);
+    padding: 25px 20px;
+    border-radius: 12px;
+
+    .icon {
+      display: inline-block;
+      height: 32px;
+      width: 32px;
+      padding: 4px;
+      border-radius: 16px;
+      background-color: var(--main-symbol-icon-bg);
+      margin-right: 12px;
+
+      svg {
+        height: 24px;
+        width: 24px;
+      }
+    }
+    .symbol {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .max-btn {
+      padding: 8px 12px;
+      margin-right: 12px;
+    }
+    input {
+      flex-grow: 1;
+      flex-shrink: 1;
+      margin-right: 12px;
+      border: none;
+      outline: none;
+      font-size: 30px;
+      min-width: 0;
+
+      &::placeholder {
+        color: var(--main-input-placeholder);
+      }
+    }
+  }
+
+  input {
+    background: var(--page-background);
+  }
+
+  .slider-container {
+    .ant-slider {
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+    .ant-slider-mark {
+      display: none;
+    }
+  }
+
+  .opts {
+    display: flex;
+    column-gap: 24px;
+
+    button {
+      flex-grow: 1;
+      flex-shrink: 1;
+    }
+  }
+}
+
+.business-page .business-create-overview {
+  background: var(--main-pad-bg);
+  border-radius: 8px;
+  padding: 40px 30px;
+}
+
+.business-page {
+  button {
+    background: var(--main-text-strong);
+    color: var(--main-text);
+    border-radius: 4px;
+    padding: 20px;
+    transition: all ease 0.15s;
+    font-size: 16px;
+
+    &:hover {
+      filter: brightness(1.1);
+    }
+
+    &:disabled {
+      background: var(--button-disabled-bg);
+      color: var(--button-disabled-text);
+      cursor: not-allowed;
+
+      &:hover {
+        filter: none;
+      }
+    }
   }
 }
 

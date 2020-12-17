@@ -31,32 +31,27 @@ function useLendingPoolCore(customInitialStates = {}) {
 
   const getContract = useCallback(() => getWeb3Contract(ABI, ADDRESS_LENDING_POOL_DATA_PROVIDER), [web3, getWeb3Contract]);
 
-  const callContract = useCallback((method, args = []) => {
-    const contract = getContract();
-    return contract.methods[method](...args).call();
-  }, [getContract]);
-
   const getReserveData = useCallback((tokenAddress) => {
     if (!currentAccount) return Promise.resolve(null);
-    return callContract('getReserveData', [
+    return getContract().call('getReserveData', [
       tokenAddress,
     ]);
-  }, [callContract, currentAccount]);
+  }, [getContract, currentAccount]);
 
   const getUserReserveData = useCallback((tokenAddress) => {
     if (!currentAccount) return Promise.resolve(null);
-    return callContract('getUserReserveData', [
+    return getContract().call('getUserReserveData', [
       tokenAddress,
       currentAccount,
     ]);
-  }, [callContract, currentAccount]);
+  }, [getContract, currentAccount]);
 
   const getUserAccountData = useCallback(() => {
     if (!currentAccount) return Promise.resolve(null);
-    return callContract('getUserAccountData', [
+    return getContract().call('getUserAccountData', [
       currentAccount,
     ]);
-  }, [callContract, currentAccount]);
+  }, [getContract, currentAccount]);
 
   return {
     getReserveData,

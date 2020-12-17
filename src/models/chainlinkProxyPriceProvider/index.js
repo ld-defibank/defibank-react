@@ -27,13 +27,8 @@ function useChainlinkProxyPriceProvider(customInitialStates = {}) {
 
   const getContract = useCallback(() => getWeb3Contract(ABI, CHAINLINK_PROXY_PRICE_PROVIDER), [web3, getWeb3Contract]);
 
-  const callContract = useCallback((method, args = []) => {
-    const contract = getContract();
-    return contract.methods[method](...args).call();
-  }, [getContract]);
-
-  const getAssetPrice = useCallback(tokenAddress => callContract('getAssetPrice', [tokenAddress]), [web3, currentAccount, callContract]);
-  const getAssetsPrices = useCallback(tokenAddresses => callContract('getAssetsPrices', [tokenAddresses]), [web3, currentAccount, callContract]);
+  const getAssetPrice = useCallback(tokenAddress => getContract().call('getAssetPrice', [tokenAddress]), [web3, currentAccount, getContract]);
+  const getAssetsPrices = useCallback(tokenAddresses => getContract().call('getAssetsPrices', [tokenAddresses]), [web3, currentAccount, getContract]);
 
   return {
     getAssetPrice,
