@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { fromAmountToFixedAmount, fromFixedAmountToAmount, times10, standardNumber } from '@utils/';
 import { Slider } from '@common/antd';
+import FormattedMessage from '@common/formattedMessage';
 
 const marks = {
   0: '0%',
@@ -26,7 +27,7 @@ function parseAmountString(amount, tokenInfo) {
   return output;
 }
 
-export default function CreatePad({ title, tokenInfo, balance, price, amount, onAmountChange, hasMax, maxAmount, opts = [], extra }) {
+export default function CreatePad({ title, tokenInfo, balance, price, amount, onAmountChange, hasMax, maxAmount, isMax, setIsMax = () => {}, opts = [], extra }) {
   const handleAmountChange = useCallback((e) => {
     const { value } = e.target;
     if (value === '') {
@@ -49,16 +50,20 @@ export default function CreatePad({ title, tokenInfo, balance, price, amount, on
 
   const handleMaxClick = useCallback(() => {
     onAmountChange(maxAmount);
+    setIsMax(true);
   }, [onAmountChange, maxAmount]);
 
   const handleSliderChange = useCallback((percent) => {
     if (!maxAmount) return;
+    setIsMax(false);
     if (percent === 0) {
       onAmountChange('');
       return;
     }
-    if (percent === 0) {
+    if (percent === 100) {
       onAmountChange(maxAmount);
+      setIsMax(true);
+      return;
     }
     onAmountChange(fromAmountToFixedAmount(fromFixedAmountToAmount(parseFloat(maxAmount) * percent / 100, tokenInfo), tokenInfo, Infinity));
   }, [onAmountChange, maxAmount, amount, tokenInfo]);
@@ -81,13 +86,16 @@ export default function CreatePad({ title, tokenInfo, balance, price, amount, on
         {`$ ${(parseFloat(fromAmountToFixedAmount(balance, tokenInfo, Infinity)) * price).toFixed(2)}`}
       </div>
       <div className="input-container">
-        <input
-          type="text"
-          value={amount}
-          onChange={handleAmountChange}
-          onBlur={handleAfterAmountChange}
-          placeholder="0.00"
-        />
+        <div className="input">
+          <input
+            type="text"
+            value={amount}
+            onChange={handleAmountChange}
+            onBlur={handleAfterAmountChange}
+            placeholder="0.00"
+          />
+          {isMax && (<div className="max-mask"><FormattedMessage id="business_create_pad_max_mask" /></div>)}
+        </div>
         {hasMax && (<button className="max-btn" onClick={handleMaxClick}>MAX</button>)}
         <span className="icon">
           <svg aria-hidden="true">

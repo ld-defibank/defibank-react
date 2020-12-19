@@ -86,9 +86,9 @@ function Borrow() {
       Object.keys(TOKENS).forEach((symbol) => {
         // 获取市场数据
         getMarketReserveData(TOKENS[symbol].tokenAddress).then((reserve) => {
-          updateAssetListValue(symbol, 'variableApr', times10(reserve.variableBorrowRate, -27, 2));
-          updateAssetListValue(symbol, 'stableApr', times10(reserve.stableBorrowRate, -27, 2));
-          updateAssetListValue(symbol, 'utilizationRate', times10(reserve.utilizationRate, -27, 2));
+          updateAssetListValue(symbol, 'variableApr', times10(reserve.variableBorrowRate, -25, 2));
+          updateAssetListValue(symbol, 'stableApr', times10(reserve.stableBorrowRate, -25, 2));
+          updateAssetListValue(symbol, 'utilizationRate', times10(reserve.utilizationRate, -25, 2));
         });
         // 获取个人数据
         getCurrentUserReserveData(TOKENS[symbol].tokenAddress).then((reserve) => {

@@ -29,30 +29,31 @@ const { BORROW_RATE_MODE, BORROW_RATE_MODE_CODE } = CONST;
 
 function getPadOpts({
   amount,
-  handleBorrow,
+  handleRepay,
 }) {
-  const disableBorrow = !(
+  const disableRepay = !(
     parseFloat(amount) > 0
   );
   const padOpts = [{
-    key: 'borrow',
-    text: <FormattedMessage id="create_borrow_opt_borrow" />,
-    onClick: handleBorrow,
+    key: 'repay',
+    text: <FormattedMessage id="create_repay_opt_repay" />,
+    onClick: handleRepay,
     props: {
-      disabled: disableBorrow,
+      disabled: disableRepay,
     },
   }];
   return padOpts;
 }
 
-function CreateWithdraw({ match }) {
+function CreateRepay({ match }) {
   const [tokenInfo, setTokenInfo] = useState(null);
-  const [availableBalance, setAvailableBalance] = useState('0');
+  const [borrowedBalance, setBorrowedBalance] = useState('0');
+  const [principalBorrowBalance, setPrincipalBorrowBalance] = useState('0');
+  const [originationFee, setOriginationFee] = useState('0');
   const [price, setPrice] = useState(0);
   const [amount, setAmount] = useState('');
   const [maxAmount, setMaxAmount] = useState('0');
-  const [rateMode, setRateMode] = useState(BORROW_RATE_MODE.stable);
-  const [lockRateMode, setLockRateMode] = useState(false);
+  const [isMax, setIsMax] = useState(false);
 
   const {
     web3,
@@ -62,7 +63,7 @@ function CreateWithdraw({ match }) {
     getCurrentUserAccountData,
     getCurrentUserReserveData,
     getCurrentAccountTokenWalletBalance,
-    borrow,
+    repayForMyself,
   } = User.useContainer();
   const {
     getAssetUSDPrice,
@@ -87,21 +88,16 @@ function CreateWithdraw({ match }) {
         getCurrentUserAccountData(tokenInfo.tokenAddress),
         getAssetETHPrice(tokenInfo.tokenAddress),
       ]).then(([reverseData, userData, assetEthPrice]) => {
-        const { borrowRateMode } = reverseData;
-        // 锁定rate mode
-        if (borrowRateMode !== BORROW_RATE_MODE_CODE.noborrow) {
-          setRateMode(BORROW_RATE_MODE[borrowRateMode]);
-          setLockRateMode(true);
-        }
-        const { availableBorrowsETH } = userData;
-        const balance = fromFixedAmountToAmount(new Decimal(availableBorrowsETH).div(assetEthPrice).toFixed(tokenInfo.decimals, Decimal.ROUND_DOWN), tokenInfo);
-        setAvailableBalance(balance);
+        const { currentBorrowBalance } = reverseData;
+        setBorrowedBalance(currentBorrowBalance);
+        setPrincipalBorrowBalance(reverseData.principalBorrowBalance);
+        setOriginationFee(reverseData.originationFee);
         // 更新amount最大值
-        if (parseInt(balance, 10) === 0) return;
-        setMaxAmount(fromAmountToFixedAmount(balance, tokenInfo, Infinity));
+        if (parseInt(currentBorrowBalance, 10) === 0) return;
+        setMaxAmount(fromAmountToFixedAmount(currentBorrowBalance, tokenInfo, Infinity));
       });
     }
-  }, [web3, currentAccount, getCurrentAccountTokenWalletBalance, tokenInfo, setAvailableBalance]);
+  }, [web3, currentAccount, getCurrentAccountTokenWalletBalance, tokenInfo, setBorrowedBalance]);
 
   const updatePrice = useCallback(() => {
     if (web3 && currentAccount && tokenInfo) {
@@ -118,7 +114,7 @@ function CreateWithdraw({ match }) {
   if (!tokenInfo) {
     return (
       <SitePage
-        id="createWithdraw"
+        id="createRepay"
         className="business-page"
         header={(
           <>
@@ -137,13 +133,13 @@ function CreateWithdraw({ match }) {
   }
 
 
-  const handleBorrow = () => {
+  const handleRepay = () => {
     if (tokenInfo) {
       setGlobalLoading(true);
-      borrow(tokenInfo.tokenAddress, fromFixedAmountToAmount(amount, tokenInfo), BORROW_RATE_MODE_CODE[rateMode]).then(() => {
+      repayForMyself(tokenInfo.tokenAddress, new Decimal(fromFixedAmountToAmount(amount, tokenInfo)).add(originationFee).toFixed(0), isMax).then(() => {
         updateWalletBalance();
         setGlobalLoading(false);
-        message.success(t('create_borrow_success'));
+        message.success(t('create_repay_success'));
       }).catch((e) => {
         const error = tryGetErrorFromWeb3Error(e);
         if (error.code !== 4001) {
@@ -157,20 +153,11 @@ function CreateWithdraw({ match }) {
   const padOpts = getPadOpts({
     t,
     amount,
-    handleBorrow,
+    handleRepay,
   });
-  const radioGroupOptions = [{
-    key: 'stable',
-    value: BORROW_RATE_MODE.stable,
-    label: t('create_borrow_mode_stable'),
-  }, {
-    key: 'variable',
-    value: BORROW_RATE_MODE.variable,
-    label: t('create_borrow_mode_variable'),
-  }];
   return (
     <SitePage
-      id="createWithdraw"
+      id="createRepay"
       className="business-page"
       header={(
         <>
@@ -185,19 +172,35 @@ function CreateWithdraw({ match }) {
     >
       <div className="opt">
         <CreatePad
-          title={<FormattedMessage id="create_borrow_title" />}
+          title={<FormattedMessage id="create_repay_title" />}
           tokenInfo={tokenInfo}
-          balance={availableBalance}
+          balance={borrowedBalance}
           price={price}
           amount={amount}
           onAmountChange={setAmount}
           hasMax
           maxAmount={maxAmount}
+          isMax={isMax}
+          setIsMax={setIsMax}
           opts={padOpts}
-          extra={(
-            <div className="radio-group-container">
-              <FormattedMessage id="create_borrow_mode" className="label" />
-              <RadioGroup options={radioGroupOptions} value={rateMode} onChange={setRateMode} optionWidth={100} disabled={lockRateMode} />
+          extra={amount && (
+            <div className="info-container">
+              <div className="row">
+                <div className="label"><FormattedMessage id="create_repay_info_borrowed" /></div>
+                <div className="value">{fromAmountToFixedAmount(fromFixedAmountToAmount(amount, tokenInfo), tokenInfo, 6)} <span className="tx-weak">{tokenInfo.symbol}</span></div>
+              </div>
+              <div className="row">
+                <div className="label"><FormattedMessage id="create_repay_info_fee" /></div>
+                <div className="value">{fromAmountToFixedAmount(originationFee, tokenInfo, 6)} <span className="tx-weak">{tokenInfo.symbol}</span></div>
+              </div>
+              <div className="row">
+                <div className="label"><FormattedMessage id="create_repay_info_total" /></div>
+                <div className="value">
+                  {
+                    fromAmountToFixedAmount(new Decimal(fromFixedAmountToAmount(amount, tokenInfo)).add(originationFee), tokenInfo, 6)
+                  } <span className="tx-weak">{tokenInfo.symbol}</span>
+                </div>
+              </div>
             </div>
           )}
         />
@@ -207,4 +210,4 @@ function CreateWithdraw({ match }) {
   );
 }
 
-export default CreateWithdraw;
+export default CreateRepay;

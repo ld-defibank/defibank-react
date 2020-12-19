@@ -35,7 +35,7 @@ function getColumns(data, t) {
     className: 'deposit',
     render: (text, row) => (
       <>
-        <div>{humanReadableNumber(text)} {row.symbol}</div>
+        <div>{humanReadableNumber(text.toFixed(2))} {row.symbol}</div>
         <div>{`$ ${humanReadableNumber(row.depositUsd.toFixed(2))}`}</div>
       </>
     ),

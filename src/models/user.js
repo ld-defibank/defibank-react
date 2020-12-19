@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { createContainer } from 'unstated-next';
+import Decimal from 'decimal.js-light';
 import fetch from '@utils/fetch';
-import { isEth } from '@utils/';
+import { isEth, times10 } from '@utils/';
 import { toChecksumAddress } from 'ethereum-checksum-address';
 import QUERYS from '../querys';
 import LendingPool from './lendingPool';
 import LendingPoolCore from './lendingPoolCore';
+import AToken from './aToken';
 import Web3 from './web3v2';
 import CONFIG from '../config';
 
@@ -25,11 +27,15 @@ function useUser(customInitialStates = {}) {
     getContract: getLendingPoolContract,
     getUserAccountData,
     getUserReserveData,
+    getReserveData,
   } = LendingPool.useContainer();
   const {
     getAllowance,
     approve,
   } = LendingPoolCore.useContainer();
+  const {
+    getContract: getATokenContract,
+  } = AToken.useContainer();
   const {
     web3,
     getErcContract,
@@ -94,6 +100,51 @@ function useUser(customInitialStates = {}) {
     ], options);
   }, [web3, currentAccount, getLendingPoolContract]);
 
+  const repay = useCallback((tokenAddress, amount, onBehalfOf, isMax) => {
+    const options = {
+      from: currentAccount,
+      value: 0,
+    };
+    if (isEth(tokenAddress)) {
+      options.value = amount;
+    }
+    if (!isMax) {
+      return getLendingPoolContract().send('repay', [
+        toChecksumAddress(tokenAddress),
+        amount,
+        onBehalfOf,
+      ], options);
+    }
+    return getReserveData(tokenAddress).then((data) => {
+      const { aTokenAddress } = data;
+      const aTokenContract = getATokenContract(aTokenAddress);
+      return aTokenContract.call('UINT_MAX_VALUE');
+    }).then((repayAmount) => {
+      if (isEth(tokenAddress)) {
+        // 如果是ETH，则加上1天的利息到value上
+        return getUserReserveData(tokenAddress).then((data) => {
+          const { borrowRate } = data;
+          const value = new Decimal(amount).add(new Decimal(amount).times(times10(borrowRate, -27)).div(360)).toFixed(0);
+          return value;
+        }).then(value => getLendingPoolContract().send('repay', [
+          toChecksumAddress(tokenAddress),
+          repayAmount,
+          onBehalfOf,
+        ], {
+          ...options,
+          value,
+        }));
+      }
+      return getLendingPoolContract().send('repay', [
+        toChecksumAddress(tokenAddress),
+        repayAmount,
+        onBehalfOf,
+      ], options);
+    });
+  }, [web3, currentAccount, getLendingPoolContract]);
+
+  const repayForMyself = useCallback((tokenAddress, amount, isMax) => repay(tokenAddress, amount, currentAccount, isMax), [repay, currentAccount]);
+
   return {
     estimateDepositETHGas,
     getCurrentUserAccountData,
@@ -103,6 +154,7 @@ function useUser(customInitialStates = {}) {
     approve,
     deposit,
     borrow,
+    repayForMyself,
   };
 }
 

@@ -7,6 +7,7 @@ import Router from './router';
 import Web3 from './web3v2';
 import Web3Modal from './web3modal';
 // 合约底层
+import AToken from './aToken';
 import LendingPoolCore from './lendingPoolCore';
 import LendingPool from './lendingPool';
 import LendingPoolDataProvider from './lendingPoolDataProvider';
@@ -21,6 +22,7 @@ const models = {
   Router,
   Web3Modal,
   Web3,
+  AToken,
   LendingPoolCore,
   LendingPool,
   LendingPoolDataProvider,

@@ -54,6 +54,13 @@ const pathConfigs = {
       active: 'borrow',
     },
   },
+  '/borrow/repay/:tokenAddress': {
+    key: 'create_repay',
+    refresh: [],
+    sidebar: {
+      active: 'borrow',
+    },
+  },
   '/borrow': {
     key: 'borrow',
     refresh: [],

@@ -78,7 +78,7 @@ function Deposit() {
       Object.keys(TOKENS).forEach((symbol) => {
         // 获取市场数据
         getMarketReserveData(TOKENS[symbol].tokenAddress).then((reserve) => {
-          updateAssetListValue(symbol, 'apr', times10(reserve.liquidityRate, -27, 2));
+          updateAssetListValue(symbol, 'apr', times10(reserve.liquidityRate, -25, 2));
         });
         // 获取个人数据
         getCurrentUserReserveData(TOKENS[symbol].tokenAddress).then((reserve) => {

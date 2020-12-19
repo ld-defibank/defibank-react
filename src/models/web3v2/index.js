@@ -78,8 +78,8 @@ class Contract {
 }
 
 class Erc20Contract extends Contract {
-  constructor(web3, address) {
-    super(web3, ERC20_ABI, address);
+  constructor(web3, address, ABI = ERC20_ABI) {
+    super(web3, ABI, address);
   }
 
   balanceOf(account) {
@@ -156,7 +156,7 @@ function useWeb3(customInitialStates = {}) {
 
   const getContract = useCallback((ABI, address) => new Contract(web3, ABI, toChecksumAddress(address)), [web3]);
 
-  const getErcContract = useCallback(address => new Erc20Contract(web3, address), [web3]);
+  const getErcContract = useCallback((address, ABI) => new Erc20Contract(web3, address, ABI), [web3]);
 
   const getCurrentAccountTokenWalletBalance = useCallback((tokenAddress) => {
     if (!web3 || !currentAccount || !tokenAddress) return Promise.resolve('0');

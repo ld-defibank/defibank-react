@@ -34,8 +34,8 @@ function processData({ reserves, prices }) {
       borrowUsd,
       deposit,
       depositUsd,
-      depositAPR: times10(reserve.liquidityRate, -27),
-      borrowAPR: times10(reserve.variableBorrowRate, -27),
+      depositAPR: times10(reserve.liquidityRate, -25, 2),
+      borrowAPR: times10(reserve.variableBorrowRate, -25, 2),
     };
   });
 

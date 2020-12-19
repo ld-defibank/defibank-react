@@ -69,6 +69,8 @@
   "borrow_table_mode_stable": "Stable",
   "borrow_table_mode_no_variable": "Variable",
 
+  "business_create_pad_max_mask": "MAX balance",
+
   "create_deposit_title": "Balance in wallet",
   "create_deposit_opt_approve": "Approve",
   "create_deposit_opt_deposit": "Deposit",
@@ -82,5 +84,12 @@
   "create_borrow_mode_stable": "Stable",
   "create_borrow_mode_variable": "Variable",
   "create_borrow_success": "Borrow success",
-  "create_borrow_e_3": "You cannot borrow the selected amount with a stable rate"
+  "create_borrow_e_3": "You cannot borrow the selected amount with a stable rate",
+
+  "create_repay_title": "Borrowed",
+  "create_repay_info_borrowed": "Borrowed balance (with interest)",
+  "create_repay_info_fee": "Origination fee",
+  "create_repay_info_total": "Total repay",
+  "create_repay_opt_repay": "Repay",
+  "create_repay_success": "Repay success"
 }
