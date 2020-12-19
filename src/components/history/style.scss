@@ -1,0 +1,68 @@
+.history-page .ez-table {
+  .thead .tr {
+    margin-bottom: 35px;
+  }
+  .tbody .tr {
+    margin-bottom: 45px;
+  }
+
+  .symbol {
+    width: 20%;
+  }
+
+  .symbol {
+    .icon {
+      display: inline-block;
+      height: 36px;
+      width: 36px;
+      padding: 5px;
+      border-radius: 18px;
+      background-color: var(--main-symbol-icon-bg);
+      margin-right: 20px;
+    }
+    svg {
+      height: 26px;
+      width: 26px;
+    }
+    
+    &>* {
+      vertical-align: middle;
+    }
+  }
+}
+
+.history-page .site-page-header {
+  a {
+    font-size: 20px;
+    color: var(--main-text-gray);
+    margin-right: 50px;
+
+    &.active {
+      color: var(--main-text-strong);
+    }
+  }
+
+  .back-btn {
+    color: var(--main-text-strong);
+
+    &:hover {
+      color: var(--main-text);
+    }
+
+    .icon {
+      display: inline-block;
+      height: 30px;
+      width: 30px;
+      font-size: 15px;
+      background: var(--main-pad-bg);
+      border-radius: 8px;
+      line-height: 30px;
+      text-align: center;
+      margin-right: 12px;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  @import './style.m.scss';
+}

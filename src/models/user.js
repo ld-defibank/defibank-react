@@ -180,6 +180,25 @@ function useUser(customInitialStates = {}) {
     });
   }, [web3, currentAccount]);
 
+  const getHistory = useCallback(eventName => getLendingPoolContract().getPastEvents(eventName, {
+    filter: { _user: currentAccount },
+    fromBlock: 0,
+    toBlock: 'latest',
+  }), [web3, currentAccount]);
+
+  const getDepositHistory = useCallback(() => getHistory('Deposit').then((events) => {
+    return events.map(event => ({
+      amount: event.returnValues._amount,
+      referral: event.returnValues._referral,
+      reserve: event.returnValues._reserve,
+      timestamp: event.returnValues._timestamp,
+      user: event.returnValues._user,
+      tokenMeta: Object.values(TOKENS).find(token => token.tokenAddress === event.returnValues._reserve),
+      blockNumber: event.blockNumber,
+      transactionHash: event.transactionHash,
+    }));
+  }), [web3, currentAccount, getHistory]);
+
   return {
     estimateDepositETHGas,
     getCurrentUserAccountData,
@@ -193,6 +212,7 @@ function useUser(customInitialStates = {}) {
     withdraw,
     setIsCollateral,
     swapBorrowRateMode,
+    getDepositHistory,
   };
 }
 

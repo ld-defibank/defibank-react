@@ -21,5 +21,6 @@
       "symbol": "ETH",
       "decimals": 18
     }
-  }
+  },
+  "ETH_EXPORER_URL": "https://rinkeby.etherscan.io/"
 }

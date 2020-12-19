@@ -100,5 +100,16 @@
   "create_repay_info_fee": "Origination fee",
   "create_repay_info_total": "Total repay",
   "create_repay_opt_repay": "Repay",
-  "create_repay_success": "Repay success"
+  "create_repay_success": "Repay success",
+
+
+  "history_header_deposit": "Deposit",
+  "history_header_withdraw": "Withdraw",
+  "history_header_borrow": "Borrow",
+  "history_header_repay": "Repay",
+
+  "history_deposit_table_asset": "Asset",
+  "history_deposit_table_amount": "Amount",
+  "history_deposit_table_datetime": "Datetime",
+  "history_deposit_table_hash": "TxID"
 }

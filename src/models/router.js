@@ -33,6 +33,13 @@ const pathConfigs = {
       active: 'deposit',
     },
   },
+  '/borrow': {
+    key: 'borrow',
+    refresh: [],
+    sidebar: {
+      active: 'borrow',
+    },
+  },
   '/deposit/deposit/:tokenAddress': {
     key: 'create_deposit',
     refresh: [],
@@ -61,11 +68,11 @@ const pathConfigs = {
       active: 'borrow',
     },
   },
-  '/borrow': {
-    key: 'borrow',
+  '/history/deposit': {
+    key: 'history_deposit',
     refresh: [],
     sidebar: {
-      active: 'borrow',
+      active: 'history',
     },
   },
 };

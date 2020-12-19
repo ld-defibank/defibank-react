@@ -73,6 +73,16 @@ export class Contract {
         return parseInt(gas * 1.05, 10);
       });
   }
+
+  getPastEvents(eventName, filter) {
+    return this.contract.getPastEvents(eventName, filter).then((data) => {
+      this._log('getPastEvents', eventName, {
+        过滤: { value: filter },
+        结果: { value: data },
+      });
+      return data;
+    });
+  }
 }
 
 export class Erc20Contract extends Contract {
