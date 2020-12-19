@@ -161,6 +161,25 @@ function useUser(customInitialStates = {}) {
     });
   }, [web3, currentAccount, getLendingPoolContract]);
 
+  const setIsCollateral = useCallback((tokenAddress, isCollateral) => {
+    return getLendingPoolContract().send('setUserUseReserveAsCollateral', [
+      tokenAddress,
+      isCollateral,
+    ], {
+      from: currentAccount,
+      value: 0,
+    });
+  }, [web3, currentAccount]);
+
+  const swapBorrowRateMode = useCallback((tokenAddress) => {
+    return getLendingPoolContract().send('swapBorrowRateMode', [
+      tokenAddress,
+    ], {
+      from: currentAccount,
+      value: 0,
+    });
+  }, [web3, currentAccount]);
+
   return {
     estimateDepositETHGas,
     getCurrentUserAccountData,
@@ -172,6 +191,8 @@ function useUser(customInitialStates = {}) {
     borrow,
     repayForMyself,
     withdraw,
+    setIsCollateral,
+    swapBorrowRateMode,
   };
 }
 

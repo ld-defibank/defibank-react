@@ -6,10 +6,11 @@ import Router from '@models/router';
 import Web3 from '@models/web3v2';
 import User from '@models/user';
 import Market from '@models/market';
+import Utils from '@models/utils';
 import SitePage from '@common/sitePage';
 import FormattedMessage from '@common/formattedMessage';
 import message from '@utils/message';
-import { fromAmountToFixedAmount, times10 } from '@utils/';
+import { fromAmountToFixedAmount, times10, tryGetErrorFromWeb3Error } from '@utils/';
 import CONFIG from '../../../config';
 import CONST from '../../../const';
 import DashboardBorrowUserInfo from './userInfo';
@@ -47,6 +48,7 @@ function Borrow() {
   const {
     getCurrentUserAccountData,
     getCurrentUserReserveData,
+    swapBorrowRateMode,
   } = User.useContainer();
   const {
     getMarketReserveData,
@@ -54,6 +56,7 @@ function Borrow() {
   } = Market.useContainer();
   const { t } = I18n.useContainer();
   const { goto } = Router.useContainer();
+  const { setGlobalLoading } = Utils.useContainer();
 
   useEffect(() => {
     setLoading(true);
@@ -81,30 +84,45 @@ function Borrow() {
     }
   }, [assetList]);
 
+  const updateData = useCallback(() => {
+    Object.keys(TOKENS).forEach((symbol) => {
+      // 获取市场数据
+      getMarketReserveData(TOKENS[symbol].tokenAddress).then((reserve) => {
+        updateAssetListValue(symbol, 'variableApr', times10(reserve.variableBorrowRate, -25, 2));
+        updateAssetListValue(symbol, 'stableApr', times10(reserve.stableBorrowRate, -25, 2));
+        updateAssetListValue(symbol, 'utilizationRate', times10(reserve.utilizationRate, -25, 2));
+      });
+      // 获取个人数据
+      getCurrentUserReserveData(TOKENS[symbol].tokenAddress).then((reserve) => {
+        updateAssetListValue(symbol, 'balance', reserve.currentATokenBalance);
+        updateAssetListValue(symbol, 'borrowed', reserve.currentBorrowBalance);
+        updateAssetListValue(symbol, 'isCollateral', reserve.usageAsCollateralEnabled);
+        updateAssetListValue(symbol, 'borrowRateMode', BORROW_RATE_MODE[reserve.borrowRateMode]);
+        updateAssetListValue(symbol, 'loading', false);
+      });
+    });
+  }, [getMarketReserveData, getCurrentUserReserveData, updateAssetListValue]);
+
   useEffect(() => {
     if (web3 && currentAccount) {
-      Object.keys(TOKENS).forEach((symbol) => {
-        // 获取市场数据
-        getMarketReserveData(TOKENS[symbol].tokenAddress).then((reserve) => {
-          updateAssetListValue(symbol, 'variableApr', times10(reserve.variableBorrowRate, -25, 2));
-          updateAssetListValue(symbol, 'stableApr', times10(reserve.stableBorrowRate, -25, 2));
-          updateAssetListValue(symbol, 'utilizationRate', times10(reserve.utilizationRate, -25, 2));
-        });
-        // 获取个人数据
-        getCurrentUserReserveData(TOKENS[symbol].tokenAddress).then((reserve) => {
-          updateAssetListValue(symbol, 'balance', reserve.currentATokenBalance);
-          updateAssetListValue(symbol, 'borrowed', reserve.currentBorrowBalance);
-          updateAssetListValue(symbol, 'isCollateral', reserve.usageAsCollateralEnabled);
-          updateAssetListValue(symbol, 'borrowRateMode', BORROW_RATE_MODE[reserve.borrowRateMode]);
-          updateAssetListValue(symbol, 'loading', false);
-        });
-      });
+      updateData();
     }
   }, [web3, currentAccount]);
 
   const onModeChange = (asset, mode) => {
-    updateAssetListValue(asset.symbol, 'borrowRateMode', mode);
-    // TODO:
+    setGlobalLoading(true);
+    swapBorrowRateMode(asset.tokenAddress).then((recept) => {
+      if (recept.status) {
+        updateData();
+        setGlobalLoading(false);
+      }
+    }).catch((e) => {
+      const error = tryGetErrorFromWeb3Error(e);
+      if (error.code !== 4001) {
+        message.error(t.try(`borrow_swap_ratemode_e_${error.code}`, 'common_web3_error', { code: error.code }));
+      }
+      setGlobalLoading(false);
+    });
   };
 
   return (

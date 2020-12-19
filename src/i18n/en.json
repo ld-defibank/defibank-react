@@ -54,6 +54,8 @@
   "deposit_table_opt_withdraw": "Withdraw",
   "deposit_table_collateral_yes": "YES",
   "deposit_table_collateral_no": "NO",
+  "deposit_change_collateral_e_3": "User deposit is already being used as collateral",
+
   "borrow_info_borrowed": "Borrowed",
   "borrow_info_borrow_composition": "Borrow Composition",
   "borrow_info_collateral": "Your Collateral",
@@ -61,6 +63,7 @@
   "borrow_info_composition_health": "Health factor",
   "borrow_table_asset": "Asset",
   "borrow_table_available": "Available for you",
+  "borrow_table_borrowed": "Borrowed",
   "borrow_table_stable_apr": "Stable APR",
   "borrow_table_variable_apr": "Variable APR",
   "borrow_table_opt": "Operation",
@@ -70,6 +73,7 @@
   "borrow_table_mode_noborrow": "--",
   "borrow_table_mode_stable": "Stable",
   "borrow_table_mode_no_variable": "Variable",
+  "borrow_swap_ratemode_e_3": "You cannot swap rate mode as your amount",
 
   "business_create_pad_max_mask": "MAX balance",
 
