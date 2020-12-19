@@ -24,16 +24,22 @@ export class Contract {
     this.contract = new web3.eth.Contract(ABI, toChecksumAddress(address));
   }
 
+  _log(event, method, extraData = {}) {
+    console.groupCollapsed(`合约调用 - ${event} - ${method}`);
+    console.table({
+      合约地址: { value: this.address },
+      调用方法: { value: method },
+      ...extraData,
+    });
+    console.groupEnd();
+  }
+
   call(method, args = []) {
     return this.contract.methods[method](...args).call().then((data) => {
-      console.groupCollapsed(`合约调用call - ${method}`);
-      console.table({
-        合约地址: { value: this.address },
-        调用方法: { value: method },
+      this._log('call', method, {
         方法入参: { value: args },
         结果: { value: data },
       });
-      console.groupEnd();
       return data;
     });
   }
@@ -45,15 +51,11 @@ export class Contract {
         ...options,
       }))
       .then((data) => {
-        console.groupCollapsed(`合约调用send - ${method}`);
-        console.table({
-          合约地址: { value: this.address },
-          调用方法: { value: method },
+        this._log('send', method, {
           方法入参: { value: args },
           调用参数: { value: options },
           结果: { value: data },
         });
-        console.groupEnd();
         return data;
       });
   }
@@ -62,16 +64,12 @@ export class Contract {
     return this.contract.methods[method](...args).estimateGas(options)
       // gas多一点防止出问题
       .then((gas) => {
-        console.groupCollapsed(`合约调用estimateGas - ${method}`);
-        console.table({
-          合约地址: { value: this.address },
-          调用方法: { value: method },
+        this._log('estimateGas', method, {
           方法入参: { value: args },
           调用参数: { value: options },
           预测gas: { value: gas },
           调整gas: { value: parseInt(gas * 1.05, 10) },
         });
-        console.groupEnd();
         return parseInt(gas * 1.05, 10);
       });
   }
