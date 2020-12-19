@@ -145,6 +145,22 @@ function useUser(customInitialStates = {}) {
 
   const repayForMyself = useCallback((tokenAddress, amount, isMax) => repay(tokenAddress, amount, currentAccount, isMax), [repay, currentAccount]);
 
+  const withdraw = useCallback((tokenAddress, amount, isMax) => {
+    const options = {
+      from: currentAccount,
+      value: 0,
+    };
+    return getReserveData(tokenAddress).then((data) => {
+      const { aTokenAddress } = data;
+      return getATokenContract(aTokenAddress);
+    }).then((aTokenContract) => {
+      if (isMax) {
+        return aTokenContract.redeemAll(options);
+      }
+      return aTokenContract.redeem(amount, options);
+    });
+  }, [web3, currentAccount, getLendingPoolContract]);
+
   return {
     estimateDepositETHGas,
     getCurrentUserAccountData,
@@ -155,6 +171,7 @@ function useUser(customInitialStates = {}) {
     deposit,
     borrow,
     repayForMyself,
+    withdraw,
   };
 }
 

@@ -12,4 +12,17 @@
     width: 330px;
     margin-left: 45px;
   }
+
+  .alert-container {
+    margin-bottom: 24px;
+
+    .ant-alert.ant-alert-error {
+      background: transparent;
+      border-color: var(--main-text-red);
+
+      .ant-alert-message {
+        color: var(--main-text-red);
+      }
+    }
+  }
 }

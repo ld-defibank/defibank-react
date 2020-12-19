@@ -10,6 +10,7 @@ import Steps from 'antd/lib/steps';
 import notification from 'antd/lib/notification';
 import Select from 'antd/lib/select';
 import Modal from 'antd/lib/modal';
+import Alert from 'antd/lib/alert';
 
 import './antd.less';
 
@@ -26,4 +27,5 @@ export {
   notification,
   Select,
   Modal,
+  Alert,
 };

@@ -48,25 +48,31 @@ export default function CreatePad({ title, tokenInfo, balance, price, amount, on
     onAmountChange(str);
   }, [amount, onAmountChange]);
 
+  const handleUpdateMax = useCallback((max) => {
+    if (hasMax) {
+      setIsMax(max);
+    }
+  }, [setIsMax, hasMax]);
+
   const handleMaxClick = useCallback(() => {
     onAmountChange(maxAmount);
-    setIsMax(true);
-  }, [onAmountChange, maxAmount]);
+    handleUpdateMax(true);
+  }, [onAmountChange, maxAmount, handleUpdateMax]);
 
   const handleSliderChange = useCallback((percent) => {
     if (!maxAmount) return;
-    setIsMax(false);
+    handleUpdateMax(false);
     if (percent === 0) {
       onAmountChange('');
       return;
     }
     if (percent === 100) {
       onAmountChange(maxAmount);
-      setIsMax(true);
+      handleUpdateMax(true);
       return;
     }
     onAmountChange(fromAmountToFixedAmount(fromFixedAmountToAmount(parseFloat(maxAmount) * percent / 100, tokenInfo), tokenInfo, Infinity));
-  }, [onAmountChange, maxAmount, amount, tokenInfo]);
+  }, [onAmountChange, maxAmount, amount, tokenInfo, handleUpdateMax]);
 
   const handleAfterAmountChange = useCallback(() => {
     if (!amount) return;

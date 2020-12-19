@@ -76,7 +76,10 @@
   "create_deposit_opt_deposit": "Deposit",
   "create_deposit_success": "Deposit success",
 
-  "create_withdraw_title": "Balance in DefiBank",
+  "create_withdraw_title": "Available withdraw balance",
+  "create_withdraw_opt_withdraw": "Withdraw",
+  "create_withdraw_success": "Withdraw success",
+  "create_withdraw_warning": "Withdraw most part of this asset may raise risk of liquidation. Please be cautious.",
 
   "create_borrow_title": "Collateral",
   "create_borrow_opt_borrow": "Borrow",
