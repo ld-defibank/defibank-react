@@ -27,21 +27,6 @@ function useLendingPool(customInitialStates = {}) {
 
   const getContract = useCallback(() => getWeb3Contract(ABI, ADDRESS_LENDING_POOL), [web3, getWeb3Contract]);
 
-  const deposit = useCallback((tokenAddress, amount, referralCode = '0') => {
-    const options = {
-      from: currentAccount,
-      value: 0,
-    };
-    if (isEth(tokenAddress)) {
-      options.value = amount;
-    }
-    return getContract().send('deposit', [
-      toChecksumAddress(tokenAddress),
-      amount,
-      referralCode,
-    ], options);
-  }, [web3, currentAccount, getContract]);
-
   const getReserveData = useCallback(tokenAddress => getContract().call('getReserveData', [tokenAddress]), [web3, currentAccount, getContract]);
 
   const getUserAccountData = useCallback(() => getContract().call('getUserAccountData', [currentAccount]), [web3, currentAccount, getContract]);
@@ -49,7 +34,6 @@ function useLendingPool(customInitialStates = {}) {
   const getUserReserveData = useCallback(tokenAddress => getContract().call('getUserReserveData', [tokenAddress, currentAccount]), [web3, currentAccount, getContract]);
 
   return {
-    deposit,
     getContract,
     getReserveData,
     getUserAccountData,

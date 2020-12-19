@@ -8,7 +8,6 @@ import GlobalLoading from './layout/globalLoading';
 import Index from './components/index';
 import { Deposit, Borrow, CreateDeposit, CreateWithdraw, CreateBorrow, CreateRepay } from './components/business';
 import Dashboard from './components/dashboard';
-import Test from './components/test';
 import Store from './models';
 
 function MyRouter(props) {
@@ -28,7 +27,6 @@ function MyRouter(props) {
               <Route path="/borrow/repay/:tokenAddress" exact component={CreateRepay} />
               <Route path="/borrow" exact component={Borrow} />
               <Route path="/dashboard" exact component={Dashboard} />
-              <Route path="/test" exact component={Test} />
             </Switch>
           </Main>
         </div>
