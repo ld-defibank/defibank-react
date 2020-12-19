@@ -22,7 +22,14 @@ export default function ConnectWallet() {
 
   useEffect(() => {
     if (web3Modal && !currentAccount) {
-      connect();
+      const c = () => {
+        connect().catch((e) => {
+          if (e === 'Modal closed by user') {
+            c();
+          }
+        });
+      };
+      c();
     }
   }, [web3Modal, currentAccount]);
 
