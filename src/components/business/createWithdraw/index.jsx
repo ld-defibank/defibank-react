@@ -147,21 +147,23 @@ function CreateWithdraw({ match }) {
     updatePrice();
   }, [web3, currentAccount, tokenInfo]);
 
+  const header = (
+    <>
+      <a className="back-btn" onClick={goBack}>
+        <span className="icon"><LeftOutlined /></span>
+        <FormattedMessage id="business_header_back" />
+      </a>
+      <a onClick={() => goto(`/deposit/deposit/${tokenInfo.tokenAddress}`)}><FormattedMessage id="business_header_deposit" /></a>
+      <a className="active"><FormattedMessage id="business_header_withdraw" /></a>
+    </>
+  );
+
   if (!tokenInfo) {
     return (
       <SitePage
         id="createWithdraw"
         className="business-page"
-        header={(
-          <>
-            <a className="back-btn" onClick={goBack}>
-              <span className="icon"><LeftOutlined /></span>
-              <FormattedMessage id="business_header_back" />
-            </a>
-            <a onClick={() => goto('/deposit')}><FormattedMessage id="business_header_deposit" /></a>
-            <a className="active"><FormattedMessage id="business_header_borrow" /></a>
-          </>
-        )}
+        header={header}
       >
         <Spin />
       </SitePage>
@@ -206,16 +208,7 @@ function CreateWithdraw({ match }) {
     <SitePage
       id="createWithdraw"
       className="business-page"
-      header={(
-        <>
-          <a className="back-btn" onClick={goBack}>
-            <span className="icon"><LeftOutlined /></span>
-            <FormattedMessage id="business_header_back" />
-          </a>
-          <a onClick={() => goto('/deposit')}><FormattedMessage id="business_header_deposit" /></a>
-          <a className="active"><FormattedMessage id="business_header_borrow" /></a>
-        </>
-      )}
+      header={header}
     >
       <div className="opt">
         <CreatePad

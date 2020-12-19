@@ -115,21 +115,23 @@ function CreateBorrow({ match }) {
     updatePrice();
   }, [web3, currentAccount, tokenInfo]);
 
+  const header = (
+    <>
+      <a className="back-btn" onClick={goBack}>
+        <span className="icon"><LeftOutlined /></span>
+        <FormattedMessage id="business_header_back" />
+      </a>
+      <a className="active"><FormattedMessage id="business_header_borrow" /></a>
+      <a onClick={() => goto(`/borrow/repay/${tokenInfo.tokenAddress}`)}><FormattedMessage id="business_header_repay" /></a>
+    </>
+  );
+
   if (!tokenInfo) {
     return (
       <SitePage
         id="createBorrow"
         className="business-page"
-        header={(
-          <>
-            <a className="back-btn" onClick={goBack}>
-              <span className="icon"><LeftOutlined /></span>
-              <FormattedMessage id="business_header_back" />
-            </a>
-            <a onClick={() => goto('/deposit')}><FormattedMessage id="business_header_deposit" /></a>
-            <a className="active"><FormattedMessage id="business_header_borrow" /></a>
-          </>
-        )}
+        header={header}
       >
         <Spin />
       </SitePage>
@@ -172,16 +174,7 @@ function CreateBorrow({ match }) {
     <SitePage
       id="createBorrow"
       className="business-page"
-      header={(
-        <>
-          <a className="back-btn" onClick={goBack}>
-            <span className="icon"><LeftOutlined /></span>
-            <FormattedMessage id="business_header_back" />
-          </a>
-          <a onClick={() => goto('/deposit')}><FormattedMessage id="business_header_deposit" /></a>
-          <a className="active"><FormattedMessage id="business_header_borrow" /></a>
-        </>
-      )}
+      header={header}
     >
       <div className="opt">
         <CreatePad

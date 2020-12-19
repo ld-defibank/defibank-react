@@ -38,7 +38,9 @@
   "index_table_borrow_apr": "Borrow APR",
 
   "business_header_deposit": "Deposit",
+  "business_header_withdraw": "Withdraw",
   "business_header_borrow": "Borrow",
+  "business_header_repay": "Repay",
   "business_header_back": "Back",
   "business_user_info_bar_empty": "None",
   "deposit_info_aggregated": "Aggregated",
