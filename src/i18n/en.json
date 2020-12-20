@@ -116,5 +116,19 @@
   "history_withdraw_table_asset": "Asset",
   "history_withdraw_table_amount": "Amount",
   "history_withdraw_table_datetime": "Datetime",
-  "history_withdraw_table_hash": "TxID"
+  "history_withdraw_table_hash": "TxID",
+
+  "history_borrow_table_asset": "Asset",
+  "history_borrow_table_amount": "Amount",
+  "history_borrow_table_mode": "Rate Mode",
+  "history_borrow_table_mode_1": "Stable",
+  "history_borrow_table_mode_2": "Variable",
+  "history_borrow_table_datetime": "Datetime",
+  "history_borrow_table_hash": "TxID",
+
+  "history_repay_table_asset": "Asset",
+  "history_repay_table_amount": "Amount",
+  "history_repay_table_fees": "Fee",
+  "history_repay_table_datetime": "Datetime",
+  "history_repay_table_hash": "TxID"
 }

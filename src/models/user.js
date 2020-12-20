@@ -211,6 +211,38 @@ function useUser(customInitialStates = {}) {
     }));
   }), [web3, currentAccount, getHistory]);
 
+  const getBorrowHistory = useCallback(() => getHistory('Borrow').then((events) => {
+    return events.map(event => ({
+      amount: event.returnValues._amount,
+      reserve: event.returnValues._reserve,
+      borrowRateMode: event.returnValues._borrowRateMode,
+      borrowRate: event.returnValues._borrowRate,
+      originationFee: event.returnValues._originationFee,
+      borrowBalanceIncrease: event.returnValues._originationFee,
+      timestamp: event.returnValues._timestamp,
+      user: event.returnValues._user,
+      tokenMeta: Object.values(TOKENS).find(token => token.tokenAddress === event.returnValues._reserve),
+      blockNumber: event.blockNumber,
+      transactionHash: event.transactionHash,
+    }));
+  }), [web3, currentAccount, getHistory]);
+
+  const getRepayHistory = useCallback(() => getHistory('Repay').then((events) => {
+    return events.map(event => ({
+      amount: event.returnValues._amount,
+      reserve: event.returnValues._reserve,
+      repayer: event.returnValues._repayer,
+      amountMinusFees: event.returnValues._amountMinusFees,
+      fees: event.returnValues._fees,
+      borrowBalanceIncrease: event.returnValues._originationFee,
+      timestamp: event.returnValues._timestamp,
+      user: event.returnValues._user,
+      tokenMeta: Object.values(TOKENS).find(token => token.tokenAddress === event.returnValues._reserve),
+      blockNumber: event.blockNumber,
+      transactionHash: event.transactionHash,
+    }));
+  }), [web3, currentAccount, getHistory]);
+
   return {
     estimateDepositETHGas,
     getCurrentUserAccountData,
@@ -226,6 +258,8 @@ function useUser(customInitialStates = {}) {
     swapBorrowRateMode,
     getDepositHistory,
     getWithdrawHistory,
+    getBorrowHistory,
+    getRepayHistory,
   };
 }
 

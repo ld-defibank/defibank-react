@@ -82,6 +82,20 @@ const pathConfigs = {
       active: 'history',
     },
   },
+  '/history/borrow': {
+    key: 'history_borrow',
+    refresh: [],
+    sidebar: {
+      active: 'history',
+    },
+  },
+  '/history/repay': {
+    key: 'history_repay',
+    refresh: [],
+    sidebar: {
+      active: 'history',
+    },
+  },
 };
 
 const defaultStates = {

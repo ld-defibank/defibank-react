@@ -22,7 +22,7 @@ const {
 
 function getColumns(prices, t) {
   return [{
-    title: t('history_withdraw_table_asset'),
+    title: t('history_borrow_table_asset'),
     dataIndex: 'symbol',
     key: 'symbol',
     className: 'symbol',
@@ -37,7 +37,7 @@ function getColumns(prices, t) {
       </>
     ),
   }, {
-    title: t('history_withdraw_table_amount'),
+    title: t('history_borrow_table_amount'),
     dataIndex: 'amount',
     key: 'amount',
     className: 'amount',
@@ -48,30 +48,39 @@ function getColumns(prices, t) {
       </>
     ),
     props: {
-      'data-label': t('history_deposit_table_datetime'),
+      'data-label': t('history_borrow_table_datetime'),
     },
   }, {
-    title: t('history_withdraw_table_datetime'),
+    title: t('history_borrow_table_mode'),
+    dataIndex: 'borrowRateMode',
+    key: 'mode',
+    className: 'mode',
+    render: text => <FormattedMessage id={`history_borrow_table_mode_${text}`} />,
+    props: {
+      'data-label': t('history_borrow_table_datetime'),
+    },
+  }, {
+    title: t('history_borrow_table_datetime'),
     dataIndex: 'timestamp',
     key: 'timestamp',
     className: 'timestamp',
     render: text => formatDatetime(parseInt(text, 10) * 1000),
     props: {
-      'data-label': t('history_deposit_table_datetime'),
+      'data-label': t('history_borrow_table_datetime'),
     },
   }, {
-    title: t('history_withdraw_table_hash'),
+    title: t('history_borrow_table_hash'),
     dataIndex: 'transactionHash',
     key: 'transactionHash',
     className: 'hash',
     render: text => <a href={`${ETH_EXPORER_URL}/tx/${text}`} target="_blank">{formatHash(text)}</a>,
     props: {
-      'data-label': t('history_deposit_table_datetime'),
+      'data-label': t('history_borrow_table_datetime'),
     },
   }];
 }
 
-function WithdrawHistory() {
+function BorrowHistory() {
   const [loading, setLoading] = useState(true);
   const [prices, setPrices] = useState([]);
   const [data, setData] = useState([]);
@@ -80,7 +89,7 @@ function WithdrawHistory() {
     currentAccount,
   } = Web3.useContainer();
   const {
-    getWithdrawHistory,
+    getBorrowHistory,
   } = User.useContainer();
   const {
     getAllAssetsUSDPrices,
@@ -92,7 +101,7 @@ function WithdrawHistory() {
     setLoading(true);
     if (web3 && currentAccount) {
       Promise.all([
-        getWithdrawHistory(),
+        getBorrowHistory(),
         getAllAssetsUSDPrices(),
       ]).then(([events, prs]) => {
         setLoading(false);
@@ -107,13 +116,13 @@ function WithdrawHistory() {
   const columns = getColumns(prices, t);
   return (
     <SitePage
-      id="withdrawHistory"
+      id="borrowHistory"
       className="history-page"
       header={(
         <>
           <a onClick={() => goto('/history/deposit')}><FormattedMessage id="history_header_deposit" /></a>
-          <a className="active"><FormattedMessage id="history_header_withdraw" /></a>
-          <a onClick={() => goto('/history/borrow')}><FormattedMessage id="history_header_borrow" /></a>
+          <a onClick={() => goto('/history/withdraw')}><FormattedMessage id="history_header_withdraw" /></a>
+          <a className="active"><FormattedMessage id="history_header_borrow" /></a>
           <a onClick={() => goto('/history/repay')}><FormattedMessage id="history_header_repay" /></a>
         </>
       )}
@@ -128,4 +137,4 @@ function WithdrawHistory() {
 }
 
 
-export default WithdrawHistory;
+export default BorrowHistory;
