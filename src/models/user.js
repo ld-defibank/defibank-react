@@ -199,6 +199,18 @@ function useUser(customInitialStates = {}) {
     }));
   }), [web3, currentAccount, getHistory]);
 
+  const getWithdrawHistory = useCallback(() => getHistory('RedeemUnderlying').then((events) => {
+    return events.map(event => ({
+      amount: event.returnValues._amount,
+      reserve: event.returnValues._reserve,
+      timestamp: event.returnValues._timestamp,
+      user: event.returnValues._user,
+      tokenMeta: Object.values(TOKENS).find(token => token.tokenAddress === event.returnValues._reserve),
+      blockNumber: event.blockNumber,
+      transactionHash: event.transactionHash,
+    }));
+  }), [web3, currentAccount, getHistory]);
+
   return {
     estimateDepositETHGas,
     getCurrentUserAccountData,
@@ -213,6 +225,7 @@ function useUser(customInitialStates = {}) {
     setIsCollateral,
     swapBorrowRateMode,
     getDepositHistory,
+    getWithdrawHistory,
   };
 }
 

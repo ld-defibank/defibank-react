@@ -75,6 +75,13 @@ const pathConfigs = {
       active: 'history',
     },
   },
+  '/history/withdraw': {
+    key: 'history_withdraw',
+    refresh: [],
+    sidebar: {
+      active: 'history',
+    },
+  },
 };
 
 const defaultStates = {

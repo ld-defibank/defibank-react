@@ -111,5 +111,10 @@
   "history_deposit_table_asset": "Asset",
   "history_deposit_table_amount": "Amount",
   "history_deposit_table_datetime": "Datetime",
-  "history_deposit_table_hash": "TxID"
+  "history_deposit_table_hash": "TxID",
+
+  "history_withdraw_table_asset": "Asset",
+  "history_withdraw_table_amount": "Amount",
+  "history_withdraw_table_datetime": "Datetime",
+  "history_withdraw_table_hash": "TxID"
 }
