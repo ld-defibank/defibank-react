@@ -14,7 +14,7 @@ import FormattedMessage from '@common/formattedMessage';
 import RadioGroup from '@common/radioGroup';
 import { Spin } from '@common/antd';
 import message from '@utils/message';
-import { fromAmountToFixedAmount, fromFixedAmountToAmount, tryGetErrorFromWeb3Error } from '@utils/';
+import { fromAmountToFixedAmount, fromFixedAmountToAmount, tryGetErrorFromWeb3Error, times10 } from '@utils/';
 import CreatePad from '../createPad';
 import CreateOverview from '../createOverview';
 import CONFIG from '../../../config';
@@ -26,6 +26,39 @@ import './style.scss';
 const { TOKENS } = CONFIG;
 const { BORROW_RATE_MODE, BORROW_RATE_MODE_CODE } = CONST;
 
+function getOverviewRows({
+  t,
+  tokenInfo,
+  marketConfig,
+  userData,
+}) {
+  if (!tokenInfo || !marketConfig || !userData) return [];
+  const {
+    ltv,
+    liquidationThreshold,
+  } = marketConfig;
+  const {
+    totalCollateralETH,
+    totalBorrowsETH,
+  } = userData;
+
+  // 1. 当前质押率
+  const currentltv = new Decimal(totalBorrowsETH).div(totalCollateralETH).toFixed(2);
+  // 2. 最大质押率
+  // 3. 清算⻔槛
+  // 4. TODO: 改为清算惩罚「Liquidation panalty」
+
+  return [{
+    label: t('create_repay_overview_current_ltv'),
+    value: `${currentltv} %`,
+  }, {
+    label: t('create_repay_overview_ltv'),
+    value: `${ltv} %`,
+  }, {
+    label: t('create_repay_overview_threshold'),
+    value: `${liquidationThreshold} %`,
+  }];
+}
 
 function getPadOpts({
   amount,
@@ -48,6 +81,8 @@ function getPadOpts({
 function CreateRepay({ match }) {
   const [tokenInfo, setTokenInfo] = useState(null);
   const [borrowedBalance, setBorrowedBalance] = useState('0');
+  const [marketConfig, setMarketConfig] = useState(null);
+  const [userData, setUserData] = useState(null);
   const [principalBorrowBalance, setPrincipalBorrowBalance] = useState('0');
   const [originationFee, setOriginationFee] = useState('0');
   const [price, setPrice] = useState(0);
@@ -68,6 +103,7 @@ function CreateRepay({ match }) {
   const {
     getAssetUSDPrice,
     getAssetETHPrice,
+    getMarketReserveConfigurationData,
   } = Market.useContainer();
   const { setGlobalLoading } = Utils.useContainer();
   const { t } = I18n.useContainer();
@@ -87,7 +123,8 @@ function CreateRepay({ match }) {
         getCurrentUserReserveData(tokenInfo.tokenAddress),
         getCurrentUserAccountData(tokenInfo.tokenAddress),
         getAssetETHPrice(tokenInfo.tokenAddress),
-      ]).then(([reverseData, userData, assetEthPrice]) => {
+      ]).then(([reverseData, userDataResp, assetEthPrice]) => {
+        setUserData(userDataResp);
         const { currentBorrowBalance } = reverseData;
         setBorrowedBalance(currentBorrowBalance);
         setPrincipalBorrowBalance(reverseData.principalBorrowBalance);
@@ -99,8 +136,16 @@ function CreateRepay({ match }) {
     }
   }, [web3, currentAccount, getCurrentAccountTokenWalletBalance, tokenInfo, setBorrowedBalance]);
 
-  const updatePrice = useCallback(() => {
+  const updateTokenMarketInfo = useCallback(() => {
     if (web3 && currentAccount && tokenInfo) {
+
+      Promise.all([
+        getAssetUSDPrice(tokenInfo.tokenAddress),
+        getMarketReserveConfigurationData(tokenInfo.tokenAddress),
+      ]).then((resp) => {
+        setPrice(resp[0]);
+        setMarketConfig(resp[1]);
+      });
       getAssetUSDPrice(tokenInfo.tokenAddress).then(setPrice);
     }
   }, [web3, currentAccount, setPrice, tokenInfo, getAssetUSDPrice]);
@@ -108,7 +153,7 @@ function CreateRepay({ match }) {
 
   useEffect(() => {
     updateWalletBalance();
-    updatePrice();
+    updateTokenMarketInfo();
   }, [web3, currentAccount, tokenInfo]);
 
   const header = (
@@ -157,6 +202,12 @@ function CreateRepay({ match }) {
     amount,
     handleRepay,
   });
+  const overivewRows = getOverviewRows({
+    t,
+    userData,
+    tokenInfo,
+    marketConfig,
+  });
   return (
     <SitePage
       id="createRepay"
@@ -197,7 +248,10 @@ function CreateRepay({ match }) {
             </div>
           )}
         />
-        <CreateOverview />
+        <CreateOverview
+          title={<FormattedMessage id="create_deposit_overview_title" />}
+          rows={overivewRows}
+        />
       </div>
     </SitePage>
   );

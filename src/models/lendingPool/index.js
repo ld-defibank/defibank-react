@@ -29,6 +29,8 @@ function useLendingPool(customInitialStates = {}) {
 
   const getReserveData = useCallback(tokenAddress => getContract().call('getReserveData', [tokenAddress]), [web3, currentAccount, getContract]);
 
+  const getReserveConfigurationData = useCallback(tokenAddress => getContract().call('getReserveConfigurationData', [tokenAddress]), [web3, currentAccount, getContract]);
+
   const getUserAccountData = useCallback(() => getContract().call('getUserAccountData', [currentAccount]), [web3, currentAccount, getContract]);
 
   const getUserReserveData = useCallback(tokenAddress => getContract().call('getUserReserveData', [tokenAddress, currentAccount]), [web3, currentAccount, getContract]);
@@ -36,6 +38,7 @@ function useLendingPool(customInitialStates = {}) {
   return {
     getContract,
     getReserveData,
+    getReserveConfigurationData,
     getUserAccountData,
     getUserReserveData,
   };

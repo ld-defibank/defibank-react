@@ -13,7 +13,7 @@ import SitePage from '@common/sitePage';
 import FormattedMessage from '@common/formattedMessage';
 import { Spin } from '@common/antd';
 import message from '@utils/message';
-import { fromAmountToFixedAmount, fromFixedAmountToAmount, isEth } from '@utils/';
+import { fromAmountToFixedAmount, fromFixedAmountToAmount, isEth, times10 } from '@utils/';
 import CreatePad from '../createPad';
 import CreateOverview from '../createOverview';
 import CONFIG from '../../../config';
@@ -23,6 +23,68 @@ import './style.scss';
 
 const { TOKENS } = CONFIG;
 
+function getOverviewRows({
+  t,
+  marketData,
+  tokenInfo,
+  price,
+  marketConfig,
+}) {
+  if (!marketData || !tokenInfo || !marketConfig) return [];
+  const {
+    utilizationRate,
+    totalLiquidity,
+    totalBorrowsStable,
+    totalBorrowsVariable,
+    variableBorrowRate,
+    stableBorrowRate,
+    liquidityRate,
+  } = marketData;
+  const {
+    ltv,
+    liquidationThreshold,
+    usageAsCollateralEnabled,
+  } = marketConfig;
+  // 1. 资金是利用率，=已借出/已存入
+  const utilization = times10(utilizationRate, -25, 2);
+  // 2. 可借出金额，=已存入-已借出
+  const available = new Decimal(totalLiquidity)
+    .minus(totalBorrowsVariable)
+    .minus(totalBorrowsStable)
+    .toFixed(0);
+  // 3. 币种价格，单位USD
+  const priceUSD = parseFloat(price || 0).toFixed(2);
+  // 4. 存款年利率，额外说明:此处的收益率为本币收益率+流动性挖矿收益率
+  const rate = times10(liquidityRate, -25, 2);
+  // 5. 是否可以用作抵押物，后面不是比率，是「是」或「否」
+  // 6. 最大质押率
+  // 7. 清算⻔槛
+  // 8. TODO: 清算惩罚
+  // 9. TODO: 历史利率曲线图
+
+  return [{
+    label: t('create_deposit_overview_utilization'),
+    value: `${utilization} %`,
+  }, {
+    label: t('create_deposit_overview_available'),
+    value: `${fromAmountToFixedAmount(available, tokenInfo, 2)} ${tokenInfo.symbol}`,
+  }, {
+    label: t('create_deposit_overview_price'),
+    value: `${priceUSD} USDT`,
+  }, {
+    label: t('create_deposit_overview_apr'),
+    value: `${rate} %`,
+  }, {
+    label: t('create_deposit_overview_collateral'),
+    value: usageAsCollateralEnabled ? t('yes') : t('no'),
+  }, {
+    label: t('create_deposit_overview_ltv'),
+    value: `${ltv} %`,
+  }, {
+    label: t('create_deposit_overview_threshold'),
+    value: `${liquidationThreshold} %`,
+  }];
+}
 
 function getPadOpts({
   allowance,
@@ -55,6 +117,8 @@ function getPadOpts({
 
 function CreateDeposit({ match }) {
   const [tokenInfo, setTokenInfo] = useState(null);
+  const [marketData, setMarketData] = useState(null);
+  const [marketConfig, setMarketConfig] = useState(null);
   const [walletBalance, setWalletBalance] = useState('0');
   const [price, setPrice] = useState(0);
   const [amount, setAmount] = useState('');
@@ -73,6 +137,8 @@ function CreateDeposit({ match }) {
     deposit,
   } = User.useContainer();
   const {
+    getMarketReserveData,
+    getMarketReserveConfigurationData,
     getAssetUSDPrice,
   } = Market.useContainer();
   const { setGlobalLoading } = Utils.useContainer();
@@ -106,9 +172,17 @@ function CreateDeposit({ match }) {
     }
   }, [web3, currentAccount, getCurrentAccountTokenWalletBalance, tokenInfo, setWalletBalance]);
 
-  const updatePrice = useCallback(() => {
+  const updateTokenMarketInfo = useCallback(() => {
     if (web3 && currentAccount && tokenInfo) {
-      getAssetUSDPrice(tokenInfo.tokenAddress).then(setPrice);
+      Promise.all([
+        getMarketReserveData(tokenInfo.tokenAddress),
+        getAssetUSDPrice(tokenInfo.tokenAddress),
+        getMarketReserveConfigurationData(tokenInfo.tokenAddress),
+      ]).then((resp) => {
+        setMarketData(resp[0]);
+        setPrice(resp[1]);
+        setMarketConfig(resp[2]);
+      });
     }
   }, [web3, currentAccount, setPrice, tokenInfo, getAssetUSDPrice]);
 
@@ -120,7 +194,7 @@ function CreateDeposit({ match }) {
 
   useEffect(() => {
     updateWalletBalance();
-    updatePrice();
+    updateTokenMarketInfo();
     updateAllowance();
   }, [web3, currentAccount, tokenInfo]);
 
@@ -179,6 +253,13 @@ function CreateDeposit({ match }) {
     handleApprove,
     handleDeposit,
   });
+  const overivewRows = getOverviewRows({
+    t,
+    marketData,
+    tokenInfo,
+    price,
+    marketConfig,
+  });
   return (
     <SitePage
       id="createDeposit"
@@ -197,7 +278,10 @@ function CreateDeposit({ match }) {
           maxAmount={maxAmount}
           opts={padOpts}
         />
-        <CreateOverview />
+        <CreateOverview
+          title={<FormattedMessage id="create_deposit_overview_title" />}
+          rows={overivewRows}
+        />
       </div>
     </SitePage>
   );

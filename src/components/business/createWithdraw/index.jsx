@@ -14,7 +14,7 @@ import FormattedMessage from '@common/formattedMessage';
 import RadioGroup from '@common/radioGroup';
 import { Spin, Alert } from '@common/antd';
 import message from '@utils/message';
-import { fromAmountToFixedAmount, fromFixedAmountToAmount, tryGetErrorFromWeb3Error } from '@utils/';
+import { fromAmountToFixedAmount, fromFixedAmountToAmount, tryGetErrorFromWeb3Error, times10 } from '@utils/';
 import CreatePad from '../createPad';
 import CreateOverview from '../createOverview';
 import CONFIG from '../../../config';
@@ -32,6 +32,65 @@ function getSliderPercent(amount, maxAmount) {
   if (fAmount > fMaxAmount) return 1;
   if (fAmount < 0) return 0;
   return fAmount / fMaxAmount;
+}
+
+function getOverviewRows({
+  t,
+  marketData,
+  tokenInfo,
+  price,
+  marketConfig,
+  userReverseData,
+  userData,
+  ethusdPrice,
+}) {
+  if (!marketData || !tokenInfo || !marketConfig || !userData || !userReverseData) return [];
+  const {
+    ltv,
+    liquidationThreshold,
+  } = marketConfig;
+  const {
+    totalCollateralETH,
+    totalBorrowsETH,
+    healthFactor,
+  } = userData;
+  const {
+    currentATokenBalance,
+  } = userReverseData;
+  // 1. 当前健康值
+  let health = times10(healthFactor, -18, 2);
+  if (new Decimal(health).gt(10)) {
+    health = '> 10';
+  }
+  // 2. 增加一条「Balance in DeFiBank」，显示用户当前币种总的余额
+  const balance = fromAmountToFixedAmount(currentATokenBalance, tokenInfo, 2);
+  // 3. 当前质押物价值(单位是USD)
+  const totalCollateral = new Decimal(fromAmountToFixedAmount(totalCollateralETH, TOKENS.ETH, Infinity)).times(ethusdPrice).toFixed(2);
+  // 4. 当前质押率
+  const currentltv = new Decimal(totalBorrowsETH).div(totalCollateralETH).toFixed(2);
+  // 5. 最大质押率
+  // 6. 清算⻔槛80%
+  // 7. TODO: 清算惩罚5%
+
+  return [{
+    label: t('create_withdraw_overview_health'),
+    value: `${health}`,
+  }, {
+    label: t('create_withdraw_overview_balance'),
+    value: `${balance} ${tokenInfo.symbol}`,
+  }, {
+    label: t('create_withdraw_overview_total_collateral'),
+    value: `${totalCollateral} USD`,
+  }, {
+    label: t('create_withdraw_overview_current_ltv'),
+    value: `${currentltv} %`,
+  }, {
+    label: t('create_withdraw_overview_ltv'),
+    value: `${ltv} %`,
+  }, {
+    label: t('create_withdraw_overview_threshold'),
+    value: `${liquidationThreshold} %`,
+  }];
 }
 
 function getPadOpts({
@@ -54,8 +113,13 @@ function getPadOpts({
 
 function CreateWithdraw({ match }) {
   const [tokenInfo, setTokenInfo] = useState(null);
+  const [marketData, setMarketData] = useState(null);
+  const [marketConfig, setMarketConfig] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [userReverseData, setUserReverseData] = useState(null);
   const [availableBalance, setAvailableBalance] = useState('0');
   const [price, setPrice] = useState(0);
+  const [ethusdPrice, setETHUSDPrice] = useState(0);
   const [amount, setAmount] = useState('');
   const [maxAmount, setMaxAmount] = useState('0');
   const [showWarning, setShowWarning] = useState(false);
@@ -75,6 +139,9 @@ function CreateWithdraw({ match }) {
   const {
     getAssetUSDPrice,
     getAssetETHPrice,
+    getMarketReserveData,
+    getMarketReserveConfigurationData,
+    getETHUSDPrice,
   } = Market.useContainer();
   const { setGlobalLoading } = Utils.useContainer();
   const { t } = I18n.useContainer();
@@ -94,9 +161,11 @@ function CreateWithdraw({ match }) {
         getCurrentUserReserveData(tokenInfo.tokenAddress),
         getCurrentUserAccountData(tokenInfo.tokenAddress),
         getAssetETHPrice(tokenInfo.tokenAddress),
-      ]).then(([reverseData, userData, assetEthPrice]) => {
+      ]).then(([reverseData, userDataResp, assetEthPrice]) => {
+        setUserReverseData(reverseData);
+        setUserData(userDataResp);
         const { currentATokenBalance, usageAsCollateralEnabled } = reverseData;
-        const { totalBorrowsETH, totalFeesETH, totalCollateralETH } = userData;
+        const { totalBorrowsETH, totalFeesETH, totalCollateralETH } = userDataResp;
         if (usageAsCollateralEnabled && totalBorrowsETH !== '0') {
           setShowWarning(true);
           // 如果是作为抵押，则计算最大值
@@ -136,15 +205,25 @@ function CreateWithdraw({ match }) {
     }
   }, [web3, currentAccount, getCurrentAccountTokenWalletBalance, tokenInfo, setAvailableBalance]);
 
-  const updatePrice = useCallback(() => {
+  const updateTokenMarketInfo = useCallback(() => {
     if (web3 && currentAccount && tokenInfo) {
-      getAssetUSDPrice(tokenInfo.tokenAddress).then(setPrice);
+      Promise.all([
+        getMarketReserveData(tokenInfo.tokenAddress),
+        getAssetUSDPrice(tokenInfo.tokenAddress),
+        getMarketReserveConfigurationData(tokenInfo.tokenAddress),
+        getETHUSDPrice(),
+      ]).then((resp) => {
+        setMarketData(resp[0]);
+        setPrice(resp[1]);
+        setMarketConfig(resp[2]);
+        setETHUSDPrice(resp[3]);
+      });
     }
   }, [web3, currentAccount, setPrice, tokenInfo, getAssetUSDPrice]);
 
   useEffect(() => {
     updateWalletBalance();
-    updatePrice();
+    updateTokenMarketInfo();
   }, [web3, currentAccount, tokenInfo]);
 
   const header = (
@@ -193,6 +272,16 @@ function CreateWithdraw({ match }) {
     amount,
     handleWithdraw,
   });
+  const overivewRows = getOverviewRows({
+    t,
+    userReverseData,
+    userData,
+    marketData,
+    tokenInfo,
+    price,
+    marketConfig,
+    ethusdPrice,
+  });
   const percent = getSliderPercent(amount, maxAmount);
   const handleMaxClick = (max) => {
     if (max) {
@@ -229,7 +318,10 @@ function CreateWithdraw({ match }) {
             </div>
           )}
         />
-        <CreateOverview />
+        <CreateOverview
+          title={<FormattedMessage id="create_deposit_overview_title" />}
+          rows={overivewRows}
+        />
       </div>
     </SitePage>
   );

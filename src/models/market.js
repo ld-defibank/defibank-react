@@ -21,6 +21,7 @@ function useMarket(customInitialStates = {}) {
   };
   const {
     getReserveData,
+    getReserveConfigurationData,
   } = LendingPool.useContainer();
   const {
     getAssetPrice,
@@ -28,6 +29,12 @@ function useMarket(customInitialStates = {}) {
   } = ChainlinkProxyPriceProvider.useContainer();
 
   const getMarketReserveData = useCallback(tokenAddress => getReserveData(tokenAddress).then(data => ({
+    ...data,
+    tokenAddress,
+    meta: Object.values(TOKENS).find(token => token.tokenAddress === tokenAddress),
+  })), [getReserveData]);
+
+  const getMarketReserveConfigurationData = useCallback(tokenAddress => getReserveConfigurationData(tokenAddress).then(data => ({
     ...data,
     tokenAddress,
     meta: Object.values(TOKENS).find(token => token.tokenAddress === tokenAddress),
@@ -72,6 +79,7 @@ function useMarket(customInitialStates = {}) {
 
   return {
     getMarketReserveData,
+    getMarketReserveConfigurationData,
     getMarketAllReserveData,
     getETHUSDPrice,
     getAssetETHPrice,
