@@ -1,9 +1,4 @@
-#borrow {
-  .title {
-    font-size: 24px;
-    margin-bottom: 45px;
-  }
-
+#dashboardBorrow {
   .ez-table {
     .thead .tr {
       margin-bottom: 35px;
@@ -15,9 +10,16 @@
     .symbol {
       width: 15%;
     }
-    .variableapr,
-    .stableapr,
     .available {
+      width: 15%;
+    }
+    .borrowed {
+      width: 15%;
+    }
+    .apr {
+      width: 15%;
+    }
+    .borrowratemode {
       width: 20%;
     }
     .opt {

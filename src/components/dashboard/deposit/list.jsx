@@ -9,8 +9,18 @@ import { fromAmountToFixedAmount, humanReadableNumber } from '@utils/';
 import { Spin } from '@common/antd';
 
 function getColumns(data, prices, t, goto, handleCollateralChange) {
+  const radioGroupOptions = [{
+    key: 'yes',
+    value: true,
+    label: t('dashboard_deposit_table_collateral_yes'),
+  }, {
+    key: 'no',
+    value: false,
+    label: t('dashboard_deposit_table_collateral_no'),
+  }];
+
   return [{
-    title: t('deposit_table_asset'),
+    title: t('dashboard_deposit_table_asset'),
     dataIndex: 'symbol',
     key: 'symbol',
     className: 'symbol',
@@ -25,17 +35,17 @@ function getColumns(data, prices, t, goto, handleCollateralChange) {
       </>
     ),
   }, {
-    title: t('deposit_table_wallet_balance'),
-    dataIndex: 'walletBalance',
-    key: 'walletBalance',
-    className: 'walletbalance',
+    title: t('dashboard_deposit_table_balance'),
+    dataIndex: 'balance',
+    key: 'balance',
+    className: 'balance',
     render: (text, row) => (
       row.loading ? (
         <Spin size="small" />
       ) : (
         <>
           <div>{humanReadableNumber(fromAmountToFixedAmount(text, row, 2))} {row.symbol}</div>
-          <div>{`$ ${humanReadableNumber(parseFloat(fromAmountToFixedAmount(text, row) * parseFloat((prices.find(p => p.tokenAddress === row.tokenAddress) || { price: 0 }).price)).toFixed(2))}`}</div>
+          <div>{`$ ${humanReadableNumber(parseFloat(fromAmountToFixedAmount(row.balance, row) * parseFloat((prices.find(p => p.tokenAddress === row.tokenAddress) || { price: 0 }).price)).toFixed(2))}`}</div>
         </>
       )
     ),
@@ -43,25 +53,7 @@ function getColumns(data, prices, t, goto, handleCollateralChange) {
       'data-label': t('deposit_balance'),
     },
   }, {
-    title: t('deposit_table_bank_balance'),
-    dataIndex: 'bankBalance',
-    key: 'bankBalance',
-    className: 'bankbalance',
-    render: (text, row) => (
-      row.loading ? (
-        <Spin size="small" />
-      ) : (
-        <>
-          <div>{humanReadableNumber(fromAmountToFixedAmount(text, row, 2))} {row.symbol}</div>
-          <div>{`$ ${humanReadableNumber(parseFloat(fromAmountToFixedAmount(text, row) * parseFloat((prices.find(p => p.tokenAddress === row.tokenAddress) || { price: 0 }).price)).toFixed(2))}`}</div>
-        </>
-      )
-    ),
-    props: {
-      'data-label': t('deposit_balance'),
-    },
-  }, {
-    title: t('deposit_table_apr'),
+    title: t('dashboard_deposit_table_apr'),
     dataIndex: 'apr',
     key: 'apr',
     className: 'apr',
@@ -70,13 +62,23 @@ function getColumns(data, prices, t, goto, handleCollateralChange) {
       'data-label': t('deposit_apr'),
     },
   }, {
-    title: t('deposit_table_opt'),
+    title: t('dashboard_deposit_table_collateral'),
+    dataIndex: 'isCollateral',
+    key: 'isCollateral',
+    className: 'collateral',
+    render: (text, row) => <RadioGroup options={radioGroupOptions} value={text} onChange={c => handleCollateralChange(row, c)} />,
+    props: {
+      'data-label': t('deposit_collateral'),
+    },
+  }, {
+    title: t('dashboard_deposit_table_opt'),
     dataIndex: 'opt',
     key: 'opt',
     className: 'opt',
     render: (text, row) => (
       <>
-        <a onClick={() => goto('/deposit/detail/' + row.tokenAddress)}><FormattedMessage id="deposit_table_opt_detail" /></a>
+        <a onClick={() => goto('/deposit/deposit/' + row.tokenAddress)}><FormattedMessage id="dashboard_deposit_table_opt_deposit" /></a>
+        <a onClick={() => goto('/deposit/withdraw/' + row.tokenAddress)}><FormattedMessage id="dashboard_deposit_table_opt_withdraw" /></a>
       </>
     ),
     props: {

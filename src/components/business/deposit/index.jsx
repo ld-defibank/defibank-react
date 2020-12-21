@@ -12,7 +12,6 @@ import FormattedMessage from '@common/formattedMessage';
 import message from '@utils/message';
 import { fromAmountToFixedAmount, times10, tryGetErrorFromWeb3Error } from '@utils/';
 import CONFIG from '../../../config';
-import DashboardDepositUserInfo from './userInfo';
 import DashboardDepositList from './list';
 
 import './style.scss';
@@ -21,10 +20,9 @@ const { TOKENS } = CONFIG;
 
 const initialListData = Object.values(TOKENS).map(v => ({
   ...v,
-  balance: 0,
+  bankBalance: 0,
+  walletBalance: 0,
   apr: '0',
-  isCollateral: true,
-  loading: true,
 }));
 
 
@@ -39,16 +37,12 @@ function Deposit() {
   } = Web3.useContainer();
   const {
     getCurrentUserAccountData,
-    getCurrentUserReserveData,
-    setIsCollateral,
+    getCurrentAccountTokenWalletBalance,
   } = User.useContainer();
   const {
     getMarketReserveData,
     getAllAssetsUSDPrices,
   } = Market.useContainer();
-  const { t } = I18n.useContainer();
-  const { goto } = Router.useContainer();
-  const { setGlobalLoading } = Utils.useContainer();
 
   useEffect(() => {
     setLoading(true);
@@ -81,15 +75,14 @@ function Deposit() {
       // 获取市场数据
       getMarketReserveData(TOKENS[symbol].tokenAddress).then((reserve) => {
         updateAssetListValue(symbol, 'apr', times10(reserve.liquidityRate, -25, 2));
+        updateAssetListValue(symbol, 'bankBalance', reserve.totalLiquidity);
       });
       // 获取个人数据
-      getCurrentUserReserveData(TOKENS[symbol].tokenAddress).then((reserve) => {
-        updateAssetListValue(symbol, 'balance', reserve.currentATokenBalance);
-        updateAssetListValue(symbol, 'isCollateral', reserve.usageAsCollateralEnabled);
-        updateAssetListValue(symbol, 'loading', false);
+      getCurrentAccountTokenWalletBalance(TOKENS[symbol].tokenAddress).then((balance) => {
+        updateAssetListValue(symbol, 'walletBalance', balance);
       });
     });
-  }, [getMarketReserveData, getCurrentUserReserveData, updateAssetListValue]);
+  }, [getMarketReserveData, getCurrentAccountTokenWalletBalance, updateAssetListValue]);
 
   useEffect(() => {
     if (web3 && currentAccount) {
@@ -97,35 +90,13 @@ function Deposit() {
     }
   }, [web3, currentAccount]);
 
-  const handleCollateralChange = (asset, isCollateral) => {
-    setGlobalLoading(true);
-    setIsCollateral(asset.tokenAddress, isCollateral).then((recept) => {
-      if (recept.status) {
-        updateData();
-        setGlobalLoading(false);
-      }
-    }).catch((e) => {
-      const error = tryGetErrorFromWeb3Error(e);
-      if (error.code !== 4001) {
-        message.error(t.try(`deposit_change_collateral_e_${error.code}`, 'common_web3_error', { code: error.code }));
-      }
-      setGlobalLoading(false);
-    });
-  };
-
   return (
     <SitePage
       id="deposit"
       className="business-page"
-      header={(
-        <>
-          <a className="active"><FormattedMessage id="business_header_deposit" /></a>
-          <a onClick={() => goto('/borrow')}><FormattedMessage id="business_header_borrow" /></a>
-        </>
-      )}
     >
-      <DashboardDepositUserInfo data={userData} prices={prices} assetList={assetList} />
-      <DashboardDepositList data={assetList} prices={prices} onCollateralChange={handleCollateralChange} />
+      <div className="title"><FormattedMessage id="business_header_deposit" /></div>
+      <DashboardDepositList data={assetList} prices={prices} />
     </SitePage>
   );
 }

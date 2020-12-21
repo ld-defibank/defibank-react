@@ -17,14 +17,14 @@ export default function UserInfoBar({ data = [] }) {
 
   if (isEmpty) {
     return (
-      <div className="business-user-info-bar empty">
-        <FormattedMessage id="business_user_info_bar_empty" />
+      <div className="dashboard-user-info-bar empty">
+        <FormattedMessage id="dashboard_user_info_bar_empty" />
       </div>
     );
   }
 
   return (
-    <div className="business-user-info-bar">
+    <div className="dashboard-user-info-bar">
       {filtedData.map(asset => (
         <div className="asset" key={asset.symbol} style={{ width: `${parseFloat(asset.percent * 100).toFixed(3)}%` }}>
           <div className="tip">

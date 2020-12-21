@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/media-has-caption */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import I18n from '@models/i18n';
 import Router from '@models/router';
 import Web3 from '@models/web3v2';
@@ -12,23 +12,23 @@ import FormattedMessage from '@common/formattedMessage';
 import message from '@utils/message';
 import { fromAmountToFixedAmount, times10, tryGetErrorFromWeb3Error } from '@utils/';
 import CONFIG from '../../../config';
-import CONST from '../../../const';
-import DashboardBorrowList from './list';
+import DashboardDepositUserInfo from './userInfo';
+import DashboardDepositList from './list';
 
 import './style.scss';
 
-
 const { TOKENS } = CONFIG;
-const { BORROW_RATE_MODE } = CONST;
 
 const initialListData = Object.values(TOKENS).map(v => ({
   ...v,
-  available: 0,
-  variableApr: '0',
-  stableApr: '0',
+  balance: 0,
+  apr: '0',
+  isCollateral: true,
+  loading: true,
 }));
 
-function Borrow() {
+
+function Deposit() {
   const [loading, setLoading] = useState(true);
   const [prices, setPrices] = useState([]);
   const [userData, setUserData] = useState(null);
@@ -39,11 +39,16 @@ function Borrow() {
   } = Web3.useContainer();
   const {
     getCurrentUserAccountData,
+    getCurrentUserReserveData,
+    setIsCollateral,
   } = User.useContainer();
   const {
     getMarketReserveData,
     getAllAssetsUSDPrices,
   } = Market.useContainer();
+  const { t } = I18n.useContainer();
+  const { goto } = Router.useContainer();
+  const { setGlobalLoading } = Utils.useContainer();
 
   useEffect(() => {
     setLoading(true);
@@ -75,11 +80,16 @@ function Borrow() {
     Object.keys(TOKENS).forEach((symbol) => {
       // 获取市场数据
       getMarketReserveData(TOKENS[symbol].tokenAddress).then((reserve) => {
-        updateAssetListValue(symbol, 'variableApr', times10(reserve.variableBorrowRate, -25, 2));
-        updateAssetListValue(symbol, 'stableApr', times10(reserve.stableBorrowRate, -25, 2));
+        updateAssetListValue(symbol, 'apr', times10(reserve.liquidityRate, -25, 2));
+      });
+      // 获取个人数据
+      getCurrentUserReserveData(TOKENS[symbol].tokenAddress).then((reserve) => {
+        updateAssetListValue(symbol, 'balance', reserve.currentATokenBalance);
+        updateAssetListValue(symbol, 'isCollateral', reserve.usageAsCollateralEnabled);
+        updateAssetListValue(symbol, 'loading', false);
       });
     });
-  }, [getMarketReserveData, updateAssetListValue]);
+  }, [getMarketReserveData, getCurrentUserReserveData, updateAssetListValue]);
 
   useEffect(() => {
     if (web3 && currentAccount) {
@@ -87,15 +97,38 @@ function Borrow() {
     }
   }, [web3, currentAccount]);
 
+  const handleCollateralChange = (asset, isCollateral) => {
+    setGlobalLoading(true);
+    setIsCollateral(asset.tokenAddress, isCollateral).then((recept) => {
+      if (recept.status) {
+        updateData();
+        setGlobalLoading(false);
+      }
+    }).catch((e) => {
+      const error = tryGetErrorFromWeb3Error(e);
+      if (error.code !== 4001) {
+        message.error(t.try(`dashboard_deposit_change_collateral_e_${error.code}`, 'common_web3_error', { code: error.code }));
+      }
+      setGlobalLoading(false);
+    });
+  };
+
   return (
     <SitePage
-      id="borrow"
-      className="business-page"
+      id="dashboardDeposit"
+      className="dashboard-page"
+      header={(
+        <>
+          <a className="active"><FormattedMessage id="dashboard_header_deposit" /></a>
+          <a onClick={() => goto('/dashboard/borrow')}><FormattedMessage id="dashboard_header_borrow" /></a>
+        </>
+      )}
     >
-      <div className="title"><FormattedMessage id="business_header_borrow" /></div>
-      <DashboardBorrowList data={assetList} prices={prices} userData={userData} />
+      <DashboardDepositUserInfo data={userData} prices={prices} assetList={assetList} />
+      <DashboardDepositList data={assetList} prices={prices} onCollateralChange={handleCollateralChange} />
     </SitePage>
   );
 }
 
-export default Borrow;
+
+export default Deposit;

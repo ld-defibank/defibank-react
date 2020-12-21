@@ -12,16 +12,6 @@ import CONST from '../../../const';
 const { BORROW_RATE_MODE } = CONST;
 
 function getColumns(data, prices, userData, t, goto, handleModeChange) {
-  const radioGroupOptions = [{
-    key: 'stable',
-    value: BORROW_RATE_MODE.stable,
-    label: t('borrow_table_mode_stable'),
-  }, {
-    key: 'variable',
-    value: BORROW_RATE_MODE.variable,
-    label: t('borrow_table_mode_no_variable'),
-  }];
-
   const availableBorrowsETH = userData ? userData.availableBorrowsETH : '0';
 
   return [{
@@ -61,77 +51,22 @@ function getColumns(data, prices, userData, t, goto, handleModeChange) {
       'data-label': t('borrow_table_available'),
     },
   }, {
-    title: t('borrow_table_borrowed'),
-    dataIndex: 'borrowed',
-    key: 'borrowed',
-    className: 'borrowed',
-    render: (text, row) => {
-      if (row.loading) return <Spin size="small" />;
-      const priceInfo = prices.find(p => p.tokenAddress === row.tokenAddress) || { priceAsEth: 0, price: 0 };
-      const { price, priceAsEth } = priceInfo;
-      let borrowed;
-      if (parseFloat(price) === 0 || parseFloat(priceAsEth) === 0) {
-        borrowed = 0;
-      } else {
-        borrowed = parseFloat(text) / parseFloat(priceAsEth);
-      }
-
-      return `${humanReadableNumber(borrowed.toFixed(2))} ${row.symbol}`;
-    },
+    title: t('borrow_table_variable_apr'),
+    dataIndex: 'variableApr',
+    key: 'variableApr',
+    className: 'variableapr',
+    render: text => <span className="tx-green">{text} %</span>,
     props: {
-      'data-label': t('borrow_table_borrowed'),
+      'data-label': t('borrow_table_available'),
     },
   }, {
-    title: (
-      <>
-        <div><FormattedMessage id="borrow_table_stable_apr" /></div>
-        <div><FormattedMessage id="borrow_table_variable_apr" /></div>
-      </>
-    ),
-    dataIndex: 'apr',
-    key: 'apr',
-    className: 'apr',
-    render: (text, row) => {
-      const { borrowRateMode, variableApr, stableApr } = row;
-      if (borrowRateMode === BORROW_RATE_MODE.stable) {
-        return (
-          <>
-            <div className="tx-green">{stableApr} %</div>
-            <div className="tx-gray">{variableApr} %</div>
-          </>
-        );
-      }
-      if (borrowRateMode === BORROW_RATE_MODE.variable) {
-        return (
-          <>
-            <div className="tx-gray">{stableApr} %</div>
-            <div className="tx-green">{variableApr} %</div>
-          </>
-        );
-      }
-      return (
-        <>
-          <div className="tx-green">{stableApr} %</div>
-          <div className="tx-green">{variableApr} %</div>
-        </>
-      );
-    },
+    title: t('borrow_table_stable_apr'),
+    dataIndex: 'stableApr',
+    key: 'stableApr',
+    className: 'stableapr',
+    render: text => <span className="tx-green">{text} %</span>,
     props: {
-      'data-label': t('deposit_apr'),
-    },
-  }, {
-    title: t('borrow_table_mode'),
-    dataIndex: 'borrowRateMode',
-    key: 'borrowRateMode',
-    className: 'borrowratemode',
-    render: (text, row) => {
-      if (text === BORROW_RATE_MODE.noborrow) {
-        return <span className="tx-gray"><FormattedMessage id="borrow_table_mode_noborrow" /></span>;
-      }
-      return <RadioGroup options={radioGroupOptions} value={text} onChange={c => handleModeChange(row, c)} optionWidth={90} />;
-    },
-    props: {
-      'data-label': t('deposit_collateral'),
+      'data-label': t('borrow_table_available'),
     },
   }, {
     title: t('borrow_table_opt'),
@@ -140,8 +75,7 @@ function getColumns(data, prices, userData, t, goto, handleModeChange) {
     className: 'opt',
     render: (text, row) => (
       <>
-        <a onClick={() => goto('/borrow/borrow/' + row.tokenAddress)}><FormattedMessage id="borrow_table_opt_borrow" /></a>
-        <a onClick={() => goto('/borrow/repay/' + row.tokenAddress)}><FormattedMessage id="borrow_table_opt_repay" /></a>
+        <a onClick={() => goto('/borrow/detail/' + row.tokenAddress)}><FormattedMessage id="borrow_table_opt_detail" /></a>
       </>
     ),
     props: {

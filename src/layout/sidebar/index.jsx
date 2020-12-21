@@ -35,7 +35,7 @@ function Sidebar() {
               <a onClick={() => goto('/')}><FormattedMessage id="sidebar_menu_home" /></a>
             </div>
             <div className={classnames('menu-item', { active: sidebar.active === 'dashboard' })}>
-              <a onClick={() => goto('/dashboard')}><FormattedMessage id="sidebar_menu_dashboard" /></a>
+              <a onClick={() => goto('/dashboard/deposit')}><FormattedMessage id="sidebar_menu_dashboard" /></a>
             </div>
             <div className={classnames('menu-item', { active: sidebar.active === 'deposit' })}>
               <a onClick={() => goto('/deposit')}><FormattedMessage id="sidebar_menu_deposit" /></a>

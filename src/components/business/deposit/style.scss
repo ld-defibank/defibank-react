@@ -1,4 +1,9 @@
 #deposit {
+  .title {
+    font-size: 24px;
+    margin-bottom: 45px;
+  }
+
   .ez-table {
     .thead .tr {
       margin-bottom: 35px;
@@ -10,7 +15,8 @@
     .symbol {
       width: 20%;
     }
-    .balance {
+    .walletbalance,
+    .bankbalance {
       width: 20%;
 
       &>div:last-child {
@@ -18,9 +24,6 @@
       }
     }
     .apr {
-      width: 20%;
-    }
-    .collateral {
       width: 20%;
     }
     .opt {

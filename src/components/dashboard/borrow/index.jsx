@@ -13,6 +13,7 @@ import message from '@utils/message';
 import { fromAmountToFixedAmount, times10, tryGetErrorFromWeb3Error } from '@utils/';
 import CONFIG from '../../../config';
 import CONST from '../../../const';
+import DashboardBorrowUserInfo from './userInfo';
 import DashboardBorrowList from './list';
 
 import './style.scss';
@@ -26,6 +27,13 @@ const initialListData = Object.values(TOKENS).map(v => ({
   available: 0,
   variableApr: '0',
   stableApr: '0',
+  balance: '0',
+  borrowed: '0',
+  isStableApr: true,
+  isCollateral: true,
+  loading: true,
+  utilizationRate: '0',
+  borrowRateMode: BORROW_RATE_MODE[0],
 }));
 
 function Borrow() {
@@ -39,11 +47,16 @@ function Borrow() {
   } = Web3.useContainer();
   const {
     getCurrentUserAccountData,
+    getCurrentUserReserveData,
+    swapBorrowRateMode,
   } = User.useContainer();
   const {
     getMarketReserveData,
     getAllAssetsUSDPrices,
   } = Market.useContainer();
+  const { t } = I18n.useContainer();
+  const { goto } = Router.useContainer();
+  const { setGlobalLoading } = Utils.useContainer();
 
   useEffect(() => {
     setLoading(true);
@@ -77,9 +90,18 @@ function Borrow() {
       getMarketReserveData(TOKENS[symbol].tokenAddress).then((reserve) => {
         updateAssetListValue(symbol, 'variableApr', times10(reserve.variableBorrowRate, -25, 2));
         updateAssetListValue(symbol, 'stableApr', times10(reserve.stableBorrowRate, -25, 2));
+        updateAssetListValue(symbol, 'utilizationRate', times10(reserve.utilizationRate, -25, 2));
+      });
+      // 获取个人数据
+      getCurrentUserReserveData(TOKENS[symbol].tokenAddress).then((reserve) => {
+        updateAssetListValue(symbol, 'balance', reserve.currentATokenBalance);
+        updateAssetListValue(symbol, 'borrowed', reserve.currentBorrowBalance);
+        updateAssetListValue(symbol, 'isCollateral', reserve.usageAsCollateralEnabled);
+        updateAssetListValue(symbol, 'borrowRateMode', BORROW_RATE_MODE[reserve.borrowRateMode]);
+        updateAssetListValue(symbol, 'loading', false);
       });
     });
-  }, [getMarketReserveData, updateAssetListValue]);
+  }, [getMarketReserveData, getCurrentUserReserveData, updateAssetListValue]);
 
   useEffect(() => {
     if (web3 && currentAccount) {
@@ -87,13 +109,35 @@ function Borrow() {
     }
   }, [web3, currentAccount]);
 
+  const onModeChange = (asset, mode) => {
+    setGlobalLoading(true);
+    swapBorrowRateMode(asset.tokenAddress).then((recept) => {
+      if (recept.status) {
+        updateData();
+        setGlobalLoading(false);
+      }
+    }).catch((e) => {
+      const error = tryGetErrorFromWeb3Error(e);
+      if (error.code !== 4001) {
+        message.error(t.try(`dashboard_borrow_swap_ratemode_e_${error.code}`, 'common_web3_error', { code: error.code }));
+      }
+      setGlobalLoading(false);
+    });
+  };
+
   return (
     <SitePage
-      id="borrow"
-      className="business-page"
+      id="dashboardBorrow"
+      className="dashboard-page"
+      header={(
+        <>
+          <a onClick={() => goto('/dashboard/deposit')}><FormattedMessage id="dashboard_header_deposit" /></a>
+          <a className="active"><FormattedMessage id="dashboard_header_borrow" /></a>
+        </>
+      )}
     >
-      <div className="title"><FormattedMessage id="business_header_borrow" /></div>
-      <DashboardBorrowList data={assetList} prices={prices} userData={userData} />
+      <DashboardBorrowUserInfo data={userData} prices={prices} assetList={assetList} />
+      <DashboardBorrowList data={assetList} prices={prices} userData={userData} onModeChange={onModeChange} />
     </SitePage>
   );
 }

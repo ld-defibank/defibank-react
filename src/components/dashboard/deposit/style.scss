@@ -1,9 +1,4 @@
-#borrow {
-  .title {
-    font-size: 24px;
-    margin-bottom: 45px;
-  }
-
+#dashboardDeposit {
   .ez-table {
     .thead .tr {
       margin-bottom: 35px;
@@ -13,11 +8,19 @@
     }
 
     .symbol {
-      width: 15%;
+      width: 20%;
     }
-    .variableapr,
-    .stableapr,
-    .available {
+    .balance {
+      width: 20%;
+
+      &>div:last-child {
+        color: var(--main-text-gray);
+      }
+    }
+    .apr {
+      width: 20%;
+    }
+    .collateral {
       width: 20%;
     }
     .opt {
