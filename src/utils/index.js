@@ -73,6 +73,7 @@ function times10(deciaml, pow10, fixed) {
 }
 
 function fromAmountToFixedAmount(amount, TOKEN, fixed, side = Decimal.ROUND_DOWN) {
+  if (!TOKEN) return amount;
   const {
     decimals,
   } = TOKEN;
@@ -86,6 +87,7 @@ function fromAmountToFixedAmount(amount, TOKEN, fixed, side = Decimal.ROUND_DOWN
 }
 
 function fromFixedAmountToAmount(fixedAmount, TOKEN) {
+  if (!TOKEN) return fixedAmount;
   const {
     decimals,
   } = TOKEN;

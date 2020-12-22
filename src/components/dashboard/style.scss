@@ -34,7 +34,7 @@
 .dashboard-page .user-info {
   padding: 16px;
   border-radius: 8px;
-  background: var(--business-user-info-bg);
+  background: var(--dashboard-user-info-bg);
   display: flex;
   margin-bottom: 24px;
 
@@ -141,24 +141,24 @@
       border-radius: 4px;
     }
     &:nth-child(3n + 1) {
-      background-color: var(--business-user-info-bar-color-1);
+      background-color: var(--dashboard-user-info-bar-color-1);
 
       .tip::before {
-        background-color: var(--business-user-info-bar-color-1);
+        background-color: var(--dashboard-user-info-bar-color-1);
       }
     }
     &:nth-child(3n + 2) {
-      background-color: var(--business-user-info-bar-color-2);
+      background-color: var(--dashboard-user-info-bar-color-2);
 
       .tip::before {
-        background-color: var(--business-user-info-bar-color-2);
+        background-color: var(--dashboard-user-info-bar-color-2);
       }
     }
     &:nth-child(3n) {
-      background-color: var(--business-user-info-bar-color-3);
+      background-color: var(--dashboard-user-info-bar-color-3);
 
       .tip::before {
-        background-color: var(--business-user-info-bar-color-3);
+        background-color: var(--dashboard-user-info-bar-color-3);
       }
     }
   }

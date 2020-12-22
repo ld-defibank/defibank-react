@@ -9,6 +9,7 @@ import Index from './components/index';
 import { Deposit, Borrow, CreateDeposit, CreateWithdraw, CreateBorrow, CreateRepay } from './components/business';
 import { DepositHistory, WithdrawHistory, BorrowHistory, RepayHistory } from './components/history';
 import { Deposit as DashboardDeposit, Borrow as DashboardBorrow } from './components/dashboard';
+import Detail from './components/detail';
 import Store from './models';
 
 function MyRouter(props) {
@@ -23,6 +24,7 @@ function MyRouter(props) {
               <Route path="/" exact component={Index} />
               <Route path="/deposit" exact component={Deposit} />
               <Route path="/borrow" exact component={Borrow} />
+              <Route path="/detail/:tokenAddress" exact component={Detail} />
               <Route path="/deposit/deposit/:tokenAddress" exact component={CreateDeposit} />
               <Route path="/deposit/withdraw/:tokenAddress" exact component={CreateWithdraw} />
               <Route path="/borrow/borrow/:tokenAddress" exact component={CreateBorrow} />

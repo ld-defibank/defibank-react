@@ -33,6 +33,13 @@ const pathConfigs = {
       active: 'dashboard',
     },
   },
+  '/detail/:tokenAddress': {
+    key: 'detail',
+    refresh: [],
+    sidebar: {
+      active: '',
+    },
+  },
   '/deposit': {
     key: 'deposit',
     refresh: [],

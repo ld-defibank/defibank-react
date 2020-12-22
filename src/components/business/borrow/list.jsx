@@ -75,7 +75,7 @@ function getColumns(data, prices, userData, t, goto, handleModeChange) {
     className: 'opt',
     render: (text, row) => (
       <>
-        <a onClick={() => goto('/borrow/detail/' + row.tokenAddress)}><FormattedMessage id="borrow_table_opt_detail" /></a>
+        <a onClick={() => goto('/detail/' + row.tokenAddress)}><FormattedMessage id="borrow_table_opt_detail" /></a>
       </>
     ),
     props: {

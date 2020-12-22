@@ -76,7 +76,7 @@ function getColumns(data, prices, t, goto, handleCollateralChange) {
     className: 'opt',
     render: (text, row) => (
       <>
-        <a onClick={() => goto('/deposit/detail/' + row.tokenAddress)}><FormattedMessage id="deposit_table_opt_detail" /></a>
+        <a onClick={() => goto('/detail/' + row.tokenAddress)}><FormattedMessage id="deposit_table_opt_detail" /></a>
       </>
     ),
     props: {
