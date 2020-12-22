@@ -30,7 +30,7 @@ module.exports = {
   context: path.join(__dirname, '..', 'src/'),
   entry,
   output: {
-    path: path.join(__dirname, '..', '/dist/dashboard'),
+    path: path.join(__dirname, '..', '/dist/assets'),
     filename: '[name].[chunkhash:8].js',
     publicPath: config.STATIC_PATH
   },

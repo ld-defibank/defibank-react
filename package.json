@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "webpack-dev-server --color --process --config webpack/webpack.config.dev.js --open",
     "clean": "rm -rf dist && mkdir dist",
-    "production": "npm run clean && webpack --mode production --config webpack/webpack.config.production.js && mv dist/dashboard/dashboard.html dist/dashboard.html",
-    "release_test": "scp dist/assets/* test.io:~/public/assets"
+    "production": "npm run clean && webpack --mode production --config webpack/webpack.config.production.js && mv dist/assets/dashboard.html dist/index.html",
+    "release_test": "scp dist/index.html deploy@test-defibank.io:~/defibank/index.html && scp dist/assets/* deploy@test-defibank.io:~/assets.isekai.me/defibank"
   },
   "author": "",
   "license": "MIT",
