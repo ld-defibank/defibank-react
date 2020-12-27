@@ -24,9 +24,7 @@ const plugins = routers.map(r => new HtmlWebpackPlugin({
 }));
 
 const apis = [
-  '/users/*',
   '/api/v1/*',
-  '/protocol.json'
 ];
 
 const proxy = {};

@@ -1,5 +1,6 @@
 {
   "REACT_APP_ENV": "TEST",
+  "PROXY_DOMAIN": "http://defibank.isekai.me/",
   "DOMAIN": "",
 
   "INTERFACE": {

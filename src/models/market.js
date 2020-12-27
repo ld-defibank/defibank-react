@@ -11,6 +11,8 @@ const {
   TOKENS,
 } = CONFIG;
 
+const getMarketReserveHistoryDataCall = data => fetch.get(QUERYS.HISTORY_RESERVE, data);
+
 const defaultStates = {
 };
 
@@ -77,6 +79,8 @@ function useMarket(customInitialStates = {}) {
     priceAsEth: token.priceAsEth,
   }))), [getAllAssetsETHPrices, getETHUSDPrice]);
 
+  const getMarketReserveHistoryData = (tokenAddress, filter = 'day', limit = '10') => getMarketReserveHistoryDataCall({ token_address: tokenAddress, filter, limit });
+
   return {
     getMarketReserveData,
     getMarketReserveConfigurationData,
@@ -87,6 +91,7 @@ function useMarket(customInitialStates = {}) {
     getAllAssetsETHPrices,
     getAssetUSDPrice,
     getAllAssetsUSDPrices,
+    getMarketReserveHistoryData,
   };
 }
 

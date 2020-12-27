@@ -7,12 +7,7 @@ function getTimestamp() {
 }
 
 const QUERYS = {
-  STATE_CODE: '/static/state_code.json',
-  LOGIN_TOKEN: () => `/api/v1/user_login_token.json?_=${new Date().getTime()}`,
-  LOGIN: '/api/v1/user_login.json',
-  USER_INFO: '/api/v1/user/me.json',
-  UPLOAD_ATTACHMENT: '/api/v1/upload_attachment.json',
-  CONNECT_MEDIUM: token => `/auth/medium?token=${token}`,
+  HISTORY_RESERVE: '/api/v1/history/reserve.json',
 };
 
 const { API } = config;

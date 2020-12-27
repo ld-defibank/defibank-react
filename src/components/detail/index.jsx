@@ -12,6 +12,7 @@ import CONFIG from '../../config';
 import DetailSize from './size';
 import DetailData from './data';
 import DetailUser from './user';
+import DetailHistory from './history';
 
 import './style.scss';
 
@@ -26,6 +27,7 @@ export default function Detail({ match }) {
   const [price, setPrice] = useState(0);
   const [ETHPrice, setETHPrice] = useState(0);
   const [walletBalance, setWalletBalance] = useState(0);
+  const [historyData, setHistoryData] = useState([]);
   const {
     web3,
     currentAccount,
@@ -35,6 +37,7 @@ export default function Detail({ match }) {
     getMarketReserveConfigurationData,
     getAssetUSDPrice,
     getAssetETHPrice,
+    getMarketReserveHistoryData,
   } = Market.useContainer();
   const {
     getCurrentUserReserveData,
@@ -60,6 +63,11 @@ export default function Detail({ match }) {
       getCurrentUserReserveData(tokenAddress).then(setUserReserveData);
       getCurrentUserAccountData().then(setUserData);
       getCurrentAccountTokenWalletBalance(tokenAddress).then(setWalletBalance);
+      getMarketReserveHistoryData(tokenAddress, 'hour', 30).then((resp) => {
+        if (resp && resp.history) {
+          setHistoryData(resp.history);
+        }
+      });
     }
   }, [web3, currentAccount, tokenInfo, getMarketReserveData]);
 
@@ -100,6 +108,8 @@ export default function Detail({ match }) {
         </span>
         <span className="symbol">{tokenInfo.symbol || '--'}</span>
       </div>
+      <DetailHistory historyData={historyData} />
+      <div className="title"><FormattedMessage id="detail_info" /></div>
       <div className="row1">
         <DetailSize reserveData={reserveData} price={price} />
         <DetailData reserveData={reserveData} price={price} reserveConfigData={reserveConfigData} />

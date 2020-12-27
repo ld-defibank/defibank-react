@@ -32,7 +32,7 @@
 
 #detail .title {
   font-size: 24px;
-  margin-bottom: 20px;
+  margin: 20px 0;
 
   &>* {
     vertical-align: middle;
@@ -183,6 +183,7 @@
 
   .title {
     font-size: 16px;
+    margin-top: 0;
     margin-bottom: 20px;
   }
 
@@ -213,6 +214,36 @@
 
       &:hover {
         background: var(--main-pad-bg-strong);
+      }
+    }
+  }
+}
+
+#detail .history {
+  display: flex;
+  column-gap: 45px;
+  
+  .card {
+    flex-grow: 1;
+    flex-shrink: 1;
+    width: 33.3333%;
+    background-color: var(--index-market-bg);
+    background-image: url(../../assets/index-card-bg.svg);
+    background-repeat: no-repeat;
+    background-position: calc(100% + 15px) calc(100% + 15px);
+    font-size: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+
+    &-title {
+      padding: 16px 16px 0 16px;
+    }
+
+    &-content {
+      svg {
+        height: 90px;
+        width: 100%;
+        display: block;
       }
     }
   }

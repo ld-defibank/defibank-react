@@ -206,5 +206,8 @@
   "detail_user_available": "Available To You",
   "detail_user_deposit": "Deposit",
   "detail_user_wallet_balance": "Your Wallet Balance",
-  "detail_user_deposit_balance": "You Already Deposited"
+  "detail_user_deposit_balance": "You Already Deposited",
+  "detail_history_variable_borrow_rates": "Variable Borrow APR",
+  "detail_history_stable_borrow_rates": "Stable Borrow APR",
+  "detail_history_liquidity_rates": "Deposit APR"
 }
