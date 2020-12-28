@@ -5,6 +5,11 @@ import Decimal from 'decimal.js-light';
 import isMobile from './isMobile';
 import CONFIG from '../config';
 
+Decimal.config({
+  precision: 100,
+  toExpPos: 100,
+});
+
 const {
   TOKENS,
 } = CONFIG;
