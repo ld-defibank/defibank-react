@@ -28,6 +28,7 @@ export default function Detail({ match }) {
   const [ETHPrice, setETHPrice] = useState(0);
   const [walletBalance, setWalletBalance] = useState(0);
   const [historyData, setHistoryData] = useState([]);
+  const [aggregationData, setAggregationData] = useState(null);
   const {
     web3,
     currentAccount,
@@ -38,6 +39,7 @@ export default function Detail({ match }) {
     getAssetUSDPrice,
     getAssetETHPrice,
     getMarketReserveHistoryData,
+    getMarketReserveAggregation,
   } = Market.useContainer();
   const {
     getCurrentUserReserveData,
@@ -68,6 +70,7 @@ export default function Detail({ match }) {
           setHistoryData(resp.history);
         }
       });
+      getMarketReserveAggregation(tokenAddress, ['liquidity_rate', 'variable_borrow_rate', 'stable_borrow_rate'], 'avg', 'day', 30).then(setAggregationData);
     }
   }, [web3, currentAccount, tokenInfo, getMarketReserveData]);
 
@@ -112,7 +115,7 @@ export default function Detail({ match }) {
       <div className="title"><FormattedMessage id="detail_info" /></div>
       <div className="row1">
         <DetailSize reserveData={reserveData} price={price} />
-        <DetailData reserveData={reserveData} price={price} reserveConfigData={reserveConfigData} />
+        <DetailData reserveData={reserveData} price={price} reserveConfigData={reserveConfigData} aggregationData={aggregationData} />
       </div>
       <div className="title"><FormattedMessage id="detail_user_info" /></div>
       <DetailUser reserveData={reserveData} price={price} userReserveData={userReserveData} userData={userData} ETHPrice={ETHPrice} walletBalance={walletBalance} />

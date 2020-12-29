@@ -8,6 +8,7 @@ function getTimestamp() {
 
 const QUERYS = {
   HISTORY_RESERVE: '/api/v1/history/reserve.json',
+  AGGREGATION_RESERVE: '/api/v1/aggregation/reserve.json',
 };
 
 const { API } = config;

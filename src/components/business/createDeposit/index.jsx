@@ -167,7 +167,6 @@ function CreateDeposit({ match }) {
         if (!isEth(tokenInfo.tokenAddress)) {
           setMaxAmount(fromAmountToFixedAmount(balance, tokenInfo, Infinity));
         } else {
-          // TODO:
           // ETH先判定gas
           estimateDepositETHGas().then((gas) => {
             setMaxAmount(fromAmountToFixedAmount(new Decimal(balance).minus(gas).toFixed(0), tokenInfo, Infinity));

@@ -12,6 +12,7 @@ const {
 } = CONFIG;
 
 const getMarketReserveHistoryDataCall = data => fetch.get(QUERYS.HISTORY_RESERVE, data);
+const getMarketReserveAggregationCall = data => fetch.get(QUERYS.AGGREGATION_RESERVE, data);
 
 const defaultStates = {
 };
@@ -80,6 +81,7 @@ function useMarket(customInitialStates = {}) {
   }))), [getAllAssetsETHPrices, getETHUSDPrice]);
 
   const getMarketReserveHistoryData = (tokenAddress, filter = 'day', limit = '10') => getMarketReserveHistoryDataCall({ token_address: tokenAddress, filter, limit });
+  const getMarketReserveAggregation = (tokenAddress, targets = [], command, filter = 'day', limit = '10') => getMarketReserveAggregationCall({ token_address: tokenAddress, targets: targets.join(','), command, filter, limit });
 
   return {
     getMarketReserveData,
@@ -92,6 +94,7 @@ function useMarket(customInitialStates = {}) {
     getAssetUSDPrice,
     getAllAssetsUSDPrices,
     getMarketReserveHistoryData,
+    getMarketReserveAggregation,
   };
 }
 
