@@ -45,6 +45,7 @@ function getOverviewRows({
   const {
     ltv,
     liquidationThreshold,
+    liquidationBonus,
   } = marketConfig;
   const {
     totalBorrowsETH,
@@ -64,7 +65,8 @@ function getOverviewRows({
   const variableRate = times10(variableBorrowRate, -25, 2);
   // 7. 最大质押率
   // 8. 清算⻔槛
-  // 9. TODO: 清算惩罚
+  // 9. 清算惩罚
+  const liquidationPunishment = parseInt(liquidationBonus, 10) - 100;
 
   return [{
     label: t('create_borrow_overview_borrowed'),
@@ -90,6 +92,9 @@ function getOverviewRows({
   }, {
     label: t('create_borrow_overview_threshold'),
     value: `${liquidationThreshold} %`,
+  }, {
+    label: t('create_borrow_overview_punishment'),
+    value: `${liquidationPunishment} %`,
   }];
 }
 

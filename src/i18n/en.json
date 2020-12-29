@@ -84,6 +84,7 @@
   "create_withdraw_overview_current_ltv": "Current LTV",
   "create_withdraw_overview_ltv": "Maximum LTV",
   "create_withdraw_overview_threshold": "Liquidation Threshold",
+  "create_withdraw_overview_punishment": "Liquidation Punishment",
 
   "create_borrow_title": "Collateral",
   "create_borrow_opt_borrow": "Borrow",
@@ -100,6 +101,7 @@
   "create_borrow_overview_variable_apr": "Variable Borrow APR",
   "create_borrow_overview_ltv": "Maximum LTV",
   "create_borrow_overview_threshold": "Liquidation Threshold",
+  "create_borrow_overview_punishment": "Liquidation Punishment",
 
   "create_repay_title": "Borrowed",
   "create_repay_info_borrowed": "Borrowed balance (with interest)",
@@ -110,7 +112,7 @@
   "create_repay_overview_current_ltv": "Current LTV",
   "create_repay_overview_ltv": "Maximum LTV",
   "create_repay_overview_threshold": "Liquidation Threshold",
-
+  "create_repay_overview_punishment": "Liquidation Punishment",
 
   "history_header_deposit": "Deposit",
   "history_header_withdraw": "Withdraw",

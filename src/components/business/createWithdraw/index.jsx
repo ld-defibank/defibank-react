@@ -48,6 +48,7 @@ function getOverviewRows({
   const {
     ltv,
     liquidationThreshold,
+    liquidationBonus,
   } = marketConfig;
   const {
     totalCollateralETH,
@@ -70,7 +71,8 @@ function getOverviewRows({
   const currentltv = new Decimal(totalBorrowsETH).div(totalCollateralETH).toFixed(2);
   // 5. 最大质押率
   // 6. 清算⻔槛80%
-  // 7. TODO: 清算惩罚5%
+  // 7. 清算惩罚5%
+  const liquidationPunishment = parseInt(liquidationBonus, 10) - 100;
 
   return [{
     label: t('create_withdraw_overview_health'),
@@ -90,6 +92,9 @@ function getOverviewRows({
   }, {
     label: t('create_withdraw_overview_threshold'),
     value: `${liquidationThreshold} %`,
+  }, {
+    label: t('create_withdraw_overview_punishment'),
+    value: `${liquidationPunishment} %`,
   }];
 }
 
