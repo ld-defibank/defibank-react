@@ -24,7 +24,6 @@ function getCollateral(data, prices) {
   return usd.toFixed(2);
 }
 
-// TODO: 需要处理0的情况
 function getBorrowedBarData(data, prices) {
   const barData = data.map((asset) => {
     const priceInfo = prices.find(price => price.tokenAddress === asset.tokenAddress) || { price: 0 };

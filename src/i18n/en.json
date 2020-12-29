@@ -73,6 +73,7 @@
   "create_deposit_overview_collateral": "Usage As Collateral",
   "create_deposit_overview_ltv": "Maximum LTV",
   "create_deposit_overview_threshold": "Liquidation Threshold",
+  "create_deposit_overview_punishment": "Liquidation Punishment",
 
   "create_withdraw_title": "Available withdraw balance",
   "create_withdraw_opt_withdraw": "Withdraw",

@@ -44,6 +44,7 @@ function getOverviewRows({
     ltv,
     liquidationThreshold,
     usageAsCollateralEnabled,
+    liquidationBonus,
   } = marketConfig;
   // 1. 资金是利用率，=已借出/已存入
   const utilization = times10(utilizationRate, -25, 2);
@@ -59,7 +60,8 @@ function getOverviewRows({
   // 5. 是否可以用作抵押物，后面不是比率，是「是」或「否」
   // 6. 最大质押率
   // 7. 清算⻔槛
-  // 8. TODO: 清算惩罚
+  // 8. 清算惩罚
+  const liquidationPunishment = parseInt(liquidationBonus, 10) - 100;
   // 9. TODO: 历史利率曲线图
 
   return [{
@@ -83,6 +85,9 @@ function getOverviewRows({
   }, {
     label: t('create_deposit_overview_threshold'),
     value: `${liquidationThreshold} %`,
+  }, {
+    label: t('create_deposit_overview_punishment'),
+    value: `${liquidationPunishment} %`,
   }];
 }
 
