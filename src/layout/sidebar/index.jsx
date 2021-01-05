@@ -2,9 +2,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
+import RadioGroup from '@common/radioGroup';
 import FormattedMessage from '@common/formattedMessage';
 import I18n from '@models/i18n';
 import Router from '@models/router';
+import Utils from '@models/utils';
 import ASSETS from '@common/assets';
 import { Dropdown, Menu } from '@common/antd';
 import { UserOutlined, HistoryOutlined, CustomerServiceOutlined, CrownOutlined } from '@ant-design/icons';
@@ -12,14 +14,31 @@ import ism from '@utils/isMobile';
 
 import './style.scss';
 
+const {
+  themeDart,
+  themeLight,
+} = ASSETS;
 const logo = ism() ? ASSETS.logoIcon : ASSETS.logo;
 
 function Sidebar() {
-  const routerModel = Router.useContainer();
-
-  const { goto, currentPageConfig } = routerModel;
+  const {
+    theme,
+    setTheme,
+  } = Utils.useContainer();
+  const { goto, currentPageConfig } = Router.useContainer();
 
   const { sidebar } = currentPageConfig;
+
+  console.log(theme);
+  const radioGroupOptions = [{
+    key: 'dark',
+    value: 'dark',
+    label: <img src={themeDart} />,
+  }, {
+    key: 'light',
+    value: 'light',
+    label: <img src={themeLight} />,
+  }];
 
   return (
     <div id="sidebar">
@@ -46,6 +65,9 @@ function Sidebar() {
             <div className={classnames('menu-item', { active: sidebar.active === 'history' })}>
               <a onClick={() => goto('/history/deposit')}><FormattedMessage id="sidebar_menu_history" /></a>
             </div>
+          </div>
+          <div className="theme-switch">
+            <RadioGroup options={radioGroupOptions} value={theme} onChange={setTheme} optionWidth={60} />
           </div>
         </div>
       </div>

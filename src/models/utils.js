@@ -7,6 +7,7 @@ import QUERYS from '../querys';
 const getStateCodeCallback = () => fetch.get(QUERYS.STATE_CODE);
 const defaultStates = {
   globalLoading: false,
+  theme: 'dark',
 };
 
 function useUtils(customInitialStates = {}) {
@@ -15,6 +16,7 @@ function useUtils(customInitialStates = {}) {
     ...customInitialStates,
   };
   const [globalLoading, setGlobalLoading] = useState(initialStates.globalLoading);
+  const [theme, setTheme] = useState(initialStates.theme);
 
   const getStateCode = useCallback(() => getStateCodeCallback(), []);
 
@@ -22,6 +24,8 @@ function useUtils(customInitialStates = {}) {
     getStateCode,
     globalLoading,
     setGlobalLoading,
+    theme,
+    setTheme,
   };
 }
 
