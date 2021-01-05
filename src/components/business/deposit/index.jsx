@@ -38,6 +38,7 @@ function Deposit() {
   const {
     getCurrentUserAccountData,
     getCurrentAccountTokenWalletBalance,
+    getCurrentUserReserveData,
   } = User.useContainer();
   const {
     getMarketReserveData,
@@ -75,11 +76,14 @@ function Deposit() {
       // 获取市场数据
       getMarketReserveData(TOKENS[symbol].tokenAddress).then((reserve) => {
         updateAssetListValue(symbol, 'apr', times10(reserve.liquidityRate, -25, 2));
-        updateAssetListValue(symbol, 'bankBalance', reserve.totalLiquidity);
       });
       // 获取个人数据
       getCurrentAccountTokenWalletBalance(TOKENS[symbol].tokenAddress).then((balance) => {
         updateAssetListValue(symbol, 'walletBalance', balance);
+      });
+      // 获取个人数据
+      getCurrentUserReserveData(TOKENS[symbol].tokenAddress).then((reserve) => {
+        updateAssetListValue(symbol, 'bankBalance', reserve.currentATokenBalance);
       });
     });
   }, [getMarketReserveData, getCurrentAccountTokenWalletBalance, updateAssetListValue]);
