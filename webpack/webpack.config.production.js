@@ -37,7 +37,7 @@ module.exports = {
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
     new webpack.DefinePlugin({
-      __VERSION__: JSON.stringify(packageJson.version),
+      __VERSION__: JSON.stringify(packageJson.version + (packageJson.pre_version ? '.pre' : '')),
       __CONFIG__: JSON.stringify(config),
     }),
     new MiniCssExtractPlugin({

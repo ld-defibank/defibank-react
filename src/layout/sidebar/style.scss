@@ -29,6 +29,7 @@ $barWidth: 290px;
     height: calc(100vh - 98px);
     display: flex;
     align-items: center;
+    position: relative;
 
     &-content {
       width: 100%;
@@ -65,6 +66,16 @@ $barWidth: 290px;
     }
   }
 
+  .theme-switch {
+    position: absolute;
+    left: 15px;
+    bottom: 15px;
+
+    img {
+      height: 20px;
+      width: 20px;
+    }
+  }
 }
 
 @media screen and (max-width: 600px) {

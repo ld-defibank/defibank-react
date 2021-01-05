@@ -18,6 +18,7 @@
   --main-symbol-icon-bg: #d8d8d8;
   --button-disabled-bg: #424959;
   --button-disabled-text: #6C7284;
+  --button-text: var(--main-text);
 
   --index-market-bg: var(--main-pad-bg);
   --dashboard-user-info-bg: var(--main-pad-bg);
@@ -26,4 +27,48 @@
   --dashboard-user-info-bar-color-3: #E43BA3;
 
   --detail-ring-bg: #393D50;
+  --detail-user-btn-bg: var(--page-background);
+  --detail-user-btn-hover-color: var(--main-text);
+
+  --switch-color: var(--main-text);
+  --switch-active-color: var(--switch-color);
+
+  --slider-dot: var(--main-text-gray);
+}
+
+:root[data-theme="light"] {
+  --page-background: #fff;
+  --main-text: #464A65;
+  // --main-text-strong: var(--primary-color);
+  // --main-text-strong-2: #DDC1A6;
+  // --main-text-weak: #7B7F9D;
+  // --main-text-gray: #464A65;
+  // --main-text-red: #dc3545;
+  --main-text-green: #46ca08;
+  // --main-text-orange: #FE9900;
+  // --main-input-placeholder: #666;
+
+  --main-pad-bg: #F7F7F7;
+  --main-pad-bg-strong: var(--primary-color);
+  // --main-tip-bg: #fff;
+  // --main-tip-text: #100C20;
+  // --main-symbol-icon-bg: #d8d8d8;
+  // --button-disabled-bg: #424959;
+  // --button-disabled-text: #6C7284;
+  --button-text: #fff;
+
+  // --index-market-bg: var(--main-pad-bg);
+  // --dashboard-user-info-bg: var(--main-pad-bg);
+  // --dashboard-user-info-bar-color-1: #E4913B;
+  // --dashboard-user-info-bar-color-2: #EDC910;
+  // --dashboard-user-info-bar-color-3: #E43BA3;
+
+  --detail-ring-bg: #ECECEC;
+  --detail-user-btn-bg: #ECECEC;
+  --detail-user-btn-hover-color: #fff;
+
+  --switch-color: var(--main-text);
+  --switch-active-color: #fff;
+
+  --slider-dot: #e2d4c5;
 }
