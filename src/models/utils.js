@@ -16,9 +16,14 @@ function useUtils(customInitialStates = {}) {
     ...customInitialStates,
   };
   const [globalLoading, setGlobalLoading] = useState(initialStates.globalLoading);
-  const [theme, setTheme] = useState(initialStates.theme);
+  const [theme, setThemeProp] = useState(initialStates.theme);
 
   const getStateCode = useCallback(() => getStateCodeCallback(), []);
+
+  const setTheme = useCallback((t) => {
+    window.document.documentElement.setAttribute('data-theme', t);
+    setThemeProp(t);
+  }, [setThemeProp]);
 
   return {
     getStateCode,

@@ -206,7 +206,7 @@
   
   .opts {
     button {
-      background: var(--page-background);
+      background: var(--detail-user-btn-bg);
       width: 100px;
       padding: 5px 0;
       margin-right: 14px;
@@ -214,6 +214,7 @@
 
       &:hover {
         background: var(--main-pad-bg-strong);
+        color: var(--detail-user-btn-hover-color);
       }
     }
   }

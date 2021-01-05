@@ -23,6 +23,11 @@
       transform: translate(-50%, -50%);
       font-size: 14px;
       font-weight: 600;
+      color: var(--switch-color);
+    }
+
+    &.checked>span {
+      color: var(--switch-active-color);
     }
   }
 

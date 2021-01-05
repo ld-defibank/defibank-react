@@ -16,9 +16,10 @@
     padding: 8px 14px;
     background: transparent;
     border: #fff solid 1px;
+    border-color: var(--main-text);
     border-radius: 8px;
     font-size: 16px;
-    color: #fff;
+    color: var(--main-text);
     font-weight: 500;
     line-height: 1;
     
@@ -51,7 +52,7 @@
   }
 
   .lang-menu {
-    color: #fff;
+    color: var(--main-text);
     font-weight: 500;
 
     &>* {

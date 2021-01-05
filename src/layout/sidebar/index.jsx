@@ -17,6 +17,8 @@ import './style.scss';
 const {
   themeDart,
   themeLight,
+  themeDartNotSelect,
+  themeLightNotSelect,
 } = ASSETS;
 const logo = ism() ? ASSETS.logoIcon : ASSETS.logo;
 
@@ -29,15 +31,14 @@ function Sidebar() {
 
   const { sidebar } = currentPageConfig;
 
-  console.log(theme);
   const radioGroupOptions = [{
     key: 'dark',
     value: 'dark',
-    label: <img src={themeDart} />,
+    label: theme === 'dark' ? <img src={themeDart} /> : <img src={themeDartNotSelect} />,
   }, {
     key: 'light',
     value: 'light',
-    label: <img src={themeLight} />,
+    label: theme === 'light' ? <img src={themeLight} /> : <img src={themeLightNotSelect} />,
   }];
 
   return (
