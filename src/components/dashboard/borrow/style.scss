@@ -16,14 +16,17 @@
     .borrowed {
       width: 15%;
     }
-    .apr {
-      width: 15%;
+    .stableApr {
+      width: 10%;
+    }
+    .variableApr {
+      width: 10%;
     }
     .borrowratemode {
       width: 20%;
     }
     .opt {
-      width: 20%;
+      width: 15%;
 
       a {
         margin-right: 8px;
@@ -51,6 +54,13 @@
       
       &>* {
         vertical-align: middle;
+      }
+    }
+
+    .stableApr,
+    .variableApr {
+      .anticon {
+        margin-right: 3px;
       }
     }
   }

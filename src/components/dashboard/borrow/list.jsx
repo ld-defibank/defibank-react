@@ -5,8 +5,10 @@ import RadioGroup from '@common/radioGroup';
 import I18n from '@models/i18n';
 import Router from '@models/router';
 import FormattedMessage from '@common/formattedMessage';
+import Tag from '@common/tag';
 import { fromAmountToFixedAmount, humanReadableNumber } from '@utils/';
 import { Spin } from '@common/antd';
+import { CheckCircleFilled } from '@ant-design/icons';
 import CONST from '../../../const';
 
 const { BORROW_RATE_MODE } = CONST;
@@ -82,38 +84,34 @@ function getColumns(data, prices, userData, t, goto, handleModeChange) {
       'data-label': t('dashboard_borrow_table_borrowed'),
     },
   }, {
-    title: (
-      <>
-        <div><FormattedMessage id="dashboard_borrow_table_stable_apr" /></div>
-        <div><FormattedMessage id="dashboard_borrow_table_variable_apr" /></div>
-      </>
-    ),
-    dataIndex: 'apr',
-    key: 'apr',
-    className: 'apr',
+    title: <FormattedMessage id="dashboard_borrow_table_stable_apr" />,
+    dataIndex: 'stableApr',
+    key: 'stableApr',
+    className: 'stableApr',
     render: (text, row) => {
-      const { borrowRateMode, variableApr, stableApr } = row;
-      if (borrowRateMode === BORROW_RATE_MODE.stable) {
-        return (
-          <>
-            <div className="tx-green">{stableApr} %</div>
-            <div className="tx-gray">{variableApr} %</div>
-          </>
-        );
-      }
-      if (borrowRateMode === BORROW_RATE_MODE.variable) {
-        return (
-          <>
-            <div className="tx-gray">{stableApr} %</div>
-            <div className="tx-green">{variableApr} %</div>
-          </>
-        );
-      }
+      const { borrowRateMode, stableApr } = row;
       return (
-        <>
-          <div className="tx-green">{stableApr} %</div>
-          <div className="tx-green">{variableApr} %</div>
-        </>
+        <span className="tx-green">
+          {borrowRateMode === BORROW_RATE_MODE.stable && (<CheckCircleFilled />)}
+          <span>{stableApr} %</span>
+        </span>
+      );
+    },
+    props: {
+      'data-label': t('deposit_apr'),
+    },
+  }, {
+    title: <FormattedMessage id="dashboard_borrow_table_variable_apr" />,
+    dataIndex: 'variableApr',
+    key: 'variableApr',
+    className: 'variableApr',
+    render: (text, row) => {
+      const { borrowRateMode, variableApr } = row;
+      return (
+        <span className="tx-green">
+          {borrowRateMode === BORROW_RATE_MODE.variable && (<CheckCircleFilled />)}
+          <span>{variableApr} %</span>
+        </span>
       );
     },
     props: {
@@ -126,7 +124,7 @@ function getColumns(data, prices, userData, t, goto, handleModeChange) {
     className: 'borrowratemode',
     render: (text, row) => {
       if (text === BORROW_RATE_MODE.noborrow) {
-        return <span className="tx-gray"><FormattedMessage id="dashboard_borrow_table_mode_noborrow" /></span>;
+        return <Tag color="gray"><FormattedMessage id="not_available" /></Tag>;
       }
       return <RadioGroup options={radioGroupOptions} value={text} onChange={c => handleModeChange(row, c)} optionWidth={90} />;
     },

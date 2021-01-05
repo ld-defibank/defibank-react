@@ -17,6 +17,7 @@
   "common_web3_error": "Some error occurred, please try again. Error code: {code}",
   "yes": "YES",
   "no": "NO",
+  "not_available": "Not Available",
 
   "sidebar_menu_home": "Homepage",
   "sidebar_menu_dashboard": "Dashboard",

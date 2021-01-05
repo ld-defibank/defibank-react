@@ -51,7 +51,6 @@
     }
     .tbody .tr {
       margin-bottom: 45px;
-      cursor: pointer;
     }
 
     .symbol {
@@ -105,21 +104,6 @@
       
       &>* {
         vertical-align: middle;
-      }
-    }
-    
-    .tbody .tr:hover {
-      .symbol,
-      .totalusd,
-      .deposit,
-      .borrow {
-        color: var(--main-text-strong);
-      }
-      .deposit,
-      .borrow {
-        &>div:last-child {
-          color: var(--main-text-strong-2);
-        }
       }
     }
   }

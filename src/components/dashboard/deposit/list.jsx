@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Table from '@common/table';
 import RadioGroup from '@common/radioGroup';
 import FormattedMessage from '@common/formattedMessage';
+import Tag from '@common/tag';
 import I18n from '@models/i18n';
 import Router from '@models/router';
 import { fromAmountToFixedAmount, humanReadableNumber } from '@utils/';
@@ -66,7 +67,11 @@ function getColumns(data, prices, t, goto, handleCollateralChange) {
     dataIndex: 'isCollateral',
     key: 'isCollateral',
     className: 'collateral',
-    render: (text, row) => <RadioGroup options={radioGroupOptions} value={text} onChange={c => handleCollateralChange(row, c)} />,
+    render: (text, row) => (parseInt(row.balance, 10) === 0 ? (
+      <Tag color="gray"><FormattedMessage id="not_available" /></Tag>
+    ) : (
+      <RadioGroup options={radioGroupOptions} value={text} onChange={c => handleCollateralChange(row, c)} />
+    )),
     props: {
       'data-label': t('deposit_collateral'),
     },

@@ -1,0 +1,10 @@
+.ez-tag {
+  border: #fff solid 1px;
+  border-radius: 2px;
+  padding: 2px 3px;
+
+  &.gray {
+    border-color: var(--main-text-gray);
+    color: var(--main-text-gray);
+  }
+}

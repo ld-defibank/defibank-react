@@ -78,12 +78,8 @@ function getColumns(data, t) {
 }
 
 export default function IndexTable({ data, loading }) {
-  const { t, locale } = I18n.useContainer();
+  const { t } = I18n.useContainer();
   const columns = getColumns(data, t);
-
-  const handleRowClick = (d) => {
-    console.log(d);
-  };
 
   return (
     <div className="market-list">
@@ -91,7 +87,6 @@ export default function IndexTable({ data, loading }) {
         rowKey="tokenAddress"
         dataSource={data}
         columns={columns}
-        onRowClick={handleRowClick}
       />
     </div>
   );
