@@ -165,10 +165,18 @@
 
   .content {
     height: 190px;
-    overflow: auto;
+    overflow-y: scroll;
 
     .pad-title {
       margin-bottom: 14px;
+    }
+  }
+
+  .ez-switch-label {
+    display: none;
+
+    &.active {
+      display: inline-block;
     }
   }
 }
