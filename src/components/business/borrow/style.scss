@@ -16,8 +16,11 @@
       width: 15%;
     }
     .variableapr,
-    .stableapr,
-    .available {
+    .stableapr {
+      width: 15%;
+    }
+    .available,
+    .borrowed {
       width: 20%;
     }
     .opt {

@@ -51,6 +51,27 @@ function getColumns(data, prices, userData, t, goto, handleModeChange) {
       'data-label': t('borrow_table_available'),
     },
   }, {
+    title: t('borrow_table_borrowed'),
+    dataIndex: 'borrowed',
+    key: 'borrowed',
+    className: 'borrowed',
+    render: (text, row) => {
+      if (row.loading) return <Spin size="small" />;
+      const priceInfo = prices.find(p => p.tokenAddress === row.tokenAddress) || { priceAsEth: 0, price: 0 };
+      const { price, priceAsEth } = priceInfo;
+      let borrowed;
+      if (parseFloat(price) === 0 || parseFloat(priceAsEth) === 0) {
+        borrowed = 0;
+      } else {
+        borrowed = parseFloat(text) / parseFloat(priceAsEth);
+      }
+
+      return `${humanReadableNumber(borrowed.toFixed(2))} ${row.symbol}`;
+    },
+    props: {
+      'data-label': t('borrow_table_available'),
+    },
+  }, {
     title: t('borrow_table_variable_apr'),
     dataIndex: 'variableApr',
     key: 'variableApr',

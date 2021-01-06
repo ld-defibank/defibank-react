@@ -57,6 +57,7 @@
 
   "borrow_table_asset": "Asset",
   "borrow_table_available": "Available For You",
+  "borrow_table_borrowed": "Borrowed",
   "borrow_table_variable_apr": "Variable APR",
   "borrow_table_stable_apr": "stable APR",
   "borrow_table_opt": "Operation",

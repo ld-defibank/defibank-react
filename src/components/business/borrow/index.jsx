@@ -39,6 +39,7 @@ function Borrow() {
   } = Web3.useContainer();
   const {
     getCurrentUserAccountData,
+    getCurrentUserReserveData,
   } = User.useContainer();
   const {
     getMarketReserveData,
@@ -77,6 +78,10 @@ function Borrow() {
       getMarketReserveData(TOKENS[symbol].tokenAddress).then((reserve) => {
         updateAssetListValue(symbol, 'variableApr', times10(reserve.variableBorrowRate, -25, 2));
         updateAssetListValue(symbol, 'stableApr', times10(reserve.stableBorrowRate, -25, 2));
+      });
+      // 获取个人数据
+      getCurrentUserReserveData(TOKENS[symbol].tokenAddress).then((reserve) => {
+        updateAssetListValue(symbol, 'borrowed', reserve.currentBorrowBalance);
       });
     });
   }, [getMarketReserveData, updateAssetListValue]);
