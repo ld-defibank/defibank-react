@@ -8,7 +8,19 @@ import Router from '@models/router';
 import { fromAmountToFixedAmount, humanReadableNumber } from '@utils/';
 import { Spin } from '@common/antd';
 
-function getColumns(data, prices, t, goto, handleCollateralChange) {
+function getTokenValue(balance, token, prices) {
+  const priceInfo = prices.find(p => p.tokenAddress === token.tokenAddress) || { priceAsEth: 0, price: 0 };
+  const { price } = priceInfo;
+  let value;
+  if (parseFloat(price) === 0 || parseFloat(price) === 0) {
+    value = 0;
+  } else {
+    value = parseFloat(fromAmountToFixedAmount(balance, token)) * parseFloat(price);
+  }
+  return value;
+}
+
+function getColumns(prices, t, goto) {
   return [{
     title: t('deposit_table_asset'),
     dataIndex: 'symbol',
@@ -35,7 +47,7 @@ function getColumns(data, prices, t, goto, handleCollateralChange) {
       ) : (
         <>
           <div>{humanReadableNumber(fromAmountToFixedAmount(text, row, 2))} {row.symbol}</div>
-          <div>{`$ ${humanReadableNumber(parseFloat(fromAmountToFixedAmount(text, row) * parseFloat((prices.find(p => p.tokenAddress === row.tokenAddress) || { price: 0 }).price)).toFixed(2))}`}</div>
+          <div>{`$ ${humanReadableNumber(parseFloat(getTokenValue(text, row, prices)).toFixed(2))}`}</div>
         </>
       )
     ),
@@ -53,7 +65,7 @@ function getColumns(data, prices, t, goto, handleCollateralChange) {
       ) : (
         <>
           <div>{humanReadableNumber(fromAmountToFixedAmount(text, row, 2))} {row.symbol}</div>
-          <div>{`$ ${humanReadableNumber(parseFloat(fromAmountToFixedAmount(text, row) * parseFloat((prices.find(p => p.tokenAddress === row.tokenAddress) || { price: 0 }).price)).toFixed(2))}`}</div>
+          <div>{`$ ${humanReadableNumber(parseFloat(getTokenValue(text, row, prices)).toFixed(2))}`}</div>
         </>
       )
     ),
@@ -85,17 +97,34 @@ function getColumns(data, prices, t, goto, handleCollateralChange) {
   }];
 }
 
-export default function DashboardDepositList({ data, prices, onCollateralChange }) {
+function sortData(data, prices) {
+  if (!data || data.length === 0) return [];
+  const usedArr = data.filter(d => d.bankBalance !== '0');
+  const restArr = data.filter(d => d.bankBalance === '0');
+  if (usedArr.length) {
+    usedArr.sort((a, b) => {
+      const priceA = getTokenValue(a.bankBalance, a, prices);
+      const priceB = getTokenValue(b.bankBalance, b, prices);
+      if (priceA > priceB) return -1;
+      return 1;
+    });
+  }
+  return [usedArr.concat(restArr), usedArr.length - 1];
+}
+
+export default function DashboardDepositList({ data, prices }) {
   const { t, locale } = I18n.useContainer();
   const { goto } = Router.useContainer();
 
-  const columns = getColumns(data, prices, t, goto, onCollateralChange);
+  const [sortedData, dividerIndex] = sortData(data, prices);
+  const columns = getColumns(prices, t, goto);
   return (
     <div className="business-list">
       <Table
         rowKey="symbol"
-        dataSource={data}
+        dataSource={sortedData}
         columns={columns}
+        dividerIndex={dividerIndex}
       />
     </div>
   );

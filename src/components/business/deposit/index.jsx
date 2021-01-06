@@ -20,8 +20,8 @@ const { TOKENS } = CONFIG;
 
 const initialListData = Object.values(TOKENS).map(v => ({
   ...v,
-  bankBalance: 0,
-  walletBalance: 0,
+  bankBalance: '0',
+  walletBalance: '0',
   apr: '0',
 }));
 

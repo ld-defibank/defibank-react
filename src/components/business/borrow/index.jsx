@@ -26,6 +26,7 @@ const initialListData = Object.values(TOKENS).map(v => ({
   available: 0,
   variableApr: '0',
   stableApr: '0',
+  borrowed: '0',
 }));
 
 function Borrow() {

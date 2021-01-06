@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import './table.scss';
 
-export default function Table({ dataSource, columns, rowKey, className, onRowClick }) {
+export default function Table({ dataSource, columns, rowKey, dividerIndex, className, onRowClick }) {
 
   return (
     <div className={classnames('ez-table', className)}>
@@ -14,8 +14,8 @@ export default function Table({ dataSource, columns, rowKey, className, onRowCli
         </div>
       </div>
       <div className="tbody">
-        {dataSource.map(row => (
-          <div className="tr" key={row[rowKey]} onClick={() => onRowClick && onRowClick(row)}>
+        {dataSource.map((row, i) => (
+          <div className={classnames('tr', { divider: dividerIndex === i })} key={row[rowKey]} onClick={() => onRowClick && onRowClick(row)}>
             {columns.map(col => (
               <div className={classnames('td', col.className)} key={col.key} {...(col.props || {})}>{col.render ? col.render(row[col.dataIndex], row) : row[col.dataIndex]}</div>
             ))}

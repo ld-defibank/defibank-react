@@ -9,7 +9,16 @@
       margin-bottom: 35px;
     }
     .tbody .tr {
-      margin-bottom: 45px;
+      padding-bottom: 22px;
+      margin-bottom: 22px;
+
+      &.divider {
+        border-bottom: var(--main-text-gray) solid 1px;
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
     }
 
     .symbol {
@@ -17,14 +26,15 @@
     }
     .variableapr,
     .stableapr {
-      width: 15%;
+      width: 20%;
     }
     .available,
     .borrowed {
       width: 20%;
     }
     .opt {
-      width: 20%;
+      width: 10%;
+      text-align: right;
 
       a {
         margin-right: 8px;
