@@ -29,6 +29,9 @@
   "top_language_zh-cn": "CN",
   "top_language_en": "EN",
 
+  "footer_right": "2020 DefiBank All rights reserved",
+  "footer_version": "(version {version})",
+
   "index_market_title": "Current Market Size",
   "index_market_size": "Market Size",
   "index_market_borrow": "Borrowed",

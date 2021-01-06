@@ -1,0 +1,23 @@
+.site-content {
+  min-height: calc(100vh - 216px);
+}
+.site-footer {
+  text-align: center;
+  color: var(--footer-text);
+  line-height: 1.5;
+  height: 67px;
+  margin-top: 23px;
+
+  .links {
+    margin-bottom: 25px;
+
+    a {
+      color: var(--footer-text);
+      margin: 0 20px;
+
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+  }
+}

@@ -48,7 +48,7 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      __VERSION__: JSON.stringify(packageJson.version + (packageJson.pre_version ? '.pre' : '')),
+      __VERSION__: JSON.stringify(packageJson.version + (packageJson.pre_version ? '.bata' : '')),
       __CONFIG__: JSON.stringify(config),
     }),
     new webpack.HotModuleReplacementPlugin(),

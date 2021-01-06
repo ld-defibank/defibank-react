@@ -11,6 +11,8 @@
   --main-text-orange: #FE9900;
   --main-input-placeholder: #666;
 
+  --footer-text: var(--main-text-gray);
+
   --main-pad-bg: #212232;
   --main-pad-bg-strong: #4E516D;
   --main-tip-bg: #fff;
@@ -47,6 +49,8 @@
   --main-text-green: #46ca08;
   // --main-text-orange: #FE9900;
   // --main-input-placeholder: #666;
+
+  --footer-text: var(--main-text);
 
   --main-pad-bg: #F7F7F7;
   --main-pad-bg-strong: var(--primary-color);
