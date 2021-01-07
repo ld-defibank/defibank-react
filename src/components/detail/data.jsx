@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import classnames from 'classnames';
 import Decimal from 'decimal.js-light';
+import SimpleBar from 'simplebar-react';
 import FormattedMessage from '@common/formattedMessage';
 import Switch from '@common/switch';
 import { Spin } from '@common/antd';
@@ -105,7 +106,7 @@ export default function DetailData({ reserveData, reserveConfigData, aggregation
   return (
     <div className="data">
       <div className="pad-title"><FormattedMessage id="detail_data" /></div>
-      <div className="content">
+      <SimpleBar className="content" autoHide={false}>
         <div className="row">
           <div className="label"><FormattedMessage id="detail_data_ltv" /></div>
           <div className="value">{ltv} %</div>
@@ -169,7 +170,7 @@ export default function DetailData({ reserveData, reserveConfigData, aggregation
           <div className="label"><FormattedMessage id="detail_data_total_variable_per" /></div>
           <div className="value">{(parseFloat(totalBorrowsVariable) / parseFloat(totalBorrow) * 100).toFixed(2)} %</div>
         </div>
-      </div>
+      </SimpleBar>
     </div>
   );
 }
