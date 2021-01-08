@@ -126,7 +126,7 @@ function getColumns(data, prices, userData, t, goto, handleModeChange) {
       if (text === BORROW_RATE_MODE.noborrow) {
         return <Tag color="gray"><FormattedMessage id="not_available" /></Tag>;
       }
-      return <RadioGroup options={radioGroupOptions} value={text} onChange={c => handleModeChange(row, c)} optionWidth={90} />;
+      return <RadioGroup options={radioGroupOptions} value={text} onChange={c => handleModeChange(row, c)} optionWidth={75} />;
     },
     props: {
       'data-label': t('deposit_collateral'),
