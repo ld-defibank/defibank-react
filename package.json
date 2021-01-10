@@ -1,6 +1,6 @@
 {
   "name": "rich-web-react",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "pre_version": true,
   "description": "rich web react",
   "main": "./src/index.js",
