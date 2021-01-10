@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import classnames from 'classnames';
 import { fromAmountToFixedAmount, fromFixedAmountToAmount, times10, standardNumber } from '@utils/';
 import { Slider } from '@common/antd';
 import FormattedMessage from '@common/formattedMessage';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const marks = {
   0: '0%',
@@ -116,7 +118,7 @@ export default function CreatePad({ title, tokenInfo, balance, price, amount, on
       {extra}
       <div className="opts">
         {opts.map(opt => (
-          <button key={opt.key} onClick={opt.onClick} {...opt.props}>{opt.text}</button>
+          <button className={classnames({ loading: opt.loading })} key={opt.key} onClick={() => !opt.loading && opt.onClick()} {...opt.props}>{opt.loading && <LoadingOutlined />} <span>{opt.text}</span></button>
         ))}
       </div>
     </div>

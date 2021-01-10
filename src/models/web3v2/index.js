@@ -34,6 +34,12 @@ export class Contract {
     console.groupEnd();
   }
 
+  _upsertTransaction(...args) {
+    if (window.__upsertTransaction__) {
+      window.__upsertTransaction__(...args);
+    }
+  }
+
   call(method, args = []) {
     return this.contract.methods[method](...args).call().then((data) => {
       this._log('call', method, {
@@ -46,18 +52,38 @@ export class Contract {
 
   send(method, args = [], options = {}) {
     return this.estimateGas(method, args, { ...options })
-      .then(gas => this.contract.methods[method](...args).send({
-        gas,
-        ...options,
-      }))
-      .then((data) => {
-        this._log('send', method, {
-          方法入参: { value: args },
-          调用参数: { value: options },
-          结果: { value: data },
-        });
-        return data;
-      });
+      .then(gas => new Promise((resolve, reject) => {
+        this.contract.methods[method](...args).send({
+          gas,
+          ...options,
+        })
+          .on('transactionHash', (hash) => {
+            this._upsertTransaction({
+              method,
+              args,
+              options,
+            }, hash);
+          })
+          // .on('confirmation', (confirmationNumber, receipt) => {
+          //   console.log(confirmationNumber, receipt);
+          // })
+          .on('receipt', (receipt) => {
+            this._log('send', method, {
+              方法入参: { value: args },
+              调用参数: { value: options },
+              结果: { value: receipt },
+            });
+            this._upsertTransaction({
+              method,
+              args,
+              options,
+            }, receipt.transactionHash, receipt);
+            resolve(receipt);
+          })
+          .on('error', (error, receipt) => {
+            reject(error);
+          });
+      }));
   }
 
   estimateGas(method, args = [], options = {}) {

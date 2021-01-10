@@ -5,6 +5,7 @@ import Sidebar from './layout/sidebar';
 import ConnectWallet from './layout/connectWallet';
 import Top from './layout/top';
 import GlobalLoading from './layout/globalLoading';
+import TransactionCache from './layout/transactionCache';
 import Index from './components/index';
 import { Deposit, Borrow, CreateDeposit, CreateWithdraw, CreateBorrow, CreateRepay } from './components/business';
 import { DepositHistory, WithdrawHistory, BorrowHistory, RepayHistory } from './components/history';
@@ -40,6 +41,7 @@ function MyRouter(props) {
         </div>
         <ConnectWallet />
         <GlobalLoading />
+        <TransactionCache />
       </Store>
     </Router>
   );

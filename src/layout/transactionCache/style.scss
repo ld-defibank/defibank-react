@@ -1,0 +1,56 @@
+#transactioncache {
+  .transaction {
+    display: flex;
+    cursor: pointer;
+    margin-bottom: 12px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &:hover {
+      .text {
+        color: var(--transactioncache-pending-color);
+      }
+    }
+
+    &.pending {
+      .desc .tag {
+        background-color: var(--transactioncache-pending-color);
+      }
+      .status .anticon {
+        color: var(--transactioncache-pending-color);
+      }
+    }
+
+    .desc {
+      display: flex;
+      flex-grow: 1;
+      flex-shrink: 1;
+
+      .tag {
+        flex-grow: 0;
+        flex-shrink: 0;
+        width: 75px;
+        text-align: center;
+        background-color: var(--transactioncache-done-color);
+        color: #fff;
+        border-radius: 3px;
+        margin-right: 5px;
+      }
+      .text {
+        flex-grow: 1;
+        flex-shrink: 1;
+      }
+    }
+    .status {
+      flex-grow: 0;
+      flex-shrink: 0;
+
+      .anticon {
+        color: var(--transactioncache-done-color);
+      }
+    }
+
+  }
+}

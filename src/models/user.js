@@ -104,6 +104,7 @@ function useUser(customInitialStates = {}) {
     const options = {
       from: currentAccount,
       value: 0,
+      isMax,
     };
     if (isEth(tokenAddress)) {
       options.value = amount;
@@ -149,6 +150,8 @@ function useUser(customInitialStates = {}) {
     const options = {
       from: currentAccount,
       value: 0,
+      isMax,
+      tokenAddress,
     };
     return getReserveData(tokenAddress).then((data) => {
       const { aTokenAddress } = data;

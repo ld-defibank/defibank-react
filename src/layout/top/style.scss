@@ -10,6 +10,17 @@
     align-items: center;
   }
 
+  .pending-btn {
+    font-size: 20px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: all ease 0.15s;
+
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+
   .wallet-connect {
     margin-right: 30px;
     color: #29446E;

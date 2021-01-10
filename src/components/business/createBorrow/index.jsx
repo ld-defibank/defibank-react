@@ -8,7 +8,6 @@ import Router from '@models/router';
 import Web3 from '@models/web3v2';
 import User from '@models/user';
 import Market from '@models/market';
-import Utils from '@models/utils';
 import SitePage from '@common/sitePage';
 import FormattedMessage from '@common/formattedMessage';
 import RadioGroup from '@common/radioGroup';
@@ -102,6 +101,7 @@ function getOverviewRows({
 function getPadOpts({
   amount,
   handleBorrow,
+  loading,
 }) {
   const disableBorrow = !(
     parseFloat(amount) > 0
@@ -113,6 +113,7 @@ function getPadOpts({
     props: {
       disabled: disableBorrow,
     },
+    loading,
   }];
   return padOpts;
 }
@@ -129,6 +130,7 @@ function CreateBorrow({ match }) {
   const [maxAmount, setMaxAmount] = useState('0');
   const [rateMode, setRateMode] = useState(BORROW_RATE_MODE.stable);
   const [lockRateMode, setLockRateMode] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     web3,
@@ -147,7 +149,6 @@ function CreateBorrow({ match }) {
     getMarketReserveConfigurationData,
     getETHUSDPrice,
   } = Market.useContainer();
-  const { setGlobalLoading } = Utils.useContainer();
   const { t } = I18n.useContainer();
   const { goto, goBack } = Router.useContainer();
 
@@ -231,17 +232,17 @@ function CreateBorrow({ match }) {
 
   const handleBorrow = () => {
     if (tokenInfo) {
-      setGlobalLoading(true);
+      setLoading(true);
       borrow(tokenInfo.tokenAddress, fromFixedAmountToAmount(amount, tokenInfo), BORROW_RATE_MODE_CODE[rateMode]).then(() => {
         updateWalletBalance();
-        setGlobalLoading(false);
+        setLoading(false);
         message.success(t('create_borrow_success'));
       }).catch((e) => {
         const error = tryGetErrorFromWeb3Error(e);
         if (error.code !== 4001) {
           message.error(t.try(`create_borrow_e_${error.code}`, 'common_web3_error', { code: error.code }));
         }
-        setGlobalLoading(false);
+        setLoading(false);
       });
     }
   };
@@ -250,6 +251,7 @@ function CreateBorrow({ match }) {
     t,
     amount,
     handleBorrow,
+    loading,
   });
   const radioGroupOptions = [{
     key: 'stable',

@@ -8,10 +8,8 @@ import Router from '@models/router';
 import Web3 from '@models/web3v2';
 import User from '@models/user';
 import Market from '@models/market';
-import Utils from '@models/utils';
 import SitePage from '@common/sitePage';
 import FormattedMessage from '@common/formattedMessage';
-import RadioGroup from '@common/radioGroup';
 import { Spin } from '@common/antd';
 import message from '@utils/message';
 import { fromAmountToFixedAmount, fromFixedAmountToAmount, tryGetErrorFromWeb3Error, times10 } from '@utils/';
@@ -68,6 +66,7 @@ function getOverviewRows({
 function getPadOpts({
   amount,
   handleRepay,
+  loading,
 }) {
   const disableRepay = !(
     parseFloat(amount) > 0
@@ -79,6 +78,7 @@ function getPadOpts({
     props: {
       disabled: disableRepay,
     },
+    loading,
   }];
   return padOpts;
 }
@@ -94,6 +94,7 @@ function CreateRepay({ match }) {
   const [amount, setAmount] = useState('');
   const [maxAmount, setMaxAmount] = useState('0');
   const [isMax, setIsMax] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     web3,
@@ -110,7 +111,6 @@ function CreateRepay({ match }) {
     getAssetETHPrice,
     getMarketReserveConfigurationData,
   } = Market.useContainer();
-  const { setGlobalLoading } = Utils.useContainer();
   const { t } = I18n.useContainer();
   const { goto, goBack } = Router.useContainer();
 
@@ -187,17 +187,17 @@ function CreateRepay({ match }) {
 
   const handleRepay = () => {
     if (tokenInfo) {
-      setGlobalLoading(true);
+      setLoading(true);
       repayForMyself(tokenInfo.tokenAddress, new Decimal(fromFixedAmountToAmount(amount, tokenInfo)).add(originationFee).toFixed(0), isMax).then(() => {
         updateWalletBalance();
-        setGlobalLoading(false);
+        setLoading(false);
         message.success(t('create_repay_success'));
       }).catch((e) => {
         const error = tryGetErrorFromWeb3Error(e);
         if (error.code !== 4001) {
           message.error(t.try(`create_borrow_e_${error.code}`, 'common_web3_error', { code: error.code }));
         }
-        setGlobalLoading(false);
+        setLoading(false);
       });
     }
   };
@@ -206,6 +206,7 @@ function CreateRepay({ match }) {
     t,
     amount,
     handleRepay,
+    loading,
   });
   const overivewRows = getOverviewRows({
     t,

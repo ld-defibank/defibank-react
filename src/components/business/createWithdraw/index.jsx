@@ -8,10 +8,8 @@ import Router from '@models/router';
 import Web3 from '@models/web3v2';
 import User from '@models/user';
 import Market from '@models/market';
-import Utils from '@models/utils';
 import SitePage from '@common/sitePage';
 import FormattedMessage from '@common/formattedMessage';
-import RadioGroup from '@common/radioGroup';
 import { Spin, Alert } from '@common/antd';
 import message from '@utils/message';
 import { fromAmountToFixedAmount, fromFixedAmountToAmount, tryGetErrorFromWeb3Error, times10 } from '@utils/';
@@ -101,6 +99,7 @@ function getOverviewRows({
 function getPadOpts({
   amount,
   handleWithdraw,
+  loading,
 }) {
   const disableWithdraw = !(
     parseFloat(amount) > 0
@@ -112,6 +111,7 @@ function getPadOpts({
     props: {
       disabled: disableWithdraw,
     },
+    loading,
   }];
   return padOpts;
 }
@@ -130,6 +130,7 @@ function CreateWithdraw({ match }) {
   const [showWarning, setShowWarning] = useState(false);
   const [canWithdrawMax, setCanWithdrawMax] = useState(false);
   const [isMax, setIsMax] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     web3,
@@ -148,7 +149,6 @@ function CreateWithdraw({ match }) {
     getMarketReserveConfigurationData,
     getETHUSDPrice,
   } = Market.useContainer();
-  const { setGlobalLoading } = Utils.useContainer();
   const { t } = I18n.useContainer();
   const { goto, goBack } = Router.useContainer();
 
@@ -257,17 +257,17 @@ function CreateWithdraw({ match }) {
 
   const handleWithdraw = () => {
     if (tokenInfo) {
-      setGlobalLoading(true);
+      setLoading(true);
       withdraw(tokenInfo.tokenAddress, fromFixedAmountToAmount(amount, tokenInfo), isMax).then(() => {
         updateWalletBalance();
-        setGlobalLoading(false);
+        setLoading(false);
         message.success(t('create_withdraw_success'));
       }).catch((e) => {
         const error = tryGetErrorFromWeb3Error(e);
         if (error.code !== 4001) {
           message.error(t.try(`create_withdraw_e_${error.code}`, 'common_web3_error', { code: error.code }));
         }
-        setGlobalLoading(false);
+        setLoading(false);
       });
     }
   };
@@ -276,6 +276,7 @@ function CreateWithdraw({ match }) {
     t,
     amount,
     handleWithdraw,
+    loading,
   });
   const overivewRows = getOverviewRows({
     t,

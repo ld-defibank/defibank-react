@@ -96,6 +96,8 @@ function getPadOpts({
   amount,
   handleApprove,
   handleDeposit,
+  approveLoading,
+  depositLoading,
 }) {
   const padOpts = [];
   if (allowance === '0') {
@@ -103,6 +105,7 @@ function getPadOpts({
       key: 'approve',
       text: <FormattedMessage id="create_deposit_opt_approve" />,
       onClick: handleApprove,
+      loading: approveLoading,
     });
   }
   const disableDeposit = !(
@@ -116,6 +119,7 @@ function getPadOpts({
     props: {
       disabled: disableDeposit,
     },
+    loading: depositLoading,
   });
   return padOpts;
 }
@@ -129,6 +133,8 @@ function CreateDeposit({ match }) {
   const [amount, setAmount] = useState('');
   const [maxAmount, setMaxAmount] = useState('0');
   const [allowance, setAllowance] = useState('0');
+  const [approveLoading, setApproveLoading] = useState(false);
+  const [depositLoading, setDepositLoading] = useState(false);
 
   const {
     web3,
@@ -146,7 +152,6 @@ function CreateDeposit({ match }) {
     getMarketReserveConfigurationData,
     getAssetUSDPrice,
   } = Market.useContainer();
-  const { setGlobalLoading } = Utils.useContainer();
   const { t } = I18n.useContainer();
   const { goto, goBack } = Router.useContainer();
 
@@ -227,25 +232,25 @@ function CreateDeposit({ match }) {
 
   const handleApprove = () => {
     if (tokenInfo) {
-      setGlobalLoading(true);
+      setApproveLoading(true);
       approve(tokenInfo.tokenAddress).then(() => {
         updateAllowance();
-        setGlobalLoading(false);
+        setApproveLoading(false);
       }).catch(() => {
-        setGlobalLoading(false);
+        setApproveLoading(false);
       });
     }
   };
 
   const handleDeposit = () => {
     if (tokenInfo) {
-      setGlobalLoading(true);
+      setDepositLoading(true);
       deposit(tokenInfo.tokenAddress, fromFixedAmountToAmount(amount, tokenInfo)).then(() => {
         updateWalletBalance();
-        setGlobalLoading(false);
+        setDepositLoading(false);
         message.success(t('create_deposit_success'));
       }).catch(() => {
-        setGlobalLoading(false);
+        setDepositLoading(false);
       });
     }
   };
@@ -256,6 +261,8 @@ function CreateDeposit({ match }) {
     amount,
     handleApprove,
     handleDeposit,
+    approveLoading,
+    depositLoading,
   });
   const overivewRows = getOverviewRows({
     t,

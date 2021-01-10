@@ -36,6 +36,9 @@
   --switch-active-color: var(--switch-color);
 
   --slider-dot: var(--main-text-gray);
+
+  --transactioncache-pending-color: #E4913B;
+  --transactioncache-done-color: #46ca08;
 }
 
 :root[data-theme="light"] {
